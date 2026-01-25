@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biology - Know Ur Schist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,0,0,0.2) transparent;
+    }
+    
+    *::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    *::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
+    
+    *::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0,0,0,0.3);
+    }
+    
+    body {
+      background: #fafafa;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    
+    #navbar-placeholder {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .content-wrapper {
+      padding-top: 0;
+    }
+    
+    .unit-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-radius: 20px;
+      box-shadow: 8px 8px 16px rgba(0,0,0,0.08), -8px -8px 16px rgba(255,255,255,0.8);
+      border: 2px solid rgba(0,0,0,0.1);
+    }
+    
+    .unit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 12px 12px 24px rgba(0,0,0,0.15), -12px -12px 24px rgba(255,255,255,0.9);
+      border-color: rgba(0,0,0,0.2);
+    }
+    
+    .unit-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    
+    .arrow-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <div id="navbar-placeholder"></div>
+  </div>
+  
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
+    <div class="mb-16">
+      <div class="text-6xl mb-6">🌱</div>
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">Biology</h1>
+      <p class="text-gray-600 text-lg">Master life sciences and prepare for UIL competitions. Explore comprehensive study materials, practice with past competition questions, and master key biological concepts through interactive learning tools designed to help you excel in UIL Biology competitions.</p>
+    </div>
+    
+    <!-- Questioner Card -->
+    <div class="mb-16">
+      <a href="questioner.html" class="block bg-white rounded-2xl p-10 border-2 border-gray-200 hover:shadow-xl transition-all hover:border-green-300">
+        <div class="flex items-center gap-6 mb-6">
+          <div class="w-20 h-20 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-question-circle text-white text-4xl"></i>
+          </div>
+          <div>
+            <h2 class="text-4xl font-bold text-gray-900 mb-2">Questioner</h2>
+            <p class="text-gray-600 text-lg">Practice with past UIL Biology questions. Filter by units and keywords to focus your study.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-green-600 font-semibold text-lg">
+          <span>Start Up Questioner</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+    </div>
+    
+    <!-- Units Section -->
+    <div id="units" class="mb-16">
+      <div class="flex items-center gap-4 mb-10">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+          <i class="fas fa-layer-group text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900">Study Units</h2>
+        </div>
+      </div>
+      
+      <div class="space-y-4">
+        <!-- Unit 1 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(1)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-black">
+              <i class="fas fa-dna text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Structure & Function</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Biochemistry, cell biology, membranes, organic macromolecules</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 2 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(2)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-green-500">
+              <i class="fas fa-repeat text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Cellular Replication</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Cell cycle, DNA replication, mitosis, meiosis, viral replication</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 3 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(3)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-black">
+              <i class="fas fa-bolt text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Energy Transformations</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Metabolism, cellular respiration, photosynthesis, enzymes</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 4 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(4)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-green-500">
+              <i class="fas fa-code text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Gene Expression</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Protein synthesis, transcription, translation, gene regulation, mutations</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 5 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(5)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-black">
+              <i class="fas fa-dna text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Genetics & Inheritance</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Mendelian inheritance, genetic crosses, DNA technology</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 6 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(6)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-green-500">
+              <i class="fas fa-project-diagram text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Evolution</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Natural selection, microevolution, macroevolution, speciation</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 7 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(7)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-black">
+              <i class="fas fa-leaf text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Diversity of Life</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Phylogeny, taxonomy, domains, animal/plant behavior</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 8 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(8)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-green-500">
+              <i class="fas fa-globe text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Ecology & Environment</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Population biology, community dynamics, biogeochemical cycles</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 9 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(9)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-black">
+              <i class="fas fa-heartbeat text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Human Anatomy & Physiology</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Tissue types, homeostasis, organ systems</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+        
+        <!-- Unit 10 -->
+        <div class="unit-card bg-white p-6 flex items-center justify-between" onclick="toggleUnit(10)">
+          <div class="flex items-center gap-4 flex-1">
+            <div class="unit-icon bg-green-500">
+              <i class="fas fa-virus text-white"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-lg">Diseases</h3>
+            <span class="text-gray-400">-</span>
+            <p class="text-gray-600">Eukaryotic, viral, bacterial diseases, pathogenesis, diagnosis</p>
+          </div>
+          <div class="arrow-icon">
+            <i class="fas fa-arrow-right text-black text-sm"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Latin Roots Section -->
+    <div id="latin-roots" class="mb-16">
+      <div class="flex items-center gap-4 mb-10">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+          <i class="fas fa-book text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900">Latin Roots</h2>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-palette text-white text-xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Colors</h3>
+          <p class="text-sm text-gray-600">Learn color-related Latin roots (albus, rubor, etc.)</p>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-calculator text-white text-xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Quantities</h3>
+          <p class="text-sm text-gray-600">Master number and quantity roots (uni, bi, multi, etc.)</p>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-shapes text-white text-xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Shapes & Forms</h3>
+          <p class="text-sm text-gray-600">Learn shape-related roots (forma, globus, etc.)</p>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-ruler text-white text-xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Size & Position</h3>
+          <p class="text-sm text-gray-600">Master size and position roots (magnus, parvus, etc.)</p>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-hand text-white text-xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Body Parts</h3>
+          <p class="text-sm text-gray-600">Learn anatomical Latin roots (corpus, caput, etc.)</p>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-flask text-white text-xl"></i>
+          </div>
+          <h3 class="font-bold text-gray-900 mb-2">Processes</h3>
+          <p class="text-sm text-gray-600">Master process-related roots (synthesis, lysis, etc.)</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Resources Section -->
+    <div id="resources" class="mb-16">
+      <div class="flex items-center gap-4 mb-10">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+          <i class="fas fa-folder text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900">Resources</h2>
+        </div>
+      </div>
+      
+      <!-- PDFs Section -->
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">PDF Documents</h3>
+        <div class="space-y-3">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-red-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Official UIL Biology Rules</h3>
+                <p class="text-sm text-gray-600">2024 Competition Guidelines</p>
+              </div>
+            </div>
+            <a href="/biology/pdfs/rules.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+              <i class="fas fa-download mr-2"></i>Download PDF
+            </a>
+          </div>
+          
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-red-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Past Competition Questions</h3>
+                <p class="text-sm text-gray-600">2019-2023 UIL Biology Tests</p>
+              </div>
+            </div>
+            <a href="/biology/pdfs/past-tests.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+              <i class="fas fa-download mr-2"></i>Download PDF
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Videos Section -->
+      <div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Video Resources</h3>
+        <div class="space-y-3">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-video text-gray-700"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Cell Biology Video Series</h3>
+                <p class="text-sm text-gray-600">Complete course on YouTube</p>
+              </div>
+            </div>
+            <a href="#" class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+              <i class="fas fa-external-link-alt mr-2"></i>Watch Videos
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Load navbar
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('../navbar.html');
+    });
+    
+    function toggleUnit(unitNum) {
+      // Navigate to study page with unit parameter
+      window.location.href = `study.html?unit=${unitNum}`;
+    }
+  </script>
+</body>
+</html>
+
