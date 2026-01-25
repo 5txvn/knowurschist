@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Know Ur Schist - UIL Science Preparation</title>
+  <link rel="stylesheet" href="public/css/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+    
+    .galaxy-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 25%, #16213e 50%, #0f3460 75%, #0a0a1a 100%);
+      z-index: -2;
+    }
+    
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+    }
+    
+    .planet {
+      position: fixed;
+      border-radius: 50%;
+      z-index: 0;
+      transition: transform 0.1s ease-out;
+    }
+    
+    
+    .planet-1 {
+      width: 180px;
+      height: 180px;
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
+      top: 20%;
+      right: 15%;
+      box-shadow: inset -30px -30px 0px rgba(0,0,0,0.3), inset 15px 15px 0px rgba(255,255,255,0.1);
+    }
+    
+    .planet-1::before {
+      content: '';
+      position: absolute;
+      width: 45px;
+      height: 45px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      top: 20%;
+      left: 30%;
+    }
+    
+    .planet-1::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 50%;
+      bottom: 25%;
+      right: 20%;
+    }
+    
+    .planet-2 {
+      width: 160px;
+      height: 160px;
+      background: linear-gradient(135deg, #4169E1 0%, #1E90FF 50%, #87CEEB 100%);
+      top: 25%;
+      left: 10%;
+      box-shadow: inset -25px -25px 0px rgba(0,0,0,0.3), inset 12px 12px 0px rgba(255,255,255,0.1);
+    }
+    
+    .planet-2::before {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      top: 30%;
+      left: 25%;
+    }
+    
+    .planet-3 {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #FF6347 0%, #FF4500 50%, #FF8C00 100%);
+      bottom: 20%;
+      right: 12%;
+      box-shadow: inset -22px -22px 0px rgba(0,0,0,0.3), inset 11px 11px 0px rgba(255,255,255,0.1);
+    }
+    
+    .planet-3::before {
+      content: '';
+      position: absolute;
+      width: 35px;
+      height: 35px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      top: 25%;
+      left: 40%;
+    }
+    
+    .planet-4 {
+      width: 170px;
+      height: 170px;
+      background: linear-gradient(135deg, #9370DB 0%, #BA55D3 50%, #DA70D6 100%);
+      bottom: 25%;
+      left: 10%;
+      box-shadow: inset -28px -28px 0px rgba(0,0,0,0.3), inset 14px 14px 0px rgba(255,255,255,0.1);
+    }
+    
+    .planet-4::before {
+      content: '';
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 50%;
+      top: 35%;
+      right: 30%;
+    }
+    
+    .scroll-arrow {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+      cursor: pointer;
+      z-index: 10;
+      transition: opacity 0.3s ease;
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+    
+    .card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-5px);
+    }
+    
+    .card-button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      transition: all 0.3s ease;
+    }
+    
+    .card-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+    
+    @media (max-width: 1023px) {
+      .planet {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+  <div class="galaxy-bg"></div>
+  <div class="stars" id="stars"></div>
+  
+  <!-- Planets -->
+  <div class="planet planet-1 hidden lg:block" data-speed="0.5" data-direction-x="1"></div>
+  <div class="planet planet-2 hidden lg:block" data-speed="0.3" data-direction-x="-1"></div>
+  <div class="planet planet-3 hidden lg:block" data-speed="0.4" data-direction-x="1"></div>
+  <div class="planet planet-4 hidden lg:block" data-speed="0.6" data-direction-x="-1"></div>
+  
+  <!-- Main Landing Section -->
+  <section class="relative min-h-screen flex flex-col items-center justify-center z-10">
+    <h1 class="text-7xl md:text-9xl font-black text-white mb-6 text-center drop-shadow-2xl px-4">
+      Know Ur Schist
+    </h1>
+    <p class="text-xl md:text-2xl text-white/90 mb-16 text-center px-4">
+      your ultimate destination for UIL science preparation
+    </p>
+    
+    <div class="scroll-arrow" onclick="scrollToContent()">
+      <i class="fas fa-chevron-down text-white text-4xl"></i>
+    </div>
+  </section>
+  
+  <!-- Subject Cards Section -->
+  <section id="subjects" class="relative min-h-screen flex flex-col items-center justify-center z-10 py-20 px-4">
+    <div class="flex flex-col md:flex-row gap-8 max-w-7xl w-full items-center justify-center">
+      <!-- Biology Card -->
+      <div class="card rounded-xl p-10 text-white w-full md:w-96 text-center flex flex-col">
+        <i class="fas fa-dna text-7xl mb-6"></i>
+        <h2 class="text-4xl font-bold mb-4">Biology</h2>
+        <p class="text-white/90 text-lg mb-6 leading-relaxed">Master life sciences and prepare for UIL competitions. Explore cellular biology, genetics, evolution, and human anatomy through interactive flashcards, games, and comprehensive study materials.</p>
+        <a href="biology/index.html" class="mt-auto border-2 border-white/60 rounded-lg px-8 py-4 text-lg font-semibold hover:bg-white/20 transition-all hover:border-white/80">
+          Explore Biology →
+        </a>
+      </div>
+      
+      <!-- Chemistry Card -->
+      <div class="card rounded-xl p-10 text-white w-full md:w-96 text-center flex flex-col">
+        <i class="fas fa-flask text-7xl mb-6"></i>
+        <h2 class="text-4xl font-bold mb-4">Chemistry</h2>
+        <p class="text-white/90 text-lg mb-6 leading-relaxed">Explore the molecular world and master chemical reactions. Study the periodic table, stoichiometry, organic chemistry, and reaction mechanisms with detailed resources and practice problems.</p>
+        <a href="chemistry/index.html" class="mt-auto border-2 border-white/60 rounded-lg px-8 py-4 text-lg font-semibold hover:bg-white/20 transition-all hover:border-white/80">
+          Explore Chemistry →
+        </a>
+      </div>
+      
+      <!-- Physics Card -->
+      <div class="card rounded-xl p-10 text-white w-full md:w-96 text-center flex flex-col">
+        <i class="fas fa-atom text-7xl mb-6"></i>
+        <h2 class="text-4xl font-bold mb-4">Physics</h2>
+        <p class="text-white/90 text-lg mb-6 leading-relaxed">Understand the fundamental laws of the universe. Learn mechanics, thermodynamics, electromagnetism, and optics through interactive learning tools and comprehensive study guides.</p>
+        <a href="physics/index.html" class="mt-auto border-2 border-white/60 rounded-lg px-8 py-4 text-lg font-semibold hover:bg-white/20 transition-all hover:border-white/80">
+          Explore Physics →
+        </a>
+      </div>
+    </div>
+  </section>
+  
+  <script>
+    // Create stars
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const numStars = 200;
+      
+      for (let i = 0; i < numStars; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        starsContainer.appendChild(star);
+      }
+    }
+    
+    // Animate planets with JavaScript
+    let animationTime = 0;
+    function animatePlanets() {
+      animationTime += 0.016; // ~60fps
+      
+      $('.planet').each(function() {
+        const $planet = $(this);
+        const speed = parseFloat($planet.data('speed')) || 0.5;
+        const directionX = parseFloat($planet.data('direction-x')) || 1;
+        const scrollTop = $(window).scrollTop();
+        
+        // Parallax from scroll - faster movement to get planets off screen
+        const parallaxY = -scrollTop * speed * 2.5;
+        const parallaxX = scrollTop * speed * 1.0 * directionX;
+        
+        // Individual animations
+        let animX = 0, animY = 0, animRotate = 0;
+        
+        if ($planet.hasClass('planet-1')) {
+          // Float animation
+          animX = Math.sin(animationTime * 0.5) * 10;
+          animY = Math.cos(animationTime * 0.5) * -15;
+        } else if ($planet.hasClass('planet-2')) {
+          // Rotation animation
+          animRotate = (animationTime * 18) % 360; // 20s rotation
+        } else if ($planet.hasClass('planet-3')) {
+          // Float animation
+          animX = Math.sin(animationTime * 0.7) * -12;
+          animY = Math.cos(animationTime * 0.7) * 10;
+        } else if ($planet.hasClass('planet-4')) {
+          // Combined float and rotate
+          animX = Math.sin(animationTime * 0.4) * 15;
+          animY = Math.cos(animationTime * 0.4) * -10;
+          animRotate = Math.sin(animationTime * 0.4) * 5;
+        }
+        
+        // Combine parallax and animation
+        $planet.css({
+          'transform': `translate(${parallaxX + animX}px, ${parallaxY + animY}px) rotate(${animRotate}deg)`
+        });
+      });
+      
+      requestAnimationFrame(animatePlanets);
+    }
+    
+    // Start animation loop
+    animatePlanets();
+    
+    // Handle scroll arrow fade out
+    function handleScrollArrow() {
+      const scrollTop = $(window).scrollTop();
+      const windowHeight = $(window).height();
+      const subjectsSection = $('#subjects');
+      const subjectsTop = subjectsSection.offset().top;
+      const halfwayPoint = subjectsTop / 2;
+      
+      if (scrollTop > halfwayPoint) {
+        $('.scroll-arrow').css('opacity', 0);
+      } else {
+        const fadeProgress = scrollTop / halfwayPoint;
+        $('.scroll-arrow').css('opacity', Math.max(0, 1 - fadeProgress));
+      }
+    }
+    
+    $(window).on('scroll', handleScrollArrow);
+    
+    function scrollToContent() {
+      document.getElementById('subjects').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+    
+    // Initialize
+    $(document).ready(function() {
+      createStars();
+      handleScrollArrow();
+    });
+  </script>
+</body>
+</html>
+
