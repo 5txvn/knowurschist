@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chemistry - Know Ur Schist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,0,0,0.2) transparent;
+    }
+    
+    *::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    *::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    *::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.2);
+      border-radius: 10px;
+    }
+    
+    *::-webkit-scrollbar-thumb:hover {
+      background-color: rgba(0,0,0,0.3);
+    }
+    
+    body {
+      background: #fafafa;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    
+    #navbar-placeholder {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .content-wrapper {
+      padding-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <div id="navbar-placeholder"></div>
+  </div>
+  
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
+    <div class="mb-16">
+      <div class="text-6xl mb-6">⚛️</div>
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">Chemistry</h1>
+      <p class="text-gray-600 text-lg">Explore the molecular world and master chemical reactions</p>
+    </div>
+    
+    <!-- Questioner Card -->
+    <div class="mb-16">
+      <a href="questioner.html" class="block bg-white rounded-2xl p-10 border-2 border-gray-200 hover:shadow-xl transition-all hover:border-pink-300">
+        <div class="flex items-center gap-6 mb-6">
+          <div class="w-20 h-20 bg-pink-500 rounded-xl flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-question-circle text-white text-4xl"></i>
+          </div>
+          <div>
+            <h2 class="text-4xl font-bold text-gray-900 mb-2">Questioner</h2>
+            <p class="text-gray-600 text-lg">Practice with past UIL Chemistry questions. Filter by units and keywords to focus your study.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 text-pink-600 font-semibold text-lg">
+          <span>Start Up Questioner</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
+    </div>
+    
+    <!-- Flashcards Section -->
+    <div class="mb-16">
+      <div class="flex items-center gap-4 mb-10">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+          <i class="fas fa-clone text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900">Flashcards</h2>
+          <p class="text-gray-600">Master key chemistry concepts and formulas</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-table text-white text-xl"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Periodic Table</h3>
+          <p class="text-sm text-gray-600 mb-4">Learn element properties and trends</p>
+          <button class="text-sm text-pink-600 font-medium hover:text-pink-700">Start Learning →</button>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-pink-500 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-flask text-white text-xl"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Chemical Reactions</h3>
+          <p class="text-sm text-gray-600 mb-4">Master reaction types and equations</p>
+          <button class="text-sm text-pink-600 font-medium hover:text-pink-700">Start Learning →</button>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-calculator text-white text-xl"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Stoichiometry</h3>
+          <p class="text-sm text-gray-600 mb-4">Practice calculations and conversions</p>
+          <button class="text-sm text-pink-600 font-medium hover:text-pink-700">Start Learning →</button>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+          <div class="w-12 h-12 bg-pink-500 rounded-lg flex items-center justify-center mb-4">
+            <i class="fas fa-atom text-white text-xl"></i>
+          </div>
+          <h3 class="font-semibold text-gray-900 mb-2">Organic Chemistry</h3>
+          <p class="text-sm text-gray-600 mb-4">Study carbon compounds and structures</p>
+          <button class="text-sm text-pink-600 font-medium hover:text-pink-700">Start Learning →</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Practice Games Section -->
+    <div class="mb-16">
+      <div class="flex items-center gap-4 mb-10">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+          <i class="fas fa-gamepad text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900">Practice Games</h2>
+          <p class="text-gray-600">Engaging games to test your chemistry knowledge</p>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl p-8 border border-gray-200">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 bg-black rounded-xl flex items-center justify-center">
+              <i class="fas fa-puzzle-piece text-white text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">Element Matching</h3>
+              <p class="text-gray-600">Match elements with their properties</p>
+            </div>
+          </div>
+          <button class="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition-colors">
+            Play Now
+          </button>
+        </div>
+        
+        <div class="bg-white rounded-xl p-8 border border-gray-200">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-16 h-16 bg-pink-500 rounded-xl flex items-center justify-center">
+              <i class="fas fa-balance-scale text-white text-2xl"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-900">Reaction Builder</h3>
+              <p class="text-gray-600">Build and balance chemical equations</p>
+            </div>
+          </div>
+          <button class="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition-colors">
+            Play Now
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Resources Section -->
+    <div id="resources" class="mb-16">
+      <div class="flex items-center gap-4 mb-10">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+          <i class="fas fa-folder text-white text-xl"></i>
+        </div>
+        <div>
+          <h2 class="text-4xl font-bold text-gray-900">Resources</h2>
+          <p class="text-gray-600">Download PDFs, watch videos, and access study materials</p>
+        </div>
+      </div>
+      
+      <!-- PDFs Section -->
+      <div class="mb-6">
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">PDF Documents</h3>
+        <div class="space-y-3">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-red-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Official UIL Chemistry Rules</h3>
+                <p class="text-sm text-gray-600">2024 Competition Guidelines</p>
+              </div>
+            </div>
+            <a href="/chemistry/pdfs/rules.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+              <i class="fas fa-download mr-2"></i>Download PDF
+            </a>
+          </div>
+          
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-red-600"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Past Competition Questions</h3>
+                <p class="text-sm text-gray-600">2019-2023 UIL Chemistry Tests</p>
+              </div>
+            </div>
+            <a href="/chemistry/pdfs/past-tests.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+              <i class="fas fa-download mr-2"></i>Download PDF
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Videos Section -->
+      <div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-4">Video Resources</h3>
+        <div class="space-y-3">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-video text-gray-700"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Periodic Table Video Series</h3>
+                <p class="text-sm text-gray-600">Complete course on YouTube</p>
+              </div>
+            </div>
+            <a href="#" class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+              <i class="fas fa-external-link-alt mr-2"></i>Watch Videos
+            </a>
+          </div>
+          
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                <i class="fas fa-video text-gray-700"></i>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900">Lab Demonstrations</h3>
+                <p class="text-sm text-gray-600">Essential laboratory procedures</p>
+              </div>
+            </div>
+            <a href="#" class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+              <i class="fas fa-external-link-alt mr-2"></i>Watch Videos
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('../navbar.html');
+    });
+  </script>
+</body>
+</html>
+
