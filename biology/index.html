@@ -8,26 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,0,0,0.2) transparent;
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
     
-    *::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    *::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    *::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.2);
-      border-radius: 10px;
-    }
-    
-    *::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(0,0,0,0.3);
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
     }
     
     body {
@@ -93,18 +82,16 @@
     <div id="navbar-placeholder"></div>
   </div>
   
-  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
-    <div class="mb-16">
-      <div class="text-6xl mb-6">🌱</div>
-      <h1 class="text-5xl font-bold text-gray-900 mb-4">Biology</h1>
-      <p class="text-gray-600 text-lg">Master life sciences and prepare for UIL competitions. Explore comprehensive study materials, practice with past competition questions, and master key biological concepts through interactive learning tools designed to help you excel in UIL Biology competitions.</p>
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto pt-8 md:pt-12">
+    <div class="mb-8 md:mb-16 text-center md:text-left">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">🌱 Biology</h1>
     </div>
     
     <!-- Questioner Card -->
     <div class="mb-16">
-      <a href="questioner.html" class="block bg-white rounded-2xl p-10 border-2 border-gray-200 hover:shadow-xl transition-all hover:border-green-300">
-        <div class="flex items-center gap-6 mb-6">
-          <div class="w-20 h-20 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0">
+      <a href="questioner.html" class="block bg-white rounded-2xl p-10 border-2 border-green-500 hover:shadow-xl transition-all hover:border-green-600">
+        <div class="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-6 mb-6">
+          <div class="w-20 h-20 bg-green-500 rounded-xl flex items-center justify-center flex-shrink-0 hidden md:flex">
             <i class="fas fa-question-circle text-white text-4xl"></i>
           </div>
           <div>
@@ -112,7 +99,7 @@
             <p class="text-gray-600 text-lg">Practice with past UIL Biology questions. Filter by units and keywords to focus your study.</p>
           </div>
         </div>
-        <div class="flex items-center gap-2 text-green-600 font-semibold text-lg">
+        <div class="flex items-center justify-center md:justify-start gap-2 text-green-600 font-semibold text-lg">
           <span>Start Up Questioner</span>
           <i class="fas fa-arrow-right"></i>
         </div>
@@ -121,8 +108,8 @@
     
     <!-- Units Section -->
     <div id="units" class="mb-16">
-      <div class="flex items-center gap-4 mb-10">
-        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+      <div class="flex items-center gap-4 mb-10 justify-center md:justify-start">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center hidden md:flex">
           <i class="fas fa-layer-group text-white text-xl"></i>
         </div>
         <div>
@@ -138,10 +125,10 @@
               <i class="fas fa-dna text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Structure & Function</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Biochemistry, cell biology, membranes, organic macromolecules</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Biochemistry, cell biology, membranes, organic macromolecules</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -153,10 +140,10 @@
               <i class="fas fa-repeat text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Cellular Replication</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Cell cycle, DNA replication, mitosis, meiosis, viral replication</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Cell cycle, DNA replication, mitosis, meiosis, viral replication</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -168,10 +155,10 @@
               <i class="fas fa-bolt text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Energy Transformations</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Metabolism, cellular respiration, photosynthesis, enzymes</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Metabolism, cellular respiration, photosynthesis, enzymes</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -183,10 +170,10 @@
               <i class="fas fa-code text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Gene Expression</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Protein synthesis, transcription, translation, gene regulation, mutations</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Protein synthesis, transcription, translation, gene regulation, mutations</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -198,10 +185,10 @@
               <i class="fas fa-dna text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Genetics & Inheritance</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Mendelian inheritance, genetic crosses, DNA technology</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Mendelian inheritance, genetic crosses, DNA technology</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -213,10 +200,10 @@
               <i class="fas fa-project-diagram text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Evolution</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Natural selection, microevolution, macroevolution, speciation</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Natural selection, microevolution, macroevolution, speciation</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -228,10 +215,10 @@
               <i class="fas fa-leaf text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Diversity of Life</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Phylogeny, taxonomy, domains, animal/plant behavior</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Phylogeny, taxonomy, domains, animal/plant behavior</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -243,10 +230,10 @@
               <i class="fas fa-globe text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Ecology & Environment</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Population biology, community dynamics, biogeochemical cycles</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Population biology, community dynamics, biogeochemical cycles</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -258,10 +245,10 @@
               <i class="fas fa-heartbeat text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Human Anatomy & Physiology</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Tissue types, homeostasis, organ systems</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Tissue types, homeostasis, organ systems</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -273,10 +260,10 @@
               <i class="fas fa-virus text-white"></i>
             </div>
             <h3 class="font-bold text-gray-900 text-lg">Diseases</h3>
-            <span class="text-gray-400">-</span>
-            <p class="text-gray-600">Eukaryotic, viral, bacterial diseases, pathogenesis, diagnosis</p>
+            <span class="text-gray-400 hidden md:inline">-</span>
+            <p class="text-gray-600 hidden md:block">Eukaryotic, viral, bacterial diseases, pathogenesis, diagnosis</p>
           </div>
-          <div class="arrow-icon">
+          <div class="arrow-icon hidden md:flex">
             <i class="fas fa-arrow-right text-black text-sm"></i>
           </div>
         </div>
@@ -285,8 +272,8 @@
     
     <!-- Latin Roots Section -->
     <div id="latin-roots" class="mb-16">
-      <div class="flex items-center gap-4 mb-10">
-        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+      <div class="flex items-center gap-4 mb-10 justify-center md:justify-start">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center hidden md:flex">
           <i class="fas fa-book text-white text-xl"></i>
         </div>
         <div>
@@ -296,59 +283,65 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
-            <i class="fas fa-palette text-white text-xl"></i>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-palette text-white text-xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-xl">Colors</h3>
           </div>
-          <h3 class="font-bold text-gray-900 mb-2">Colors</h3>
-          <p class="text-sm text-gray-600">Learn color-related Latin roots (albus, rubor, etc.)</p>
         </div>
         
         <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
-            <i class="fas fa-calculator text-white text-xl"></i>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-calculator text-white text-xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-xl">Quantities</h3>
           </div>
-          <h3 class="font-bold text-gray-900 mb-2">Quantities</h3>
-          <p class="text-sm text-gray-600">Master number and quantity roots (uni, bi, multi, etc.)</p>
         </div>
         
         <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
-            <i class="fas fa-shapes text-white text-xl"></i>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-shapes text-white text-xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-xl">Shapes & Forms</h3>
           </div>
-          <h3 class="font-bold text-gray-900 mb-2">Shapes & Forms</h3>
-          <p class="text-sm text-gray-600">Learn shape-related roots (forma, globus, etc.)</p>
         </div>
         
         <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
-            <i class="fas fa-ruler text-white text-xl"></i>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-ruler text-white text-xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-xl">Size & Position</h3>
           </div>
-          <h3 class="font-bold text-gray-900 mb-2">Size & Position</h3>
-          <p class="text-sm text-gray-600">Master size and position roots (magnus, parvus, etc.)</p>
         </div>
         
         <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-          <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center mb-4">
-            <i class="fas fa-hand text-white text-xl"></i>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-black rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-hand text-white text-xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-xl">Body Parts</h3>
           </div>
-          <h3 class="font-bold text-gray-900 mb-2">Body Parts</h3>
-          <p class="text-sm text-gray-600">Learn anatomical Latin roots (corpus, caput, etc.)</p>
         </div>
         
         <div class="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
-          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
-            <i class="fas fa-flask text-white text-xl"></i>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-flask text-white text-xl"></i>
+            </div>
+            <h3 class="font-bold text-gray-900 text-xl">Processes</h3>
           </div>
-          <h3 class="font-bold text-gray-900 mb-2">Processes</h3>
-          <p class="text-sm text-gray-600">Master process-related roots (synthesis, lysis, etc.)</p>
         </div>
       </div>
     </div>
     
     <!-- Resources Section -->
     <div id="resources" class="mb-16">
-      <div class="flex items-center gap-4 mb-10">
-        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+      <div class="flex items-center gap-4 mb-10 justify-center md:justify-start">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center hidden md:flex">
           <i class="fas fa-folder text-white text-xl"></i>
         </div>
         <div>
@@ -358,34 +351,35 @@
       
       <!-- PDFs Section -->
       <div class="mb-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">PDF Documents</h3>
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 hidden md:block">PDF Documents</h3>
         <div class="space-y-3">
-          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex flex-col md:flex-row items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-file-pdf text-red-600"></i>
+              <div class="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-white"></i>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-900">Official UIL Biology Rules</h3>
-                <p class="text-sm text-gray-600">2024 Competition Guidelines</p>
+                <h3 class="font-semibold text-gray-900">Official UIL Biology Director Notes</h3>
+                <p class="text-sm text-gray-600">2025-2026</p>
               </div>
             </div>
-            <a href="/biology/pdfs/rules.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+            <a href="/biology/pdfs/Biology-Director-Notes-2025-2026.pdf" download class="bg-gray-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full md:w-auto text-center mt-4 md:mt-0">
               <i class="fas fa-download mr-2"></i>Download PDF
             </a>
           </div>
-          
-          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+        </div>
+
+        <div class="bg-white rounded-lg p-5 border border-gray-200 flex flex-col md:flex-row items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-file-pdf text-red-600"></i>
+              <div class="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-white"></i>
               </div>
               <div>
-                <h3 class="font-semibold text-gray-900">Past Competition Questions</h3>
-                <p class="text-sm text-gray-600">2019-2023 UIL Biology Tests</p>
+                <h3 class="font-semibold text-gray-900">Helpful Images</h3>
+                <p class="text-sm text-gray-600">A Compilation Created by Steven in Notion</p>
               </div>
             </div>
-            <a href="/biology/pdfs/past-tests.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+            <a href="/biology/pdfs/Helpful-Images.pdf" download class="bg-gray-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full md:w-auto text-center mt-4 md:mt-0">
               <i class="fas fa-download mr-2"></i>Download PDF
             </a>
           </div>
@@ -393,10 +387,11 @@
       </div>
       
       <!-- Videos Section -->
+      <!--
       <div>
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">Video Resources</h3>
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 hidden md:block">Video Resources</h3>
         <div class="space-y-3">
-          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex flex-col md:flex-row items-center justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
               <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                 <i class="fas fa-video text-gray-700"></i>
@@ -406,12 +401,13 @@
                 <p class="text-sm text-gray-600">Complete course on YouTube</p>
               </div>
             </div>
-            <a href="#" class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors">
+            <a href="#" class="bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full md:w-auto text-center mt-4 md:mt-0">
               <i class="fas fa-external-link-alt mr-2"></i>Watch Videos
             </a>
           </div>
         </div>
       </div>
+      -->
     </div>
   </div>
   

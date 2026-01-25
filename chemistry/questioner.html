@@ -8,26 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,0,0,0.2) transparent;
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
     
-    *::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    *::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    *::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.2);
-      border-radius: 10px;
-    }
-    
-    *::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(0,0,0,0.3);
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
     }
     
     body {
@@ -267,7 +256,7 @@
     </div>
   </div>
   
-  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto">
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto pt-8 md:pt-12">
     <!-- Setup Screen -->
     <div id="setup-screen" class="mb-16">
       <!-- Unit Selection -->

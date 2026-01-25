@@ -8,26 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,0,0,0.2) transparent;
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
     
-    *::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    *::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    *::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.2);
-      border-radius: 10px;
-    }
-    
-    *::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(0,0,0,0.3);
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
     }
     
     body {
@@ -59,22 +48,39 @@
     <div id="navbar-placeholder"></div>
   </div>
   
-  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto">
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto pt-8 md:pt-12">
+    <div class="mb-8 md:mb-16 text-center md:text-left">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">🚀 Physics</h1>
+    </div>
+    
+    <!-- Questioner Card -->
     <div class="mb-16">
-      <div class="text-6xl mb-6">⚛️</div>
-      <h1 class="text-5xl font-bold text-gray-900 mb-4">Physics</h1>
-      <p class="text-gray-600 text-lg">Understand the fundamental laws of the universe</p>
+      <a href="questioner.html" class="block bg-white rounded-2xl p-10 border-2 border-blue-500 hover:shadow-xl transition-all hover:border-blue-600">
+        <div class="flex flex-col items-center text-center md:flex-row md:items-start md:text-left gap-6 mb-6">
+          <div class="w-20 h-20 bg-blue-500 rounded-xl flex items-center justify-center flex-shrink-0 hidden md:flex">
+            <i class="fas fa-question-circle text-white text-4xl"></i>
+          </div>
+          <div>
+            <h2 class="text-4xl font-bold text-gray-900 mb-2">Questioner</h2>
+            <p class="text-gray-600 text-lg">Practice with past UIL Physics questions. Filter by units and keywords to focus your study.</p>
+          </div>
+        </div>
+        <div class="flex items-center justify-center md:justify-start gap-2 text-blue-600 font-semibold text-lg">
+          <span>Start Up Questioner</span>
+          <i class="fas fa-arrow-right"></i>
+        </div>
+      </a>
     </div>
     
     <!-- Flashcards Section -->
     <div class="mb-16">
-      <div class="flex items-center gap-4 mb-10">
-        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+      <div class="flex items-center gap-4 mb-10 justify-center md:justify-start">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center hidden md:flex">
           <i class="fas fa-clone text-white text-xl"></i>
         </div>
         <div>
-          <h2 class="text-4xl font-bold text-gray-900">Flashcards</h2>
-          <p class="text-gray-600">Master physics formulas and concepts</p>
+          <h2 class="text-4xl font-bold text-gray-900 text-center md:text-left">Flashcards</h2>
+          <p class="text-gray-600 hidden md:block">Master physics formulas and concepts</p>
         </div>
       </div>
       
@@ -119,13 +125,13 @@
     
     <!-- Practice Games Section -->
     <div class="mb-16">
-      <div class="flex items-center gap-4 mb-10">
-        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+      <div class="flex items-center gap-4 mb-10 justify-center md:justify-start">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center hidden md:flex">
           <i class="fas fa-gamepad text-white text-xl"></i>
         </div>
         <div>
-          <h2 class="text-4xl font-bold text-gray-900">Practice Games</h2>
-          <p class="text-gray-600">Interactive learning through gameplay</p>
+          <h2 class="text-4xl font-bold text-gray-900 text-center md:text-left">Practice Games</h2>
+          <p class="text-gray-600 hidden md:block">Interactive learning through gameplay</p>
         </div>
       </div>
       
@@ -164,61 +170,61 @@
     
     <!-- Resources Section -->
     <div id="resources" class="mb-16">
-      <div class="flex items-center gap-4 mb-10">
-        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center">
+      <div class="flex items-center gap-4 mb-10 justify-center md:justify-start">
+        <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center hidden md:flex">
           <i class="fas fa-folder text-white text-xl"></i>
         </div>
         <div>
-          <h2 class="text-4xl font-bold text-gray-900">Resources</h2>
-          <p class="text-gray-600">Download PDFs, watch videos, and access study materials</p>
+          <h2 class="text-4xl font-bold text-gray-900 text-center md:text-left">Resources</h2>
+          <p class="text-gray-600 hidden md:block">Download PDFs, watch videos, and access study materials</p>
         </div>
       </div>
       
       <!-- PDFs Section -->
       <div class="mb-6">
-        <h3 class="text-xl font-semibold text-gray-800 mb-4">PDF Documents</h3>
+        <h3 class="text-xl font-semibold text-gray-800 mb-6 hidden md:block">PDF Documents</h3>
         <div class="space-y-3">
-          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex flex-col md:flex-row items-center md:justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-file-pdf text-red-600"></i>
+              <div class="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-white"></i>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900">Official UIL Physics Rules</h3>
                 <p class="text-sm text-gray-600">2024 Competition Guidelines</p>
               </div>
             </div>
-            <a href="/physics/pdfs/rules.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+            <a href="/physics/pdfs/rules.pdf" download class="bg-gray-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full md:w-auto text-center">
               <i class="fas fa-download mr-2"></i>Download PDF
             </a>
           </div>
           
-          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex flex-col md:flex-row items-center md:justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-file-pdf text-red-600"></i>
+              <div class="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-white"></i>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900">Formula Sheet</h3>
                 <p class="text-sm text-gray-600">All essential physics formulas</p>
               </div>
             </div>
-            <a href="/physics/pdfs/formulas.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+            <a href="/physics/pdfs/formulas.pdf" download class="bg-gray-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full md:w-auto text-center">
               <i class="fas fa-download mr-2"></i>Download PDF
             </a>
           </div>
           
-          <div class="bg-white rounded-lg p-5 border border-gray-200 flex items-center justify-between flex-wrap gap-4">
+          <div class="bg-white rounded-lg p-5 border border-gray-200 flex flex-col md:flex-row items-center md:justify-between flex-wrap gap-4">
             <div class="flex items-center gap-4">
-              <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <i class="fas fa-file-pdf text-red-600"></i>
+              <div class="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                <i class="fas fa-file-pdf text-white"></i>
               </div>
               <div>
                 <h3 class="font-semibold text-gray-900">Past Competition Questions</h3>
                 <p class="text-sm text-gray-600">2019-2023 UIL Physics Tests</p>
               </div>
             </div>
-            <a href="/physics/pdfs/past-tests.pdf" download class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors">
+            <a href="/physics/pdfs/past-tests.pdf" download class="bg-gray-700 text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors w-full md:w-auto text-center">
               <i class="fas fa-download mr-2"></i>Download PDF
             </a>
           </div>
@@ -226,6 +232,7 @@
       </div>
       
       <!-- Videos Section -->
+      <!--
       <div>
         <h3 class="text-xl font-semibold text-gray-800 mb-4">Video Resources</h3>
         <div class="space-y-3">
@@ -260,6 +267,7 @@
           </div>
         </div>
       </div>
+      -->
     </div>
   </div>
   

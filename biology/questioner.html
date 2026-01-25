@@ -8,26 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(0,0,0,0.2) transparent;
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
     
-    *::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    *::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    *::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.2);
-      border-radius: 10px;
-    }
-    
-    *::-webkit-scrollbar-thumb:hover {
-      background-color: rgba(0,0,0,0.3);
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
     }
     
     body {
@@ -178,33 +167,46 @@
     .keyword-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: #e5f7e5;
-      color: #166534;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 14px;
+      gap: 8px;
+      background: black;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 16px;
       font-weight: 500;
     }
     
     .keyword-tag .remove {
       cursor: pointer;
-      font-weight: bold;
-      opacity: 0.7;
-      background: black;
       color: white;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
+      font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      margin-left: 8px;
     }
     
     .keyword-tag .remove:hover {
+      opacity: 0.7;
+    }
+    
+    /* AI Explanation Button */
+    .ai-explanation-btn {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .ai-explanation-btn.visible {
       opacity: 1;
-      background: #333;
+    }
+    
+    /* AI Explanation Container */
+    .ai-explanation {
+      margin-top: 16px;
+      padding: 16px;
+      background: #f9fafb;
+      border-left: 4px solid #22c55e;
+      border-radius: 8px;
     }
     
     /* Next Arrow in Question Card */
@@ -240,6 +242,13 @@
     .question-card {
       position: relative;
     }
+    
+    /* Always hide stats on mobile */
+    @media (max-width: 767px) {
+      #freeplay-stats {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -267,12 +276,12 @@
     </div>
   </div>
   
-  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto">
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto pt-8 md:pt-12">
     <!-- Setup Screen -->
     <div id="setup-screen" class="mb-16">
       <!-- Unit Selection -->
       <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Select Units</h2>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Select Units</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
             <div class="custom-checkbox checked">
@@ -280,7 +289,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 1 - Structure & Function</span>
-              <p class="text-sm text-gray-600">Biochemistry, cell biology, membranes, organic macromolecules</p>
+              <p class="text-sm text-gray-600 hidden md:block">Biochemistry, cell biology, membranes, organic macromolecules</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -289,7 +298,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 2 - Cellular Replication</span>
-              <p class="text-sm text-gray-600">Cell cycle, DNA replication, mitosis, meiosis, viral replication</p>
+              <p class="text-sm text-gray-600 hidden md:block">Cell cycle, DNA replication, mitosis, meiosis, viral replication</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -298,7 +307,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 3 - Energy Transformations</span>
-              <p class="text-sm text-gray-600">Metabolism, cellular respiration, photosynthesis, enzymes</p>
+              <p class="text-sm text-gray-600 hidden md:block">Metabolism, cellular respiration, photosynthesis, enzymes</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -307,7 +316,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 4 - Gene Expression</span>
-              <p class="text-sm text-gray-600">Protein synthesis, transcription, translation, gene regulation, mutations</p>
+              <p class="text-sm text-gray-600 hidden md:block">Protein synthesis, transcription, translation, gene regulation, mutations</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -316,7 +325,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 5 - Genetics & Inheritance</span>
-              <p class="text-sm text-gray-600">Mendelian inheritance, genetic crosses, DNA technology</p>
+              <p class="text-sm text-gray-600 hidden md:block">Mendelian inheritance, genetic crosses, DNA technology</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -325,7 +334,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 6 - Evolution</span>
-              <p class="text-sm text-gray-600">Natural selection, microevolution, macroevolution, speciation</p>
+              <p class="text-sm text-gray-600 hidden md:block">Natural selection, microevolution, macroevolution, speciation</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -334,7 +343,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 7 - Diversity of Life</span>
-              <p class="text-sm text-gray-600">Phylogeny, taxonomy, domains, animal/plant behavior</p>
+              <p class="text-sm text-gray-600 hidden md:block">Phylogeny, taxonomy, domains, animal/plant behavior</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -343,7 +352,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 8 - Ecology & Environment</span>
-              <p class="text-sm text-gray-600">Population biology, community dynamics, biogeochemical cycles</p>
+              <p class="text-sm text-gray-600 hidden md:block">Population biology, community dynamics, biogeochemical cycles</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -352,7 +361,7 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 9 - Human Anatomy & Physiology</span>
-              <p class="text-sm text-gray-600">Tissue types, homeostasis, organ systems</p>
+              <p class="text-sm text-gray-600 hidden md:block">Tissue types, homeostasis, organ systems</p>
             </div>
           </label>
           <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-green-500 transition-colors">
@@ -361,30 +370,26 @@
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 10 - Diseases</span>
-              <p class="text-sm text-gray-600">Eukaryotic, viral, bacterial diseases, pathogenesis, diagnosis</p>
+              <p class="text-sm text-gray-600 hidden md:block">Eukaryotic, viral, bacterial diseases, pathogenesis, diagnosis</p>
             </div>
           </label>
         </div>
-        <div class="mt-4 flex gap-2">
+        <div class="mt-4 flex gap-2 justify-center hidden md:flex">
           <button onclick="selectAllUnits()" class="text-sm text-black hover:text-gray-700 font-medium">Select All</button>
           <span class="text-gray-400">|</span>
           <button onclick="deselectAllUnits()" class="text-sm text-black hover:text-gray-700 font-medium">Deselect All</button>
         </div>
       </div>
       
-      <!-- Keyword Selection -->
-      <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Filter by Keywords</h2>
+      <!-- Configuration -->
+      <div class="mb-4">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Configuration</h2>
         <div class="mb-4">
-          <input type="text" id="keyword-search" placeholder="Search for keywords..." class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none">
+          <input type="text" id="keyword-search" placeholder="Search for keywords..." class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none">
           <div id="keyword-suggestions" class="mt-2 bg-white border-2 border-gray-200 rounded-lg max-h-48 overflow-y-auto hidden"></div>
         </div>
         <div id="selected-keywords" class="flex flex-wrap gap-2 mb-4"></div>
-      </div>
-      
-      <!-- Quiz Mode Selection -->
-      <div class="mb-8">
-        <input type="number" id="question-count" min="1" placeholder="Number of questions (leave blank for freeplay)" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-green-500 focus:outline-none">
+        <input type="number" id="question-count" min="1" placeholder="Number of questions (leave blank for freeplay)" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none">
       </div>
       
       <!-- Start Button -->
@@ -406,18 +411,18 @@
       </div>
       
       <!-- Stats (only in freeplay mode) -->
-      <div id="freeplay-stats" class="mb-6 bg-white rounded-lg p-4 border-2 border-gray-200">
+      <div id="freeplay-stats" class="mb-6 bg-white rounded-lg p-4 border-2 border-gray-200 hidden md:block">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <div>
             <div class="text-2xl font-bold text-gray-900" id="stat-accuracy">0%</div>
             <div class="text-sm text-gray-600">Accuracy</div>
           </div>
           <div>
-            <div class="text-2xl font-bold text-green-600" id="stat-correct">✓ 0</div>
+            <div class="text-2xl font-bold text-green-600" id="stat-correct">✅ 0</div>
             <div class="text-sm text-gray-600">Correct</div>
           </div>
           <div>
-            <div class="text-2xl font-bold text-red-600" id="stat-incorrect">✗ 0</div>
+            <div class="text-2xl font-bold text-red-600" id="stat-incorrect">❌ 0</div>
             <div class="text-sm text-gray-600">Incorrect</div>
           </div>
           <div>
@@ -443,6 +448,20 @@
         <h2 class="text-2xl font-bold text-gray-900 mb-6 mt-4" id="question-text"></h2>
         
         <div class="space-y-3" id="options-container"></div>
+        
+        <!-- AI Explanation Button -->
+        <button id="ai-explanation-btn" class="ai-explanation-btn w-full mt-6 bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+          Generate AI Explanation
+        </button>
+        
+        <!-- Loading Indicator -->
+        <div id="ai-loading" class="hidden mt-4 text-center">
+          <i class="fas fa-spinner fa-spin text-2xl text-gray-600"></i>
+          <p class="text-gray-600 mt-2">Generating explanation...</p>
+        </div>
+        
+        <!-- AI Explanation Display -->
+        <div id="ai-explanation" class="hidden"></div>
       </div>
       
       <!-- Results Screen -->
@@ -575,7 +594,9 @@
         const tag = $(`
           <div class="keyword-tag">
             <span>${keyword}</span>
-            <span class="remove" onclick="removeKeyword('${keyword}')">×</span>
+            <span class="remove" onclick="removeKeyword('${keyword}')">
+              <i class="fas fa-times"></i>
+            </span>
           </div>
         `);
         container.append(tag);
@@ -737,6 +758,11 @@
         optionsContainer.append(optionBtn);
       });
       
+      // Hide AI explanation elements
+      $('#ai-explanation-btn').removeClass('visible');
+      $('#ai-loading').addClass('hidden');
+      $('#ai-explanation').addClass('hidden').empty();
+      
       updateStats();
     }
     
@@ -756,6 +782,10 @@
       // Mark selected answer if incorrect
       if (!isCorrect) {
         $(`.option-btn[data-index="${index}"]`).addClass('incorrect');
+        // Show AI explanation button
+        $('#ai-explanation-btn').addClass('visible');
+      } else {
+        $('#ai-explanation-btn').removeClass('visible');
       }
       
       // Update stats
@@ -773,6 +803,94 @@
       $('#question-arrow').addClass('visible');
       updateStats();
     }
+    
+    async function generateAIExplanation() {
+      const apiKey = localStorage.getItem('openrouter_api_key');
+      
+      if (!apiKey) {
+        // Open settings modal
+        $('#settings-modal').removeClass('hidden').addClass('flex');
+        return;
+      }
+      
+      // Show loading, hide button and previous explanation
+      $('#ai-explanation-btn').removeClass('visible');
+      $('#ai-loading').removeClass('hidden');
+      $('#ai-explanation').addClass('hidden').empty();
+      
+      // Build prompt
+      const question = currentQuestion;
+      const optionsText = question.options.map((opt, idx) => 
+        `${String.fromCharCode(65 + idx)}. ${opt}`
+      ).join('\n');
+      const correctAnswer = String.fromCharCode(65 + question.answer);
+      
+      const prompt = `You are a biology tutor helping a student understand a UIL Biology competition question.
+
+Question: ${question.question}
+
+Answer Choices:
+${optionsText}
+
+The correct answer is ${correctAnswer}: ${question.options[question.answer]}
+
+Please provide a clear, concise explanation of why this answer is correct. Focus on the biological concepts involved and explain any key terms. Keep your explanation under 150 words.`;
+      
+      try {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+            'HTTP-Referer': window.location.origin,
+            'X-Title': 'Know Ur Schist'
+          },
+          body: JSON.stringify({
+            model: 'moonshotai/kimi-k2:free',
+            messages: [
+              {
+                role: 'user',
+                content: prompt
+              }
+            ],
+            temperature: 0.7,
+            max_tokens: 300
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error.message || 'API Error');
+        }
+        
+        const explanation = data.choices[0].message.content;
+        
+        // Hide loading, show explanation
+        $('#ai-loading').addClass('hidden');
+        $('#ai-explanation').removeClass('hidden').html(`
+          <div class="ai-explanation">
+            <h3 class="font-bold text-gray-900 mb-2">AI Explanation:</h3>
+            <p class="text-gray-700">${explanation}</p>
+          </div>
+        `);
+      } catch (error) {
+        console.error('Error generating explanation:', error);
+        $('#ai-loading').addClass('hidden');
+        $('#ai-explanation').removeClass('hidden').html(`
+          <div class="ai-explanation border-red-500">
+            <p class="text-red-600">Error generating explanation. Please check your API key in settings.</p>
+          </div>
+        `);
+      }
+    }
+    
+    // Add click handler for AI explanation button
+    $(document).ready(function() {
+      $(document).on('click', '#ai-explanation-btn', function() {
+        generateAIExplanation();
+      });
+    });
     
     function updateStats() {
       if (isFreeplay) {
