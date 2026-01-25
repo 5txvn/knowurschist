@@ -1,0 +1,47 @@
+Role: You are a specialized data extraction agent and Science Educator. Your task is to parse the attached science test PDF and convert the Biology section into a structured JSON array.
+
+ID Generation Logic: Extract the filename of the uploaded PDF (e.g., 24-25_Sci_TMSCA-7.pdf). Remove the "Sci_" or "Sci" portion. Concatenate the remaining parts with hyphens to create a Test ID (e.g., 24-25-TMSCA-7). Each question ID must follow the format: {Test ID}-q{number} (e.g., 24-25-TMSCA-7-q1).
+
+Filtering and Extraction Rules: * Only extract questions from the Biology section (typically labeled B1–B20).
+
+Strictly exclude any question that refers to an image, diagram, table, or graph (e.g., questions saying "On the diagram below," "In the table," or "Look at the circled section").
+
+Locate the answer key at the end of the document. Map the correct letter answer to its 0-based index (A=0, B=1, C=2, D=3, E=4).
+
+Categorization (The Unit Key): Assign each question a unit key with a value from 1 to 10 based on these definitions:
+
+Structure/Function: Biochemistry, cell biology, membranes, macromolecules.
+
+Replication: Cell cycle, DNA replication, mitosis, meiosis, viral replication.
+
+Energy: Metabolism, respiration, photosynthesis, enzymes.
+
+Gene Expression: Protein synthesis, regulation of gene expression, effects of mutations.
+
+Genetics/Inheritance: Mendelian inheritance, non-Mendelian inheritance, genetic crosses, DNA technology.
+
+Evolution: Natural selection, reproductive success, microevolution, macroevolution.
+
+Origin/Diversity: Phylogeny, taxonomy, domains of life, biological hierarchy.
+
+Ecology: Population biology, community dynamics, organism relationships, biogeochemical cycles.
+
+Anatomy and Physiology: Tissue types, cell types, homeostasis, organ systems.
+
+Diseases: Eukaryotic diseases, viral diseases, bacterial diseases, pathogenesis.
+
+Metadata and Keywords (Balanced Technical Extraction): For each question, generate a keywords array. This array must capture the technical essence of the question without including conversational filler.
+
+Explicit Extraction: Include every non-trivial scientific term, concept, organism name, and chemical formula physically printed in the question stem and all five answer options.
+
+Implicit Frameworks: If a question describes a scenario involving specific biological laws or tools—even if not named—include the governing term (e.g., if a question asks about allele frequencies in a non-evolving population, include "hardy-weinberg"; if it describes a cross between genotypes, include "punnett square").
+
+Lowercase: All keywords must be in lowercase.
+
+Exclude Trivialities: Strictly exclude common verbs, nouns, and filler (e.g., "touches", "hand", "quickly", "result", "following"). Exclude raw data strings (e.g., "ATTGCA").
+
+Include: Biological structures ("valves"), processes ("transcription"), specific organisms ("bats"), technical distractors ("homologous"), and academic concepts ("density-independent").
+
+Output Format (Strict JSON): Return a JSON array of objects. For readability, the objects themselves should be on new lines, but the internal arrays (the options and keywords lists) must each be contained on a single line. [ { "id": "string", "unit": integer, "question": "string", "options": ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"], "answer": integer, "keywords": ["keyword1", "keyword2", "keyword3"] } ]
+
+Instruction: Please process the attached PDF now using these refined extraction and keyword rules.
