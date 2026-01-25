@@ -1,0 +1,135 @@
+Structural Isomers - Same molecular formula but different connectivity (atom order)
+
+Cis- Isomers - Geometric isomer where two groups are on the same side of a double bond
+
+Trans- Isomers - Geometric isomer where two groups are on opposite sides of a double bond
+
+Enantiomers - Molecules that are mirror images but cannot be superimposed
+
+Primary structure - Linear sequence of amino acids written from N to C termini
+
+Secondary structure - Local folding patterns w/hydrogen bonds, either alpha helicies or beta pleated sheets
+
+Tertiary structure - 3D shape of a chain, stabilized by side chain/R-group interactions including hydrogen/ionic bonds, hydrophobic interactions, disulfide bonds
+
+Quaternary structure - arrangement of polypeptide chains into functional proteins
+
+Hydroxyl - OH, polar, hydrophilic, forms hydrogen bonds
+
+Methyl - CH3, nonpolar, hydrophobic, affects gene expression
+
+Carbonyl - C=O, polar, found in aldehydes (end), ketones (middle)
+
+Carboxyl - COOH, polar, acidic (charged COO-)
+
+Amino - NH2, polar, basic (charged NH3+)
+
+Phosphate - OPO3(2-), polar, highly acidic
+
+Sulfhydryl - SH, polar, forms disulfide bridges
+
+Auxins - Stimulate cell elongation, govern phototropism/gravitropism
+
+Cytokinins - Promote cell division (cytokinesis), delay leaf aging
+
+Gibberellins - Trigger stem elongation, fruit growth, seed germination
+
+Abscisic Acid (ABA) - Inhibits growth, maintains seed dormancy, closes stomata
+
+Ethylene - Gaseous hormone that coordinates fruit ripening and falling leaves
+
+Trypsin - Hydrolyzes proteins
+
+Catalase - Hydrolyzes hydrogen peroxide
+
+Amylase - Hydrolyzes starch
+
+Aldolase - Hydrolyzes sugars
+
+Gap junction - Channels that directly connect cytoplasm of adjacent animal cells (synchronized heart contraction)
+
+Desmosomes - Anchoring junctions that link cytoskeletons of adjacent cells (i.e., skin cells resisting stretching)
+
+Tight junction - Junction where plasma membranes of adjacent cells are fused (intestinal cells)
+
+Extracellular matrix - Network of extracellular molecules that provide structural support (collagen, elastin, etc.)
+
+Turgid - Plant cells full of water (healthy)
+
+Plasmolyzed - Plant cells with lost water due to hypertonic osmosis
+
+Crenated - Animal cells that shrink due to water loss
+
+Integral proteins - Lipid bilayer proteins that are usually channels or receptors
+
+Peripheral proteins - Proteins attached to surface of membrane, often for signaling or structural support
+
+Glycoproteins - Proteins with carb chains, important in cell recognition and signaling
+
+Hydrolysis - Uses water to break bonds
+
+Dehydration Synthesis - Forms bonds by removing water
+
+Endocytosis - Cell engulfs material from environment into a vesicle
+
+Phagocytosis - Type of endocytosis, cell engulfs LARGE particles or other cells
+
+Microvilli - Finger-like surface projections on epithelial cells that increase area
+
+Nucleus - Stores DNA and controls cell activities
+
+Nucleolus - Synthesizes rRNA and assembles ribosome subunits
+
+Ribosomes - Synthesizes proteins, can be free (for cellular use) or attached to rough ER (for export)
+
+Mitochondria - Produces ATP through cellular respiration
+
+Rough ER - Synthesizes and folds proteins, studded w/ribosomes
+
+Smooth ER - Synthesizes lipids, detoxifies chemicals, stores calcium ions
+
+Golgi apparatus - Modifies, packages, and transports proteins/lipids in vesicles—cis face receives from ER, trans face exports
+
+Cytoplasm/Cytosol - Jelly-like fluid that supports organelles
+
+Cell membrane - Semi-permeable barrier that regulates transport and communication
+
+Peroxisomes - Break down fatty acids and neutralize toxic molecules
+
+Cytoskeleton - Maintain cell shape, aids transport
+
+Vesicles - Membrane-bound sacs for transporting molecules in/out the cell
+
+Centrosome - Microtubule-organizing center, contains centrioles in animal cells for division
+
+Cell wall - Provides structure, protection, and prevents over-expansion, PLANT ONLY
+
+Chloroplasts - Conducts photosynthesis, PLANT ONLY
+
+Large central vacuole - Stores water, nutrients, waste, and maintains turgor pressure, PLANT ONLY
+
+Plasmodesmata - Channels that allow transport and communication between plant cells, PLANT ONLY
+
+Centrioles - Organize microtubules to form cell division spindle, ANIMAL ONLY
+
+Lysosomes - Digests macromolecules, damaged organelles, and pathogens, ANIMAL ONLY
+
+Amphipathic - Contains both polar (hydrophilic) and nonpolar (hydrophobic) regions
+
+Peptidoglycan - Polymer of sugars and amino acids, forms bacteria cell walls
+
+Chitin - Polysaccharide that forms fungi cell walls
+
+Cellulose - Beta-glucose polysaccharide found in plant cell walls
+
+Hypertonic - Higher concentration of solutes outside the cell, water rushes outside, cell shrivels
+
+Hypotonic - Lower concentration of solutes outside the cell, water rushes inside, cell swells
+
+Isotonic - Same concentration of solutes inside and outside the cell
+
+Glycosidic Bond - Covalently links monosaccharides
+
+Peptide Bond - Covalently links amino acids
+
+Phosphodiester Bond - Covalently links nucleotides
