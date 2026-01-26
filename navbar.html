@@ -18,13 +18,13 @@
       </div>
     </button>
     <div id="nav-menu-dropdown" class="absolute top-16 left-0 bg-white rounded-2xl border-2 border-gray-200 shadow-xl opacity-0 invisible transition-all duration-300 overflow-hidden" style="transform: translateY(-10px);">
-      <a href="/knowurschist/biology" class="flex items-center justify-center px-4 py-3 hover:bg-gray-100 transition-colors">
+      <a href="#" id="nav-biology" class="flex items-center justify-center px-4 py-3 hover:bg-gray-100 transition-colors">
         <i class="fas fa-dna text-xl text-gray-800"></i>
       </a>
-      <a href="/knowurschist/chemistry" class="flex items-center justify-center px-4 py-3 hover:bg-gray-100 transition-colors">
+      <a href="#" id="nav-chemistry" class="flex items-center justify-center px-4 py-3 hover:bg-gray-100 transition-colors">
         <i class="fas fa-flask text-xl text-gray-800"></i>
       </a>
-      <a href="/knowurschist/physics" class="flex items-center justify-center px-4 py-3 hover:bg-gray-100 transition-colors">
+      <a href="#" id="nav-physics" class="flex items-center justify-center px-4 py-3 hover:bg-gray-100 transition-colors">
         <i class="fas fa-rocket text-xl text-gray-800"></i>
       </a>
     </div>
@@ -40,7 +40,7 @@
 
 <!-- settings modal -->
 <div id="settings-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden items-center justify-center">
-  <div class="bg-white border-2 border-gray-200 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+  <div class="bg-white border-2 border-gray-200 rounded-2xl p-8 max-w-2xl w-full mx-4 shadow-2xl">
     <div class="flex items-center justify-between mb-6">
       <h2 class="text-2xl font-bold text-black">Settings</h2>
       <button id="settings-close" class="text-gray-600 hover:text-black transition-colors">
@@ -50,16 +50,29 @@
     
     <div class="space-y-6">
       <div>
-        <label class="block text-black font-semibold mb-2">OpenRouter API Key</label>
+        <label class="block text-black font-semibold mb-2">Groq API Key</label>
         <input type="password" id="api-key-input" placeholder="Enter your API key" class="w-full px-4 py-3 bg-white border-2 border-black rounded-lg text-black placeholder-gray-500 focus:outline-none focus:border-gray-600 transition-colors">
+      </div>
+      
+      <div>
+        <label class="block text-black font-semibold mb-2">Groq Model</label>
+        <div class="custom-select-wrapper relative">
+          <div id="groq-model-display" class="w-full px-4 py-3 bg-white border-2 border-black rounded-lg text-black cursor-pointer flex items-center justify-between hover:border-gray-600 transition-colors">
+            <span id="groq-model-text">llama-3.3-70b-versatile</span>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+          <div id="groq-model-dropdown" class="hidden absolute z-10 w-full mt-2 bg-white border-2 border-black rounded-lg shadow-xl max-h-64 overflow-y-auto">
+          </div>
+        </div>
       </div>
       
       <button id="settings-save" class="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
         Save Settings
       </button>
       
-      <div class="text-center">
-        <a href="/knowurschist/help" class="text-black hover:text-gray-600 transition-colors underline">Need Help?</a>
+      <div class="text-center space-y-2">
+        <a href="https://console.groq.com/docs/rate-limits" target="_blank" class="block text-black hover:text-gray-600 transition-colors underline">Learn About Models/Rates</a>
+        <a href="https://console.groq.com/keys" target="_blank" class="block text-black hover:text-gray-600 transition-colors underline">Get Groq API Key</a>
       </div>
     </div>
   </div>
@@ -71,15 +84,135 @@
     visibility: visible;
     transform: translateY(0);
   }
+  
+  .custom-select-wrapper {
+    position: relative;
+  }
+  
+  #groq-model-dropdown {
+    display: none;
+  }
+  
+  #groq-model-dropdown.show {
+    display: block;
+  }
+  
+  .model-option {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  .model-option:last-child {
+    border-bottom: none;
+  }
+  
+  .model-option:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+  
+  .model-option.selected {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: 600;
+  }
 </style>
 
 <script>
   $(document).ready(function() {
-    const savedApiKey = localStorage.getItem('openrouter_api_key');
+    // Determine base path based on domain
+    const isGitHubPages = window.location.hostname.includes('github.io');
+    const basePath = isGitHubPages ? '/knowurschist' : '';
+    
+    // Set navigation links
+    $('#nav-biology').attr('href', basePath + '/biology');
+    $('#nav-chemistry').attr('href', basePath + '/chemistry');
+    $('#nav-physics').attr('href', basePath + '/physics');
+    
+    // Groq models
+    const groqModels = [
+      { value: 'allam-2-7b', label: 'allam-2-7b' },
+      { value: 'canopylabs/orpheus-arabic-saudi', label: 'canopylabs/orpheus-arabic-saudi' },
+      { value: 'canopylabs/orpheus-v1-english', label: 'canopylabs/orpheus-v1-english' },
+      { value: 'groq/compound', label: 'groq/compound' },
+      { value: 'groq/compound-mini', label: 'groq/compound-mini' },
+      { value: 'llama-3.1-8b-instant', label: 'llama-3.1-8b-instant' },
+      { value: 'llama-3.3-70b-versatile', label: 'llama-3.3-70b-versatile' },
+      { value: 'meta-llama/llama-4-maverick-17b-128e-instruct', label: 'meta-llama/llama-4-maverick-17b-128e-instruct' },
+      { value: 'meta-llama/llama-4-scout-17b-16e-instruct', label: 'meta-llama/llama-4-scout-17b-16e-instruct' },
+      { value: 'meta-llama/llama-guard-4-12b', label: 'meta-llama/llama-guard-4-12b' },
+      { value: 'meta-llama/llama-prompt-guard-2-22m', label: 'meta-llama/llama-prompt-guard-2-22m' },
+      { value: 'meta-llama/llama-prompt-guard-2-86m', label: 'meta-llama/llama-prompt-guard-2-86m' },
+      { value: 'moonshotai/kimi-k2-instruct', label: 'moonshotai/kimi-k2-instruct' },
+      { value: 'moonshotai/kimi-k2-instruct-0905', label: 'moonshotai/kimi-k2-instruct-0905' },
+      { value: 'openai/gpt-oss-120b', label: 'openai/gpt-oss-120b' },
+      { value: 'openai/gpt-oss-20b', label: 'openai/gpt-oss-20b' },
+      { value: 'openai/gpt-oss-safeguard-20b', label: 'openai/gpt-oss-safeguard-20b' },
+      { value: 'qwen/qwen3-32b', label: 'qwen/qwen3-32b' },
+      { value: 'whisper-large-v3', label: 'whisper-large-v3' },
+      { value: 'whisper-large-v3-turbo', label: 'whisper-large-v3-turbo' }
+    ];
+    
+    let selectedModelValue = 'llama-3.3-70b-versatile';
+    
+    // Populate model dropdown
+    function populateModelDropdown() {
+      const dropdown = $('#groq-model-dropdown');
+      dropdown.empty();
+      
+      groqModels.forEach(model => {
+        const option = $('<div></div>')
+          .addClass('model-option')
+          .attr('data-value', model.value)
+          .text(model.label);
+        
+        if (model.value === selectedModelValue) {
+          option.addClass('selected');
+        }
+        
+        option.on('click', function() {
+          selectedModelValue = model.value;
+          $('#groq-model-text').text(model.label);
+          dropdown.removeClass('show');
+          populateModelDropdown();
+        });
+        
+        dropdown.append(option);
+      });
+    }
+    
+    // Load saved settings
+    const savedApiKey = localStorage.getItem('groq_api_key');
+    const savedModel = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
+    selectedModelValue = savedModel;
+    
+    // Find the label for the saved model
+    const savedModelObj = groqModels.find(m => m.value === savedModel);
+    if (savedModelObj) {
+      $('#groq-model-text').text(savedModelObj.label);
+    }
     
     if (savedApiKey) {
       $('#api-key-input').val(savedApiKey);
     }
+    
+    // Initial population
+    populateModelDropdown();
+    
+    // Toggle dropdown
+    $('#groq-model-display').on('click', function(e) {
+      e.stopPropagation();
+      $('#groq-model-dropdown').toggleClass('show');
+    });
+    
+    // Close dropdown when clicking outside
+    $(document).on('click', function(e) {
+      if (!$(e.target).closest('.custom-select-wrapper').length) {
+        $('#groq-model-dropdown').removeClass('show');
+      }
+    });
     
     $('#settings-trigger').on('click', function() {
       $('#settings-modal').removeClass('hidden').addClass('flex');
@@ -97,9 +230,14 @@
     
     $('#settings-save').on('click', function() {
       const apiKey = $('#api-key-input').val();
+      const model = selectedModelValue;
       
       if (apiKey) {
-        localStorage.setItem('openrouter_api_key', apiKey);
+        localStorage.setItem('groq_api_key', apiKey);
+      }
+      
+      if (model) {
+        localStorage.setItem('groq_model', model);
       }
       
       $('#settings-modal').addClass('hidden').removeClass('flex');
