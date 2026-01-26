@@ -69,11 +69,11 @@
     
     
     .planet-1 {
-      width: 180px;
-      height: 180px;
+      width: clamp(120px, 12vw, 180px);
+      height: clamp(120px, 12vw, 180px);
       background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
-      top: 20%;
-      right: 15%;
+      top: 15%;
+      right: 8%;
       box-shadow: inset -30px -30px 0px rgba(0,0,0,0.3), inset 15px 15px 0px rgba(255,255,255,0.1);
     }
     
@@ -100,11 +100,11 @@
     }
     
     .planet-2 {
-      width: 160px;
-      height: 160px;
+      width: clamp(110px, 11vw, 160px);
+      height: clamp(110px, 11vw, 160px);
       background: linear-gradient(135deg, #4169E1 0%, #1E90FF 50%, #87CEEB 100%);
-      top: 25%;
-      left: 10%;
+      top: 20%;
+      left: 5%;
       box-shadow: inset -25px -25px 0px rgba(0,0,0,0.3), inset 12px 12px 0px rgba(255,255,255,0.1);
     }
     
@@ -120,11 +120,11 @@
     }
     
     .planet-3 {
-      width: 150px;
-      height: 150px;
+      width: clamp(100px, 10vw, 150px);
+      height: clamp(100px, 10vw, 150px);
       background: linear-gradient(135deg, #FF6347 0%, #FF4500 50%, #FF8C00 100%);
-      bottom: 20%;
-      right: 12%;
+      bottom: 15%;
+      right: 8%;
       box-shadow: inset -22px -22px 0px rgba(0,0,0,0.3), inset 11px 11px 0px rgba(255,255,255,0.1);
     }
     
@@ -140,11 +140,11 @@
     }
     
     .planet-4 {
-      width: 170px;
-      height: 170px;
+      width: clamp(115px, 11.5vw, 170px);
+      height: clamp(115px, 11.5vw, 170px);
       background: linear-gradient(135deg, #9370DB 0%, #BA55D3 50%, #DA70D6 100%);
-      bottom: 25%;
-      left: 10%;
+      bottom: 20%;
+      left: 5%;
       box-shadow: inset -28px -28px 0px rgba(0,0,0,0.3), inset 14px 14px 0px rgba(255,255,255,0.1);
     }
     
@@ -222,7 +222,7 @@
       Know Ur Schist
     </h1>
     <p class="text-xl md:text-2xl text-white/90 mb-16 text-center px-4">
-      your ultimate destination for UIL science preparation
+      THE destination for UIL science preparation
     </p>
     
     <div class="scroll-arrow" onclick="scrollToContent()">
@@ -232,9 +232,9 @@
   
   <!-- Subject Cards Section -->
   <section id="subjects" class="relative min-h-screen flex flex-col items-center justify-center z-10 py-10 px-4">
-    <div class="flex flex-col md:flex-row gap-8 max-w-7xl w-full items-center justify-center">
+    <div class="flex flex-col md:flex-row gap-8 w-full items-center justify-center mb-16 mx-[0px]">
       <!-- Biology Card -->
-      <div class="card rounded-xl p-10 text-white w-full md:w-[400px] text-center flex flex-col">
+      <div class="card rounded-xl p-10 text-white w-full md:w-1/4 text-center flex flex-col">
         <i class="fas fa-dna text-7xl mb-6"></i>
         <h2 class="text-4xl font-bold mb-4">Biology</h2>
         <p class="text-white/90 text-lg mb-6 leading-relaxed">Master life sciences and prepare for UIL competitions.</p>
@@ -244,7 +244,7 @@
       </div>
       
       <!-- Chemistry Card -->
-      <div class="card rounded-xl p-10 text-white w-full md:w-[400px] text-center flex flex-col">
+      <div class="card rounded-xl p-10 text-white w-full md:w-1/4 text-center flex flex-col">
         <i class="fas fa-flask text-7xl mb-6"></i>
         <h2 class="text-4xl font-bold mb-4">Chemistry</h2>
         <p class="text-white/90 text-lg mb-6 leading-relaxed">Explore the molecular world and master chemical reactions.</p>
@@ -254,13 +254,35 @@
       </div>
       
       <!-- Physics Card -->
-      <div class="card rounded-xl p-10 text-white w-full md:w-[400px] text-center flex flex-col">
+      <div class="card rounded-xl p-10 text-white w-full md:w-1/4 text-center flex flex-col">
         <i class="fas fa-rocket text-7xl mb-6"></i>
         <h2 class="text-4xl font-bold mb-4">Physics</h2>
         <p class="text-white/90 text-lg mb-6 leading-relaxed">Understand the fundamental laws of the universe.</p>
         <a href="physics/index.html" class="mt-auto border-2 border-white/60 rounded-lg px-8 py-4 text-lg font-semibold hover:bg-white/20 transition-all hover:border-white/80">
           Explore Physics →
         </a>
+      </div>
+    </div>
+    
+    <!-- Divider -->
+    <div class="w-3/4 h-[3px] bg-white/30 my-16 mb-32"></div>
+    
+    <!-- Statistics Card -->
+    <div class="card rounded-xl p-10 text-white w-3/4 text-center">
+      <h2 class="text-5xl font-bold mb-12">By The Numbers...</h2>
+      <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
+        <div class="flex-1">
+          <div class="text-5xl font-bold mb-2" id="stat-biology">0</div>
+          <div class="text-xl text-white/90">Biology Questions</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-5xl font-bold mb-2" id="stat-chemistry">0</div>
+          <div class="text-xl text-white/90">Chemistry Questions</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-5xl font-bold mb-2" id="stat-physics">0</div>
+          <div class="text-xl text-white/90">Physics Questions</div>
+        </div>
       </div>
     </div>
     
@@ -350,15 +372,84 @@
     $(window).on('scroll', handleScrollArrow);
     
     function scrollToContent() {
-      document.getElementById('subjects').scrollIntoView({
-        behavior: 'smooth'
-      });
+      const subjectsSection = document.getElementById('subjects');
+      const startPosition = window.pageYOffset;
+      const targetPosition = subjectsSection.offsetTop;
+      const distance = targetPosition - startPosition;
+      const duration = 2000; // 2 seconds
+      let start = null;
+      
+      function step(timestamp) {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        const progressPercent = Math.min(progress / duration, 1);
+        
+        // Easing function (ease-in-out)
+        const ease = progressPercent < 0.5 
+          ? 2 * progressPercent * progressPercent 
+          : 1 - Math.pow(-2 * progressPercent + 2, 2) / 2;
+        
+        window.scrollTo(0, startPosition + distance * ease);
+        
+        if (progress < duration) {
+          requestAnimationFrame(step);
+        }
+      }
+      
+      requestAnimationFrame(step);
+    }
+    
+    // Animate statistics count-up
+    function animateCountUp(elementId, targetValue, duration = 5000) {
+      const element = document.getElementById(elementId);
+      const startValue = 0;
+      const startTime = performance.now();
+      
+      function updateCount(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function (ease-out)
+        const ease = 1 - Math.pow(1 - progress, 3);
+        const currentValue = Math.floor(startValue + (targetValue - startValue) * ease);
+        
+        element.textContent = currentValue.toLocaleString();
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateCount);
+        } else {
+          element.textContent = targetValue.toLocaleString();
+        }
+      }
+      
+      requestAnimationFrame(updateCount);
+    }
+    
+    // Start count-up animation when statistics section is visible
+    let statsAnimated = false;
+    function checkStatsVisibility() {
+      const statsCard = document.getElementById('stat-biology');
+      if (!statsCard || statsAnimated) return;
+      
+      const rect = statsCard.closest('.card').getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+      
+      if (isVisible && !statsAnimated) {
+        statsAnimated = true;
+        animateCountUp('stat-biology', 738);
+        animateCountUp('stat-chemistry', 74);
+        animateCountUp('stat-physics', 0);
+      }
     }
     
     // Initialize
     $(document).ready(function() {
       createStars();
       handleScrollArrow();
+      
+      // Check stats visibility on scroll
+      $(window).on('scroll', checkStatsVisibility);
+      checkStatsVisibility(); // Check on initial load
     });
   </script>
 </body>
