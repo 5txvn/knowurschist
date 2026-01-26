@@ -192,12 +192,25 @@
     
     /* AI Explanation Button */
     .ai-explanation-btn {
+      max-height: 0;
+      overflow: hidden;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      margin-top: 0;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+      cursor: pointer;
     }
     
     .ai-explanation-btn.visible {
+      max-height: 100px;
       opacity: 1;
+      margin-top: 16px;
+    }
+    
+    .ai-explanation-btn.clicked {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      overflow: hidden;
     }
     
     /* AI Explanation Container */
@@ -205,7 +218,7 @@
       margin-top: 16px;
       padding: 16px;
       background: #f9fafb;
-      border-left: 4px solid #22c55e;
+      border-left: 4px solid black;
       border-radius: 8px;
     }
     
@@ -276,7 +289,7 @@
     </div>
   </div>
   
-  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto pt-8 md:pt-12">
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto mt-12">
     <!-- Setup Screen -->
     <div id="setup-screen" class="mb-16">
       <!-- Unit Selection -->
@@ -393,7 +406,7 @@
       </div>
       
       <!-- Start Button -->
-      <button onclick="startQuiz()" class="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors">
+      <button onclick="startQuiz()" class="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg transition-all hover:-translate-y-1">
         Start Quiz
       </button>
     </div>
@@ -450,7 +463,7 @@
         <div class="space-y-3" id="options-container"></div>
         
         <!-- AI Explanation Button -->
-        <button id="ai-explanation-btn" class="ai-explanation-btn w-full mt-6 bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+        <button id="ai-explanation-btn" class="ai-explanation-btn w-full py-3 rounded-lg font-semibold bg-black text-white transition-colors">
           Generate AI Explanation
         </button>
         
@@ -759,7 +772,7 @@
       });
       
       // Hide AI explanation elements
-      $('#ai-explanation-btn').removeClass('visible');
+      $('#ai-explanation-btn').removeClass('visible clicked');
       $('#ai-loading').addClass('hidden');
       $('#ai-explanation').addClass('hidden').empty();
       
@@ -782,8 +795,10 @@
       // Mark selected answer if incorrect
       if (!isCorrect) {
         $(`.option-btn[data-index="${index}"]`).addClass('incorrect');
-        // Show AI explanation button
-        $('#ai-explanation-btn').addClass('visible');
+        // Show AI explanation button with slide animation
+        setTimeout(() => {
+          $('#ai-explanation-btn').addClass('visible');
+        }, 100);
       } else {
         $('#ai-explanation-btn').removeClass('visible');
       }
@@ -805,7 +820,8 @@
     }
     
     async function generateAIExplanation() {
-      const apiKey = localStorage.getItem('openrouter_api_key');
+      const apiKey = localStorage.getItem('groq_api_key');
+      const model = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
       
       if (!apiKey) {
         // Open settings modal
@@ -814,7 +830,7 @@
       }
       
       // Show loading, hide button and previous explanation
-      $('#ai-explanation-btn').removeClass('visible');
+      $('#ai-explanation-btn').addClass('clicked').removeClass('visible');
       $('#ai-loading').removeClass('hidden');
       $('#ai-explanation').addClass('hidden').empty();
       
@@ -837,16 +853,14 @@ The correct answer is ${correctAnswer}: ${question.options[question.answer]}
 Please provide a clear, concise explanation of why this answer is correct. Focus on the biological concepts involved and explain any key terms. Keep your explanation under 150 words.`;
       
       try {
-        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-            'HTTP-Referer': window.location.origin,
-            'X-Title': 'Know Ur Schist'
+            'Authorization': `Bearer ${apiKey}`
           },
           body: JSON.stringify({
-            model: 'moonshotai/kimi-k2:free',
+            model: model,
             messages: [
               {
                 role: 'user',
@@ -896,8 +910,8 @@ Please provide a clear, concise explanation of why this answer is correct. Focus
       if (isFreeplay) {
         const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
         $('#stat-accuracy').text(accuracy + '%');
-        $('#stat-correct').html('✓ ' + correctCount);
-        $('#stat-incorrect').html('✗ ' + incorrectCount);
+        $('#stat-correct').html('✅ ' + correctCount);
+        $('#stat-incorrect').html('❌ ' + incorrectCount);
         $('#stat-streak').html('🔥 ' + currentStreak);
       }
     }
