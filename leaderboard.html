@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyword Leaderboard - Know Ur Schist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
+    }
+    
+    body {
+      background: #fafafa;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    
+    #navbar-placeholder {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .content-wrapper {
+      padding-top: 0;
+    }
+    
+    .filter-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid black;
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    
+    .filter-checkbox:hover {
+      border-color: #333;
+      transform: scale(1.1);
+    }
+    
+    .filter-checkbox input {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .filter-checkbox.checked {
+      background-color: black;
+      border-color: black;
+    }
+    
+    .filter-checkbox.checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .expandable-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .expandable-section.expanded {
+      max-height: 500px;
+    }
+    
+    .expand-arrow {
+      transition: transform 0.3s ease;
+    }
+    
+    .expand-arrow.rotated {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <div id="navbar-placeholder"></div>
+  </div>
+  
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto mt-12">
+    <div class="mb-8 md:mb-16 text-center md:text-left">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">📊 Keyword Leaderboard</h1>
+      <p class="text-gray-600 text-lg">See which keywords appear most frequently across all questions</p>
+    </div>
+    
+    <!-- Subject Selection -->
+    <div class="mb-8">
+      <label class="block text-xl font-semibold text-gray-900 mb-4">Select Subject:</label>
+      <select id="subject-select" class="w-full md:w-auto p-4 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none text-lg">
+        <option value="biology">Biology</option>
+        <option value="chemistry">Chemistry</option>
+        <option value="physics">Physics</option>
+      </select>
+    </div>
+    
+    <!-- Filters -->
+    <div class="mb-8 bg-white rounded-xl p-6 border-2 border-gray-200">
+      <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleSection('years-section')">
+        <h3 class="text-xl font-semibold text-gray-900">Filter by Year</h3>
+        <i class="fas fa-chevron-down expand-arrow" id="years-arrow"></i>
+      </div>
+      <div id="years-section" class="expandable-section">
+        <div id="years-container" class="flex flex-wrap gap-4"></div>
+      </div>
+      
+      <div class="flex items-center justify-between mb-4 mt-6 cursor-pointer" onclick="toggleSection('test-types-section')">
+        <h3 class="text-xl font-semibold text-gray-900">Filter by Test Type</h3>
+        <i class="fas fa-chevron-down expand-arrow" id="test-types-arrow"></i>
+      </div>
+      <div id="test-types-section" class="expandable-section">
+        <div id="test-types-container" class="flex flex-wrap gap-4"></div>
+      </div>
+    </div>
+    
+    <!-- Leaderboard -->
+    <div id="leaderboard-container" class="bg-white rounded-xl p-8 border-2 border-gray-200">
+      <div class="text-center text-gray-500">
+        <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+        <p>Loading leaderboard...</p>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let allQuestions = [];
+    let keywordCounts = {};
+    let availableYears = new Set();
+    let availableTestTypes = new Set();
+    let selectedYears = new Set();
+    let selectedTestTypes = new Set();
+    let currentSubject = 'biology';
+    
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('navbar.html');
+      loadQuestions('biology');
+      
+      $('#subject-select').on('change', function() {
+        currentSubject = $(this).val();
+        loadQuestions(currentSubject);
+      });
+    });
+    
+    function toggleSection(sectionId) {
+      const section = $('#' + sectionId);
+      const arrowId = sectionId.replace('-section', '-arrow');
+      const arrow = $('#' + arrowId);
+      
+      section.toggleClass('expanded');
+      arrow.toggleClass('rotated');
+    }
+    
+    async function loadQuestions(subject) {
+      try {
+        const response = await fetch(`${subject}/questionBank.json`);
+        allQuestions = await response.json();
+        
+        // Extract available years and test types
+        availableYears.clear();
+        availableTestTypes.clear();
+        
+        allQuestions.forEach(q => {
+          // Parse ID format: "YY-YY-TYPE-N-qN"
+          const match = q.id.match(/^(\d{2}-\d{2})-(TMSCA|UIL|VCM)-/);
+          if (match) {
+            availableYears.add(match[1]);
+            availableTestTypes.add(match[2]);
+          }
+        });
+        
+        // Initialize all as selected
+        selectedYears = new Set(availableYears);
+        selectedTestTypes = new Set(availableTestTypes);
+        
+        // Populate filter checkboxes
+        populateFilters();
+        
+        // Generate leaderboard
+        generateLeaderboard();
+      } catch (error) {
+        console.error('Error loading questions:', error);
+        $('#leaderboard-container').html(`
+          <div class="text-center text-red-600">
+            <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+            <p>Error loading questions. Please refresh the page.</p>
+          </div>
+        `);
+      }
+    }
+    
+    function populateFilters() {
+      // Years
+      const yearsContainer = $('#years-container');
+      yearsContainer.empty();
+      
+      Array.from(availableYears).sort().reverse().forEach(year => {
+        const label = $(`
+          <label class="flex items-center gap-2 cursor-pointer">
+            <div class="filter-checkbox checked">
+              <input type="checkbox" class="year-checkbox" value="${year}" checked>
+            </div>
+            <span class="text-gray-900 font-medium">${year}</span>
+          </label>
+        `);
+        yearsContainer.append(label);
+      });
+      
+      // Test Types
+      const testTypesContainer = $('#test-types-container');
+      testTypesContainer.empty();
+      
+      ['TMSCA', 'UIL', 'VCM'].forEach(type => {
+        if (availableTestTypes.has(type)) {
+          const label = $(`
+            <label class="flex items-center gap-2 cursor-pointer">
+              <div class="filter-checkbox checked">
+                <input type="checkbox" class="test-type-checkbox" value="${type}" checked>
+              </div>
+              <span class="text-gray-900 font-medium">${type}</span>
+            </label>
+          `);
+          testTypesContainer.append(label);
+        }
+      });
+      
+      // Initialize checkboxes
+      $('.year-checkbox, .test-type-checkbox').on('change', function() {
+        const checkbox = $(this).closest('label').find('.filter-checkbox');
+        checkbox.toggleClass('checked', this.checked);
+        
+        if ($(this).hasClass('year-checkbox')) {
+          if (this.checked) {
+            selectedYears.add($(this).val());
+          } else {
+            selectedYears.delete($(this).val());
+          }
+        } else {
+          if (this.checked) {
+            selectedTestTypes.add($(this).val());
+          } else {
+            selectedTestTypes.delete($(this).val());
+          }
+        }
+        
+        generateLeaderboard();
+      });
+    }
+    
+    function generateLeaderboard() {
+      keywordCounts = {};
+      
+      // Filter questions by selected years and test types
+      const filteredQuestions = allQuestions.filter(q => {
+        const match = q.id.match(/^(\d{2}-\d{2})-(TMSCA|UIL|VCM)-/);
+        if (!match) return false;
+        
+        const year = match[1];
+        const testType = match[2];
+        
+        return selectedYears.has(year) && selectedTestTypes.has(testType);
+      });
+      
+      // Count keywords
+      filteredQuestions.forEach(q => {
+        q.keywords.forEach(keyword => {
+          const lowerKeyword = keyword.toLowerCase();
+          if (!keywordCounts[lowerKeyword]) {
+            keywordCounts[lowerKeyword] = {
+              count: 0,
+              questions: []
+            };
+          }
+          keywordCounts[lowerKeyword].count++;
+          keywordCounts[lowerKeyword].questions.push(q.id);
+        });
+      });
+      
+      // Sort by count
+      const sortedKeywords = Object.entries(keywordCounts)
+        .sort((a, b) => b[1].count - a[1].count);
+      
+      // Display leaderboard
+      const container = $('#leaderboard-container');
+      container.empty();
+      
+      if (sortedKeywords.length === 0) {
+        container.html(`
+          <div class="text-center text-gray-500">
+            <i class="fas fa-info-circle text-4xl mb-4"></i>
+            <p>No keywords found with the selected filters.</p>
+          </div>
+        `);
+        return;
+      }
+      
+      const table = $(`
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b-2 border-gray-300">
+                <th class="text-left py-4 px-4 font-bold text-gray-900">Rank</th>
+                <th class="text-left py-4 px-4 font-bold text-gray-900">Keyword</th>
+                <th class="text-left py-4 px-4 font-bold text-gray-900">Frequency</th>
+                <th class="text-left py-4 px-4 font-bold text-gray-900">Appears In</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body"></tbody>
+          </table>
+        </div>
+      `);
+      container.append(table);
+      
+      const tbody = $('#leaderboard-body');
+      sortedKeywords.forEach(([keyword, data], index) => {
+        const row = $(`
+          <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+            <td class="py-4 px-4 font-semibold text-gray-900">#${index + 1}</td>
+            <td class="py-4 px-4 font-medium text-gray-900 capitalize">${keyword}</td>
+            <td class="py-4 px-4">
+              <div class="flex items-center gap-2">
+                <div class="flex-1 bg-gray-200 rounded-full h-4">
+                  <div class="bg-black h-4 rounded-full transition-all" style="width: ${(data.count / sortedKeywords[0][1].count) * 100}%"></div>
+                </div>
+                <span class="font-semibold text-gray-900 min-w-[40px]">${data.count}</span>
+              </div>
+            </td>
+            <td class="py-4 px-4 text-sm text-gray-600">${data.count} question${data.count !== 1 ? 's' : ''}</td>
+          </tr>
+        `);
+        tbody.append(row);
+      });
+    }
+  </script>
+</body>
+</html>
+
