@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chemistry Formulas - Know Ur Schist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
+    }
+    
+    body {
+      background: #fafafa;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    
+    #navbar-placeholder {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .content-wrapper {
+      padding-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <div id="navbar-placeholder"></div>
+  </div>
+  
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto mt-12">
+    <div class="mb-16 text-center md:text-left">
+      <h1 class="text-5xl font-bold text-gray-900 mb-4 flex items-center gap-4 justify-center md:justify-start">
+        <span class="text-6xl hidden md:inline">📐</span>
+        Chemistry Formulas
+      </h1>
+    </div>
+    
+    <div id="formulas-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Formulas will be loaded here -->
+    </div>
+  </div>
+  
+  <script>
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('../navbar.html');
+      loadFormulas();
+    });
+    
+    async function loadFormulas() {
+      try {
+        const response = await fetch('json/formulas.json');
+        const formulas = await response.json();
+        
+        const container = $('#formulas-container');
+        container.empty();
+        
+        Object.entries(formulas).forEach(([name, formula]) => {
+          const card = $(`
+            <div class="bg-white rounded-xl p-8 border-2 border-gray-200">
+              <h3 class="text-2xl font-bold text-gray-900 mb-4">${name}</h3>
+              <div class="text-3xl text-center py-6" id="formula-${name.replace(/\s+/g, '-')}">${formula}</div>
+            </div>
+          `);
+          container.append(card);
+        });
+        
+        // Render MathJax
+        if (window.MathJax) {
+          MathJax.typesetPromise();
+        }
+      } catch (error) {
+        console.error('Error loading formulas:', error);
+        $('#formulas-container').html('<p class="text-red-600">Error loading formulas. Refreshing page...</p>');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    }
+  </script>
+</body>
+</html>
