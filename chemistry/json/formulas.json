@@ -1,0 +1,9 @@
+{
+  "Freezing Point Depression": "$\\Delta T_f = iK_f m$",
+  "Boiling Point Elevation": "$\\Delta T_b = iK_b m$",
+  "Ideal Gas Law": "$PV = nRT$",
+  "Rydberg Equation": "$\\frac{1}{\\lambda} = R_H \\left(\\frac{1}{n_1^2} - \\frac{1}{n_2^2}\\right)$",
+  "Graham's Law": "$\\frac{r_1}{r_2} = \\sqrt{\\frac{M_2}{M_1}}$",
+  "Arrhenius Equation": "$k = Ae^{-\\frac{E_a}{RT}}$"
+}
+

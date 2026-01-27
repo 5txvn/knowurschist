@@ -1,0 +1,41 @@
+{
+  "Freezing Point Depression": {
+    "$\\Delta T_f$": "Change in freezing point (units: °C or K)",
+    "$i$": "Van't Hoff factor (dimensionless)",
+    "$K_f$": "Freezing point depression constant (units: °C·kg/mol or K·kg/mol)",
+    "$m$": "Molality (units: mol/kg)"
+  },
+  "Boiling Point Elevation": {
+    "$\\Delta T_b$": "Change in boiling point (units: °C or K)",
+    "$i$": "Van't Hoff factor (dimensionless)",
+    "$K_b$": "Boiling point elevation constant (units: °C·kg/mol or K·kg/mol)",
+    "$m$": "Molality (units: mol/kg)"
+  },
+  "Ideal Gas Law": {
+    "$P$": "Pressure (units: atm, Pa, or mmHg)",
+    "$V$": "Volume (units: L or m³)",
+    "$n$": "Number of moles (units: mol)",
+    "$R$": "Ideal gas constant (0.0821 L·atm/(mol·K) or 8.314 J/(mol·K))",
+    "$T$": "Temperature (units: K)"
+  },
+  "Rydberg Equation": {
+    "$\\lambda$": "Wavelength (units: m or nm)",
+    "$R_H$": "Rydberg constant (1.097 × 10⁷ m⁻¹)",
+    "$n_1$": "Lower energy level (principal quantum number, dimensionless)",
+    "$n_2$": "Higher energy level (principal quantum number, dimensionless)"
+  },
+  "Graham's Law": {
+    "$r_1$": "Rate of effusion/diffusion of gas 1 (units: mol/s or L/s)",
+    "$r_2$": "Rate of effusion/diffusion of gas 2 (units: mol/s or L/s)",
+    "$M_1$": "Molar mass of gas 1 (units: g/mol)",
+    "$M_2$": "Molar mass of gas 2 (units: g/mol)"
+  },
+  "Arrhenius Equation": {
+    "$k$": "Rate constant (units vary with reaction order)",
+    "$A$": "Pre-exponential factor or frequency factor (units same as k)",
+    "$E_a$": "Activation energy (units: J/mol or kJ/mol)",
+    "$R$": "Gas constant (8.314 J/(mol·K))",
+    "$T$": "Temperature (units: K)"
+  }
+}
+
