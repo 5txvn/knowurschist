@@ -262,6 +262,134 @@
         display: none !important;
       }
     }
+    
+    /* Word Definition Styles */
+    .word-definition-tooltip {
+      position: fixed;
+      background: #f3f4f6;
+      color: black;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      display: none;
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .word-definition-tooltip.show {
+      display: block;
+    }
+    
+    .word-definition-tooltip:hover {
+      background: #e5e7eb;
+    }
+    
+    .word-definition-tooltip .define-btn {
+      background: transparent;
+      color: black;
+      padding: 0;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    /* Selection highlight */
+    ::selection {
+      background-color: #e5e7eb;
+    }
+    
+    ::-moz-selection {
+      background-color: #e5e7eb;
+    }
+    
+    /* Definition Modal */
+    .definition-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .definition-modal.active {
+      display: flex;
+    }
+    
+    .definition-modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+    
+    /* Filter Section Styles */
+    .filter-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .filter-section.expanded {
+      max-height: 500px;
+    }
+    
+    .filter-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid black;
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    
+    .filter-checkbox:hover {
+      border-color: #333;
+      transform: scale(1.1);
+    }
+    
+    .filter-checkbox input {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .filter-checkbox.checked {
+      background-color: black;
+      border-color: black;
+    }
+    
+    .filter-checkbox.checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .expand-arrow {
+      transition: transform 0.3s ease;
+    }
+    
+    .expand-arrow.rotated {
+      transform: rotate(180deg);
+    }
   </style>
 </head>
 <body>
@@ -402,7 +530,25 @@
           <div id="keyword-suggestions" class="mt-2 bg-white border-2 border-gray-200 rounded-lg max-h-48 overflow-y-auto hidden"></div>
         </div>
         <div id="selected-keywords" class="flex flex-wrap gap-2 mb-4"></div>
-        <input type="number" id="question-count" min="1" placeholder="Number of questions (leave blank for freeplay)" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none">
+        <input type="number" id="question-count" min="1" placeholder="Number of questions (leave blank for freeplay)" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none mb-4">
+        
+        <!-- Filters -->
+        <div class="mb-4">
+          <div class="flex items-center justify-between cursor-pointer" onclick="toggleFilterSection('filters-section')">
+            <h3 class="text-lg font-semibold text-gray-900">Filters</h3>
+            <i class="fas fa-chevron-down expand-arrow" id="filters-section-arrow"></i>
+          </div>
+          <div id="filters-section" class="filter-section mt-2">
+            <div class="mb-4">
+              <h4 class="text-md font-semibold text-gray-800 mb-2">Year</h4>
+              <div id="years-container" class="flex flex-wrap gap-3"></div>
+            </div>
+            <div>
+              <h4 class="text-md font-semibold text-gray-800 mb-2">Test Type</h4>
+              <div id="test-types-container" class="flex flex-wrap gap-3"></div>
+            </div>
+          </div>
+        </div>
       </div>
       
       <!-- Start Button -->
@@ -462,6 +608,28 @@
         
         <div class="space-y-3" id="options-container"></div>
         
+        <!-- Word Definition Tooltip -->
+        <div id="word-tooltip" class="word-definition-tooltip">
+          <button class="define-btn" onclick="event.stopPropagation(); window.defineSelectedWord();">Define with AI</button>
+        </div>
+        
+        <!-- Word Definition Modal -->
+        <div class="definition-modal" id="definition-modal" onclick="closeDefinitionModal(event)">
+          <div class="definition-modal-content" onclick="event.stopPropagation()">
+            <button onclick="closeDefinitionModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+              <i class="fas fa-times text-2xl"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Definition</h3>
+            <div id="definition-loading" class="text-center py-8">
+              <i class="fas fa-spinner fa-spin text-4xl text-gray-600 mb-4"></i>
+              <p class="text-gray-600">Generating definition...</p>
+            </div>
+            <div id="definition-content" class="hidden">
+              <p class="text-lg text-gray-700" id="definition-text"></p>
+            </div>
+          </div>
+        </div>
+        
         <!-- AI Explanation Button -->
         <button id="ai-explanation-btn" class="ai-explanation-btn w-full py-3 rounded-lg font-semibold bg-black text-white transition-colors">
           Generate AI Explanation
@@ -512,6 +680,11 @@
     let targetQuestionCount = 0;
     let selectedKeywords = new Set();
     let currentQuestion = null;
+    let selectedYears = new Set();
+    let selectedTestTypes = new Set();
+    let availableYears = new Set();
+    let availableTestTypes = new Set();
+    let selectedWord = '';
     
     const unitNames = {
       1: "Structure & Function",
@@ -557,17 +730,220 @@
         const response = await fetch('questionBank.json');
         allQuestions = await response.json();
         
-        // Aggregate all keywords
+        // Extract available years and test types
+        availableYears.clear();
+        availableTestTypes.clear();
+        
         allQuestions.forEach(q => {
+          // Parse ID format: "YY-YY-TYPE-N-qN"
+          const match = q.id.match(/^(\d{2}-\d{2})-(TMSCA|UIL|VCM)-/);
+          if (match) {
+            availableYears.add(match[1]);
+            availableTestTypes.add(match[2]);
+          }
+          
           q.keywords.forEach(k => allKeywords.add(k.toLowerCase()));
         });
         
+        // Initialize all as selected
+        selectedYears = new Set(availableYears);
+        selectedTestTypes = new Set(availableTestTypes);
+        
         allKeywords = Array.from(allKeywords).sort();
+        
+        // Populate filters
+        populateFilters();
+        
+        // Setup word selection
+        setupWordSelection();
       } catch (error) {
         console.error('Error loading questions:', error);
         alert('Error loading questions. Please refresh the page.');
       }
     }
+    
+    function populateFilters() {
+      // Years
+      const yearsContainer = $('#years-container');
+      yearsContainer.empty();
+      
+      Array.from(availableYears).sort().reverse().forEach(year => {
+        const label = $(`
+          <label class="flex items-center gap-2 cursor-pointer">
+            <div class="filter-checkbox checked">
+              <input type="checkbox" class="year-checkbox" value="${year}" checked>
+            </div>
+            <span class="text-gray-900 font-medium">${year}</span>
+          </label>
+        `);
+        yearsContainer.append(label);
+      });
+      
+      // Test Types
+      const testTypesContainer = $('#test-types-container');
+      testTypesContainer.empty();
+      
+      ['TMSCA', 'UIL', 'VCM'].forEach(type => {
+        if (availableTestTypes.has(type)) {
+          const label = $(`
+            <label class="flex items-center gap-2 cursor-pointer">
+              <div class="filter-checkbox checked">
+                <input type="checkbox" class="test-type-checkbox" value="${type}" checked>
+              </div>
+              <span class="text-gray-900 font-medium">${type}</span>
+            </label>
+          `);
+          testTypesContainer.append(label);
+        }
+      });
+      
+      // Initialize checkboxes
+      $('.year-checkbox, .test-type-checkbox').on('change', function() {
+        const checkbox = $(this).closest('label').find('.filter-checkbox');
+        checkbox.toggleClass('checked', this.checked);
+        
+        if ($(this).hasClass('year-checkbox')) {
+          if (this.checked) {
+            selectedYears.add($(this).val());
+          } else {
+            selectedYears.delete($(this).val());
+          }
+        } else {
+          if (this.checked) {
+            selectedTestTypes.add($(this).val());
+          } else {
+            selectedTestTypes.delete($(this).val());
+          }
+        }
+      });
+    }
+    
+    function toggleFilterSection(sectionId) {
+      const section = $('#' + sectionId);
+      const arrowId = sectionId + '-arrow';
+      const arrow = $('#' + arrowId);
+      
+      section.toggleClass('expanded');
+      arrow.toggleClass('rotated');
+    }
+    
+    function setupWordSelection() {
+      $(document).on('contextmenu', '#question-text, #options-container', function(e) {
+        const selection = window.getSelection();
+        const text = selection.toString().trim();
+        
+        if (text.length > 0 && text.length < 50) {
+          e.preventDefault();
+          selectedWord = text;
+          const tooltip = $('#word-tooltip');
+          
+          tooltip.css({
+            top: (e.pageY + 10) + 'px',
+            left: (e.pageX + 10) + 'px'
+          });
+          tooltip.addClass('show');
+        } else {
+          $('#word-tooltip').removeClass('show');
+        }
+      });
+      
+      $(document).on('click', function(e) {
+        if (!$(e.target).closest('#word-tooltip').length) {
+          $('#word-tooltip').removeClass('show');
+        }
+      });
+      
+      $(document).on('selectionchange', function() {
+        const selection = window.getSelection();
+        const text = selection.toString().trim();
+        if (text.length === 0) {
+          $('#word-tooltip').removeClass('show');
+        }
+      });
+    }
+    
+    function defineSelectedWord() {
+      if (!selectedWord) {
+        console.log('No word selected');
+        return;
+      }
+      
+      console.log('Defining word:', selectedWord);
+      
+      const apiKey = localStorage.getItem('groq_api_key');
+      const model = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
+      
+      if (!apiKey) {
+        // Open settings modal
+        $('#settings-modal').removeClass('hidden').addClass('flex');
+        return;
+      }
+      
+      $('#word-tooltip').removeClass('show');
+      
+      // Show modal
+      const modal = $('#definition-modal');
+      modal.addClass('active');
+      modal.css('display', 'flex');
+      
+      $('#definition-loading').removeClass('hidden');
+      $('#definition-content').addClass('hidden');
+      
+      const prompt = `You are a biology tutor. Provide a concise but informative definition of the following biological term. Keep it to 1-2 sentences maximum. Be clear and educational but not overly verbose.
+
+Term: ${selectedWord}
+
+Provide a concise definition:`;
+      
+      fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          throw new Error(data.error.message || 'API Error');
+        }
+        
+        const definition = data.choices[0].message.content;
+        $('#definition-loading').addClass('hidden');
+        $('#definition-content').removeClass('hidden');
+        $('#definition-text').html(`<strong>${selectedWord}</strong> - ${definition}`);
+      })
+      .catch(error => {
+        console.error('Error generating definition:', error);
+        $('#definition-loading').addClass('hidden');
+        $('#definition-content').removeClass('hidden');
+        $('#definition-text').html('<p class="text-red-600">Error generating definition. Please check your API key in settings.</p>');
+      });
+    }
+    
+    // Make function globally accessible
+    window.defineSelectedWord = defineSelectedWord;
+    
+    function closeDefinitionModal(event) {
+      if (!event || $(event.target).hasClass('definition-modal') || $(event.target).closest('button').length) {
+        $('#definition-modal').removeClass('active');
+        $('#definition-modal').css('display', 'none');
+      }
+    }
+    
+    // Make function globally accessible
+    window.closeDefinitionModal = closeDefinitionModal;
     
     function showKeywordSuggestions(searchTerm) {
       const suggestions = allKeywords.filter(k => k.includes(searchTerm) && !selectedKeywords.has(k));
@@ -641,7 +1017,8 @@
       $('.custom-checkbox').removeClass('checked');
     }
     
-    function startQuiz() {
+    // Make function globally accessible
+    window.startQuiz = function() {
       // Get selected units
       const selectedUnits = [];
       $('.unit-checkbox:checked').each(function() {
@@ -670,6 +1047,16 @@
       filteredQuestions = allQuestions.filter(q => {
         // Check unit
         if (!selectedUnits.includes(q.unit)) return false;
+        
+        // Check year and test type
+        const match = q.id.match(/^(\d{2}-\d{2})-(TMSCA|UIL|VCM)-/);
+        if (match) {
+          const year = match[1];
+          const testType = match[2];
+          if (!selectedYears.has(year) || !selectedTestTypes.has(testType)) {
+            return false;
+          }
+        }
         
         // Check keywords if provided
         if (selectedKeywords.size > 0) {
@@ -716,7 +1103,7 @@
       }
       
       displayQuestion();
-    }
+    };
     
     function shuffleArray(array) {
       const shuffled = [...array];
