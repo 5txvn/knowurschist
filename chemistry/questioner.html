@@ -7,6 +7,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    // Configure MathJax
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   <style>
     html, body {
         overflow: scroll;
@@ -52,9 +62,9 @@
     }
     
     .option-btn.correct {
-      background-color: #ec4899;
+      background-color: #22c55e;
       color: white;
-      border-color: #ec4899;
+      border-color: #22c55e;
     }
     
     .option-btn.incorrect {
@@ -72,7 +82,7 @@
     .custom-checkbox {
       width: 24px;
       height: 24px;
-      border: 2px solid #ec4899;
+      border: 2px solid #a855f7;
       border-radius: 6px;
       position: relative;
       cursor: pointer;
@@ -81,7 +91,7 @@
     }
     
     .custom-checkbox:hover {
-      border-color: #db2777;
+      border-color: #9333ea;
       transform: scale(1.1);
     }
     
@@ -93,8 +103,8 @@
     }
     
     .custom-checkbox.checked {
-      background-color: #ec4899;
-      border-color: #ec4899;
+      background-color: #a855f7;
+      border-color: #a855f7;
     }
     
     .custom-checkbox.checked::after {
@@ -143,19 +153,19 @@
       right: 40px;
       width: 56px;
       height: 56px;
-      background: #ec4899;
+      background: #a855f7;
       border-radius: 50%;
       display: none;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       z-index: 100;
-      box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
+      box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
       transition: all 0.2s ease;
     }
     
     .next-arrow:hover {
-      background: #db2777;
+      background: #9333ea;
       transform: scale(1.1);
     }
     
@@ -167,33 +177,27 @@
     .keyword-tag {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: #fce7f3;
-      color: #831843;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 14px;
+      gap: 8px;
+      background: black;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 16px;
       font-weight: 500;
     }
     
     .keyword-tag .remove {
       cursor: pointer;
-      font-weight: bold;
-      opacity: 0.7;
-      background: black;
       color: white;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
+      font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      margin-left: 8px;
     }
     
     .keyword-tag .remove:hover {
-      opacity: 1;
-      background: #333;
+      opacity: 0.7;
     }
     
     /* Next Arrow in Question Card */
@@ -229,6 +233,13 @@
     .question-card {
       position: relative;
     }
+    
+    /* Always hide stats on mobile */
+    @media (max-width: 767px) {
+      #freeplay-stats {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -256,156 +267,151 @@
     </div>
   </div>
   
-  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto pt-8 md:pt-12">
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto mt-12">
     <!-- Setup Screen -->
     <div id="setup-screen" class="mb-16">
       <!-- Unit Selection -->
       <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Select Units</h2>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Select Units</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked">
               <input type="checkbox" class="unit-checkbox" value="1" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 1 - Fundamentals</span>
-              <p class="text-sm text-gray-600">Measurements, significant digits, SI units, metric prefixes, unit conversions, classification of matter, the mole, concentration terms, isotopes</p>
+              <p class="text-sm text-gray-600 hidden md:block">Measurements, significant digits, SI units, metric prefixes, unit conversions, classification of matter, the mole, concentration terms, isotopes</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="2" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 2 - Stoichiometry</span>
-              <p class="text-sm text-gray-600">Compositional and reaction stoichiometry, chemical formulas, balancing reactions, limiting reactant, percent yield</p>
+              <p class="text-sm text-gray-600 hidden md:block">Compositional and reaction stoichiometry, chemical formulas, balancing reactions, limiting reactant, percent yield</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="3" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 3 - Atomic Theory</span>
-              <p class="text-sm text-gray-600">Electromagnetic radiation, quantum theory, electron configurations, periodic trends, ionization energy, electronegativity</p>
+              <p class="text-sm text-gray-600 hidden md:block">Electromagnetic radiation, quantum theory, electron configurations, periodic trends, ionization energy, electronegativity</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="4" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 4 - Chemical Bonding and Structure</span>
-              <p class="text-sm text-gray-600">Lewis structures, VSEPR theory, hybrid orbitals, molecular orbital theory, molecular polarity</p>
+              <p class="text-sm text-gray-600 hidden md:block">Lewis structures, VSEPR theory, hybrid orbitals, molecular orbital theory, molecular polarity</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="5" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 5 - Gases</span>
-              <p class="text-sm text-gray-600">Gas laws, ideal gas law, Dalton's law, kinetic molecular theory, diffusion and effusion, real gas behavior</p>
+              <p class="text-sm text-gray-600 hidden md:block">Gas laws, ideal gas law, Dalton's law, kinetic molecular theory, diffusion and effusion, real gas behavior</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="6" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 6 - Liquids and Solids</span>
-              <p class="text-sm text-gray-600">Intermolecular forces, physical properties, phase transitions, lattice energies</p>
+              <p class="text-sm text-gray-600 hidden md:block">Intermolecular forces, physical properties, phase transitions, lattice energies</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="7" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 7 - Thermodynamics</span>
-              <p class="text-sm text-gray-600">First and second law, enthalpy, entropy, Gibbs free energy, Hess's law, calorimetry</p>
+              <p class="text-sm text-gray-600 hidden md:block">First and second law, enthalpy, entropy, Gibbs free energy, Hess's law, calorimetry</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="8" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 8 - Physical Equilibria</span>
-              <p class="text-sm text-gray-600">Phase diagrams, colligative properties, Raoult's law, van't Hoff factor</p>
+              <p class="text-sm text-gray-600 hidden md:block">Phase diagrams, colligative properties, Raoult's law, van't Hoff factor</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="9" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 9 - Chemical Equilibria</span>
-              <p class="text-sm text-gray-600">Equilibrium constants, reaction quotient, Le Chatelier's principle, heterogeneous equilibria</p>
+              <p class="text-sm text-gray-600 hidden md:block">Equilibrium constants, reaction quotient, Le Chatelier's principle, heterogeneous equilibria</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="10" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 10 - Acids and Bases</span>
-              <p class="text-sm text-gray-600">Strong vs weak acids/bases, pH, ionization constants, buffers, titrations, indicators</p>
+              <p class="text-sm text-gray-600 hidden md:block">Strong vs weak acids/bases, pH, ionization constants, buffers, titrations, indicators</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="11" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 11 - Solubility Equilibria</span>
-              <p class="text-sm text-gray-600">Ksp, molar solubility, common ion effect, fractional precipitation, complex ion formation</p>
+              <p class="text-sm text-gray-600 hidden md:block">Ksp, molar solubility, common ion effect, fractional precipitation, complex ion formation</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="12" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 12 - Electrochemistry</span>
-              <p class="text-sm text-gray-600">Redox reactions, electrochemical cells, standard potentials, Nernst equation, batteries</p>
+              <p class="text-sm text-gray-600 hidden md:block">Redox reactions, electrochemical cells, standard potentials, Nernst equation, batteries</p>
             </div>
           </label>
-          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-pink-500 transition-colors">
+          <label class="flex items-center gap-3 p-4 bg-white rounded-2xl border-2 border-gray-200 cursor-pointer hover:border-purple-500 transition-colors">
             <div class="custom-checkbox checked" onclick="toggleCheckbox(this)">
               <input type="checkbox" class="unit-checkbox" value="13" checked>
             </div>
             <div>
               <span class="font-semibold text-gray-900">Unit 13 - Chemical Kinetics</span>
-              <p class="text-sm text-gray-600">Reaction rates, rate laws, reaction mechanisms, activation energy, Arrhenius equation, catalysts</p>
+              <p class="text-sm text-gray-600 hidden md:block">Reaction rates, rate laws, reaction mechanisms, activation energy, Arrhenius equation, catalysts</p>
             </div>
           </label>
         </div>
-        <div class="mt-4 flex gap-2">
+        <div class="mt-4 flex gap-2 justify-center hidden md:flex">
           <button onclick="selectAllUnits()" class="text-sm text-black hover:text-gray-700 font-medium">Select All</button>
           <span class="text-gray-400">|</span>
           <button onclick="deselectAllUnits()" class="text-sm text-black hover:text-gray-700 font-medium">Deselect All</button>
         </div>
       </div>
       
-      <!-- Keyword Selection -->
-      <div class="mb-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Filter by Keywords</h2>
+      <!-- Configuration -->
+      <div class="mb-4">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Configuration</h2>
         <div class="mb-4">
-          <input type="text" id="keyword-search" placeholder="Search for keywords..." class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none">
+          <input type="text" id="keyword-search" placeholder="Search for keywords..." class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none">
           <div id="keyword-suggestions" class="mt-2 bg-white border-2 border-gray-200 rounded-lg max-h-48 overflow-y-auto hidden"></div>
         </div>
         <div id="selected-keywords" class="flex flex-wrap gap-2 mb-4"></div>
-        <p class="text-sm text-gray-500">Search and add keywords to filter questions. Click on added keywords to remove them.</p>
-      </div>
-      
-      <!-- Quiz Mode Selection -->
-      <div class="mb-8">
-        <input type="number" id="question-count" min="1" placeholder="Number of questions (leave blank for freeplay)" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-pink-500 focus:outline-none">
+        <input type="number" id="question-count" min="1" placeholder="Number of questions (leave blank for freeplay)" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none">
       </div>
       
       <!-- Start Button -->
-      <button onclick="startQuiz()" class="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors">
+      <button onclick="startQuiz()" class="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg transition-all hover:-translate-y-1">
         Start Quiz
       </button>
     </div>
@@ -418,23 +424,23 @@
           <span class="text-sm font-medium text-gray-600">Question <span id="current-question-num">1</span> of <span id="total-questions">0</span></span>
         </div>
         <div class="w-full bg-gray-200 rounded-full h-2">
-          <div id="progress-bar" class="bg-pink-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+          <div id="progress-bar" class="bg-purple-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
         </div>
       </div>
       
       <!-- Stats (only in freeplay mode) -->
-      <div id="freeplay-stats" class="mb-6 bg-white rounded-lg p-4 border-2 border-gray-200">
+      <div id="freeplay-stats" class="mb-6 bg-white rounded-lg p-4 border-2 border-gray-200 hidden md:block">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
           <div>
             <div class="text-2xl font-bold text-gray-900" id="stat-accuracy">0%</div>
             <div class="text-sm text-gray-600">Accuracy</div>
           </div>
           <div>
-            <div class="text-2xl font-bold text-pink-600" id="stat-correct">✓ 0</div>
+            <div class="text-2xl font-bold text-green-600" id="stat-correct">✅ 0</div>
             <div class="text-sm text-gray-600">Correct</div>
           </div>
           <div>
-            <div class="text-2xl font-bold text-red-600" id="stat-incorrect">✗ 0</div>
+            <div class="text-2xl font-bold text-red-600" id="stat-incorrect">❌ 0</div>
             <div class="text-sm text-gray-600">Incorrect</div>
           </div>
           <div>
@@ -467,9 +473,9 @@
         <div class="bg-white rounded-xl p-10 border-2 border-gray-200 text-center">
           <div class="text-6xl mb-4">🎉</div>
           <h2 class="text-4xl font-bold text-gray-900 mb-4">Quiz Complete!</h2>
-          <p class="text-2xl text-gray-600 mb-6">Final Score: <span id="final-score" class="font-bold text-pink-600">0</span>/<span id="final-total">0</span></p>
+          <p class="text-2xl text-gray-600 mb-6">Final Score: <span id="final-score" class="font-bold text-green-600">0</span>/<span id="final-total">0</span></p>
           <div class="flex gap-4 justify-center">
-            <button onclick="restartQuiz()" class="bg-pink-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-pink-600 transition-colors">
+            <button onclick="restartQuiz()" class="bg-green-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-600 transition-colors">
               Start New Quiz
             </button>
             <a href="index.html" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
@@ -585,7 +591,9 @@
         const tag = $(`
           <div class="keyword-tag">
             <span>${keyword}</span>
-            <span class="remove" onclick="removeKeyword('${keyword}')">×</span>
+            <span class="remove" onclick="removeKeyword('${keyword}')">
+              <i class="fas fa-times"></i>
+            </span>
           </div>
         `);
         container.append(tag);
@@ -748,6 +756,7 @@
       });
       
       updateStats();
+      MathJax.typesetPromise();
     }
     
     function selectOption(index) {
@@ -788,8 +797,8 @@
       if (isFreeplay) {
         const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
         $('#stat-accuracy').text(accuracy + '%');
-        $('#stat-correct').html('✓ ' + correctCount);
-        $('#stat-incorrect').html('✗ ' + incorrectCount);
+        $('#stat-correct').html('✅ ' + correctCount);
+        $('#stat-incorrect').html('❌ ' + incorrectCount);
         $('#stat-streak').html('🔥 ' + currentStreak);
       }
     }
@@ -823,7 +832,7 @@
       optionsList.empty();
       currentQuestion.options.forEach((option, index) => {
         const isCorrect = index === currentQuestion.answer;
-        const div = $(`<div class="${isCorrect ? 'text-pink-600 font-semibold' : 'text-gray-700'}">${String.fromCharCode(65 + index)}. ${option}${isCorrect ? ' (Correct)' : ''}</div>`);
+        const div = $(`<div class="${isCorrect ? 'text-green-600 font-semibold' : 'text-gray-700'}">${String.fromCharCode(65 + index)}. ${option}${isCorrect ? ' (Correct)' : ''}</div>`);
         optionsList.append(div);
       });
       
@@ -835,6 +844,11 @@
       });
       
       $('#question-modal').addClass('active');
+      
+      // Render MathJax after modal content is populated
+      if (window.MathJax) {
+        MathJax.typesetPromise([document.getElementById('modal-question-text'), document.getElementById('modal-options')]);
+      }
     }
     
     function closeModal(event) {
