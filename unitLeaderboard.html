@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Keyword Leaderboard - Know Ur Schist</title>
+  <title>Unit Leaderboard - Know Ur Schist</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -98,6 +98,44 @@
     .expand-arrow.rotated {
       transform: rotate(180deg);
     }
+    
+    /* Custom Dropdown Styles */
+    .custom-dropdown {
+      position: relative;
+      width: 100%;
+    }
+    
+    .custom-dropdown-select {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid black;
+      border-radius: 0.5rem;
+      background: white;
+      font-size: 1.125rem;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 3rem;
+    }
+    
+    .custom-dropdown-select:focus {
+      outline: none;
+      border-color: black;
+    }
+    
+    .custom-dropdown-select:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .custom-dropdown-arrow {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: black;
+    }
   </style>
 </head>
 <body>
@@ -105,20 +143,24 @@
     <div id="navbar-placeholder"></div>
   </div>
   
-  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto mt-12">
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto md:mt-12">
     <div class="mb-8 md:mb-16 text-center md:text-left">
-      <h1 class="text-5xl font-bold text-gray-900 mb-4">📊 Keyword Leaderboard</h1>
-      <p class="text-gray-600 text-lg">See which keywords appear most frequently across all questions</p>
+      <h1 class="text-5xl mb-8 my-[-15px] block md:hidden">📊</h1>
+      <h1 class="text-5xl font-bold text-gray-900 mb-4 hidden md:block">📊 Unit Leaderboard</h1>
+      <p class="text-gray-600 text-lg hidden md:block">See which units appear most frequently across all questions</p>
     </div>
     
     <!-- Subject Selection -->
     <div class="mb-8">
       <label class="block text-xl font-semibold text-gray-900 mb-4">Select Subject:</label>
-      <select id="subject-select" class="w-full md:w-auto p-4 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none text-lg">
-        <option value="biology">Biology</option>
-        <option value="chemistry">Chemistry</option>
-        <option value="physics">Physics</option>
-      </select>
+      <div class="custom-dropdown">
+        <select id="subject-select" class="custom-dropdown-select">
+          <option value="biology">🌱 Biology</option>
+          <option value="chemistry">⚛️ Chemistry</option>
+          <option value="physics">🚀 Physics</option>
+        </select>
+        <i class="fas fa-chevron-down custom-dropdown-arrow"></i>
+      </div>
     </div>
     
     <!-- Filters -->
@@ -128,6 +170,11 @@
         <i class="fas fa-chevron-down expand-arrow" id="years-arrow"></i>
       </div>
       <div id="years-section" class="expandable-section">
+        <div class="mt-4 flex gap-2 justify-center hidden md:flex mb-4">
+          <button onclick="selectAllYears()" class="text-sm text-black hover:text-gray-700 font-medium">Select All</button>
+          <span class="text-gray-400">|</span>
+          <button onclick="deselectAllYears()" class="text-sm text-black hover:text-gray-700 font-medium">Deselect All</button>
+        </div>
         <div id="years-container" class="flex flex-wrap gap-4"></div>
       </div>
       
@@ -136,6 +183,11 @@
         <i class="fas fa-chevron-down expand-arrow" id="test-types-arrow"></i>
       </div>
       <div id="test-types-section" class="expandable-section">
+        <div class="mt-4 flex gap-2 justify-center hidden md:flex mb-4">
+          <button onclick="selectAllTestTypes()" class="text-sm text-black hover:text-gray-700 font-medium">Select All</button>
+          <span class="text-gray-400">|</span>
+          <button onclick="deselectAllTestTypes()" class="text-sm text-black hover:text-gray-700 font-medium">Deselect All</button>
+        </div>
         <div id="test-types-container" class="flex flex-wrap gap-4"></div>
       </div>
     </div>
@@ -151,16 +203,75 @@
   
   <script>
     let allQuestions = [];
-    let keywordCounts = {};
+    let unitCounts = {};
     let availableYears = new Set();
     let availableTestTypes = new Set();
     let selectedYears = new Set();
     let selectedTestTypes = new Set();
     let currentSubject = 'biology';
     
+    // Unit names for each subject
+    const unitNames = {
+      biology: {
+        1: "Structure & Function",
+        2: "Cellular Replication",
+        3: "Energy Transformations",
+        4: "Gene Expression",
+        5: "Genetics & Inheritance",
+        6: "Evolution",
+        7: "Diversity of Life",
+        8: "Ecology & Environment",
+        9: "Human Anatomy & Physiology",
+        10: "Diseases"
+      },
+      chemistry: {
+        1: "Fundamentals",
+        2: "Stoichiometry",
+        3: "Atomic Theory",
+        4: "Chemical Bonding and Structure",
+        5: "Gases",
+        6: "Liquids and Solids",
+        7: "Thermodynamics",
+        8: "Physical Equilibria",
+        9: "Chemical Equilibria",
+        10: "Acids and Bases",
+        11: "Solubility Equilibria",
+        12: "Electrochemistry",
+        13: "Chemical Kinetics"
+      },
+      physics: {
+        1: "Astronomy",
+        2: "Measurement & Math",
+        3: "Kinematics",
+        4: "Forces & Dynamics",
+        5: "Energy & Momentum",
+        6: "Rotational Motion",
+        7: "Waves & Harmonic Motion",
+        8: "Fluids",
+        9: "DC Circuits",
+        10: "Electric Fields & Potential",
+        11: "Magnetism",
+        12: "Induction & EM Waves",
+        13: "Optics",
+        14: "Modern & Quantum Physics",
+        15: "Nuclear & Particle Physics",
+        16: "Wildcard Physics 1",
+        17: "Wildcard Physics 2"
+      }
+    };
+    
     $(document).ready(function() {
       $('#navbar-placeholder').load('navbar.html');
-      loadQuestions('biology');
+      
+      // Check URL query parameter for subject
+      const urlParams = new URLSearchParams(window.location.search);
+      const subjectParam = urlParams.get('subject');
+      if (subjectParam && ['biology', 'chemistry', 'physics'].includes(subjectParam)) {
+        currentSubject = subjectParam;
+        $('#subject-select').val(currentSubject);
+      }
+      
+      loadQuestions(currentSubject);
       
       $('#subject-select').on('change', function() {
         currentSubject = $(this).val();
@@ -274,7 +385,7 @@
     }
     
     function generateLeaderboard() {
-      keywordCounts = {};
+      unitCounts = {};
       
       // Filter questions by selected years and test types
       const filteredQuestions = allQuestions.filter(q => {
@@ -287,34 +398,34 @@
         return selectedYears.has(year) && selectedTestTypes.has(testType);
       });
       
-      // Count keywords
+      // Count units
       filteredQuestions.forEach(q => {
-        q.keywords.forEach(keyword => {
-          const lowerKeyword = keyword.toLowerCase();
-          if (!keywordCounts[lowerKeyword]) {
-            keywordCounts[lowerKeyword] = {
+        if (q.unit) {
+          const unitKey = q.unit;
+          if (!unitCounts[unitKey]) {
+            unitCounts[unitKey] = {
               count: 0,
               questions: []
             };
           }
-          keywordCounts[lowerKeyword].count++;
-          keywordCounts[lowerKeyword].questions.push(q.id);
-        });
+          unitCounts[unitKey].count++;
+          unitCounts[unitKey].questions.push(q.id);
+        }
       });
       
       // Sort by count
-      const sortedKeywords = Object.entries(keywordCounts)
+      const sortedUnits = Object.entries(unitCounts)
         .sort((a, b) => b[1].count - a[1].count);
       
       // Display leaderboard
       const container = $('#leaderboard-container');
       container.empty();
       
-      if (sortedKeywords.length === 0) {
+      if (sortedUnits.length === 0) {
         container.html(`
           <div class="text-center text-gray-500">
             <i class="fas fa-info-circle text-4xl mb-4"></i>
-            <p>No keywords found with the selected filters.</p>
+            <p>No units found with the selected filters.</p>
           </div>
         `);
         return;
@@ -326,9 +437,8 @@
             <thead>
               <tr class="border-b-2 border-gray-300">
                 <th class="text-left py-4 px-4 font-bold text-gray-900">Rank</th>
-                <th class="text-left py-4 px-4 font-bold text-gray-900">Keyword</th>
+                <th class="text-left py-4 px-4 font-bold text-gray-900">Unit</th>
                 <th class="text-left py-4 px-4 font-bold text-gray-900">Frequency</th>
-                <th class="text-left py-4 px-4 font-bold text-gray-900">Appears In</th>
               </tr>
             </thead>
             <tbody id="leaderboard-body"></tbody>
@@ -338,24 +448,40 @@
       container.append(table);
       
       const tbody = $('#leaderboard-body');
-      sortedKeywords.forEach(([keyword, data], index) => {
+      const maxFrequency = sortedUnits[0][1].count;
+      
+      sortedUnits.forEach(([unitNum, data], index) => {
+        const unitNumInt = parseInt(unitNum);
+        const unitName = unitNames[currentSubject][unitNumInt] || `Unit ${unitNum}`;
+        const unitDisplay = `Unit ${unitNum} - ${unitName}`;
+        
         const row = $(`
           <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
             <td class="py-4 px-4 font-semibold text-gray-900">#${index + 1}</td>
-            <td class="py-4 px-4 font-medium text-gray-900 capitalize">${keyword}</td>
+            <td class="py-4 px-4 font-medium text-gray-900">${unitDisplay}</td>
             <td class="py-4 px-4">
-              <div class="flex items-center gap-2">
-                <div class="flex-1 bg-gray-200 rounded-full h-4">
-                  <div class="bg-black h-4 rounded-full transition-all" style="width: ${(data.count / sortedKeywords[0][1].count) * 100}%"></div>
-                </div>
-                <span class="font-semibold text-gray-900 min-w-[40px]">${data.count}</span>
-              </div>
+              <span class="font-semibold text-gray-900">${data.count}</span>
             </td>
-            <td class="py-4 px-4 text-sm text-gray-600">${data.count} question${data.count !== 1 ? 's' : ''}</td>
           </tr>
         `);
         tbody.append(row);
       });
+    }
+    
+    function selectAllYears() {
+      $('.year-checkbox').prop('checked', true).trigger('change');
+    }
+    
+    function deselectAllYears() {
+      $('.year-checkbox').prop('checked', false).trigger('change');
+    }
+    
+    function selectAllTestTypes() {
+      $('.test-type-checkbox').prop('checked', true).trigger('change');
+    }
+    
+    function deselectAllTestTypes() {
+      $('.test-type-checkbox').prop('checked', false).trigger('change');
     }
   </script>
 </body>

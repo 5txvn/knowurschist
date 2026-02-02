@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyword Leaderboard - Know Ur Schist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <style>
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
+    }
+    
+    body {
+      background: #fafafa;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    
+    #navbar-placeholder {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .content-wrapper {
+      padding-top: 0;
+    }
+    
+    .filter-checkbox {
+      width: 20px;
+      height: 20px;
+      border: 2px solid black;
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    
+    .filter-checkbox:hover {
+      border-color: #333;
+      transform: scale(1.1);
+    }
+    
+    .filter-checkbox input {
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    
+    .filter-checkbox.checked {
+      background-color: black;
+      border-color: black;
+    }
+    
+    .filter-checkbox.checked::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    
+    .expandable-section {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .expandable-section.expanded {
+      max-height: 500px;
+    }
+    
+    .expand-arrow {
+      transition: transform 0.3s ease;
+    }
+    
+    .expand-arrow.rotated {
+      transform: rotate(180deg);
+    }
+    
+    /* Custom Dropdown Styles */
+    .custom-dropdown {
+      position: relative;
+      width: 100%;
+    }
+    
+    .custom-dropdown-select {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid black;
+      border-radius: 0.5rem;
+      background: white;
+      font-size: 1.125rem;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 3rem;
+    }
+    
+    .custom-dropdown-select:focus {
+      outline: none;
+      border-color: black;
+    }
+    
+    .custom-dropdown-select:hover {
+      background-color: #f0f0f0;
+    }
+    
+    .custom-dropdown-arrow {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: black;
+    }
+    
+    /* Word Definition Styles */
+    .word-definition-tooltip {
+      position: fixed;
+      background: #f3f4f6;
+      color: black;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      display: none;
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .word-definition-tooltip.show {
+      display: block;
+    }
+    
+    .word-definition-tooltip:hover {
+      background: #e5e7eb;
+    }
+    
+    .word-definition-tooltip .define-btn {
+      background: transparent;
+      color: black;
+      padding: 0;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    /* Selection highlight */
+    ::selection {
+      background-color: #e5e7eb;
+    }
+    
+    ::-moz-selection {
+      background-color: #e5e7eb;
+    }
+    
+    /* Definition Modal */
+    .definition-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .definition-modal.active {
+      display: flex;
+    }
+    
+    .definition-modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <div id="navbar-placeholder"></div>
+  </div>
+  
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto md:mt-12">
+    <div class="mb-8 md:mb-16 text-center md:text-left">
+      <h1 class="text-5xl mb-8 my-[-15px] block md:hidden">📊</h1>
+      <h1 class="text-5xl font-bold text-gray-900 mb-4 hidden md:block">📊 Keyword Leaderboard</h1>
+      <p class="text-gray-600 text-lg hidden md:block">See which keywords appear most frequently across all questions</p>
+    </div>
+    
+    <!-- Subject Selection -->
+    <div class="mb-8">
+      <label class="block text-xl font-semibold text-gray-900 mb-4">Select Subject:</label>
+      <div class="custom-dropdown">
+        <select id="subject-select" class="custom-dropdown-select">
+          <option value="biology">🌱 Biology</option>
+          <option value="chemistry">⚛️ Chemistry</option>
+          <option value="physics">🚀 Physics</option>
+        </select>
+        <i class="fas fa-chevron-down custom-dropdown-arrow"></i>
+      </div>
+    </div>
+    
+    <!-- Filters -->
+    <div class="mb-8 bg-white rounded-xl p-6 border-2 border-gray-200">
+      <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleSection('years-section')">
+        <h3 class="text-xl font-semibold text-gray-900">Filter by Year</h3>
+        <i class="fas fa-chevron-down expand-arrow" id="years-arrow"></i>
+      </div>
+      <div id="years-section" class="expandable-section">
+        <div class="mt-4 flex gap-2 justify-center hidden md:flex mb-4">
+          <button onclick="selectAllYears()" class="text-sm text-black hover:text-gray-700 font-medium">Select All</button>
+          <span class="text-gray-400">|</span>
+          <button onclick="deselectAllYears()" class="text-sm text-black hover:text-gray-700 font-medium">Deselect All</button>
+        </div>
+        <div id="years-container" class="flex flex-wrap gap-4"></div>
+      </div>
+      
+      <div class="flex items-center justify-between mb-4 mt-6 cursor-pointer" onclick="toggleSection('test-types-section')">
+        <h3 class="text-xl font-semibold text-gray-900">Filter by Test Type</h3>
+        <i class="fas fa-chevron-down expand-arrow" id="test-types-arrow"></i>
+      </div>
+      <div id="test-types-section" class="expandable-section">
+        <div class="mt-4 flex gap-2 justify-center hidden md:flex mb-4">
+          <button onclick="selectAllTestTypes()" class="text-sm text-black hover:text-gray-700 font-medium">Select All</button>
+          <span class="text-gray-400">|</span>
+          <button onclick="deselectAllTestTypes()" class="text-sm text-black hover:text-gray-700 font-medium">Deselect All</button>
+        </div>
+        <div id="test-types-container" class="flex flex-wrap gap-4"></div>
+      </div>
+    </div>
+    
+    <!-- Leaderboard -->
+    <div id="leaderboard-container" class="bg-white rounded-xl p-8 border-2 border-gray-200">
+      <div class="text-center text-gray-500">
+        <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+        <p>Loading leaderboard...</p>
+      </div>
+    </div>
+    
+    <!-- Word Definition Tooltip -->
+    <div id="word-tooltip" class="word-definition-tooltip">
+      <button class="define-btn" onclick="event.stopPropagation(); window.defineSelectedWord();">Define with AI</button>
+    </div>
+    
+    <!-- Word Definition Modal -->
+    <div class="definition-modal" id="definition-modal" onclick="closeDefinitionModal(event)">
+      <div class="definition-modal-content" onclick="event.stopPropagation()">
+        <button onclick="closeDefinitionModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">Definition</h3>
+        <div id="definition-loading" class="text-center py-8">
+          <i class="fas fa-spinner fa-spin text-4xl text-gray-600 mb-4"></i>
+          <p class="text-gray-600">Generating definition...</p>
+        </div>
+        <div id="definition-content" class="hidden">
+          <p class="text-lg text-gray-700" id="definition-text"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let allQuestions = [];
+    let keywordCounts = {};
+    let availableYears = new Set();
+    let availableTestTypes = new Set();
+    let selectedYears = new Set();
+    let selectedTestTypes = new Set();
+    let currentSubject = 'biology';
+    let sortedKeywords = [];
+    let displayedCount = 0;
+    const ITEMS_PER_PAGE = 100;
+    let isLoading = false;
+    let selectedWord = '';
+    
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('navbar.html');
+      
+      // Check URL query parameter for subject
+      const urlParams = new URLSearchParams(window.location.search);
+      const subjectParam = urlParams.get('subject');
+      if (subjectParam && ['biology', 'chemistry', 'physics'].includes(subjectParam)) {
+        currentSubject = subjectParam;
+        $('#subject-select').val(currentSubject);
+      }
+      
+      loadQuestions(currentSubject);
+      
+      $('#subject-select').on('change', function() {
+        currentSubject = $(this).val();
+        displayedCount = 0;
+        loadQuestions(currentSubject);
+      });
+      
+      // Infinite scroll
+      $(window).on('scroll', function() {
+        if (isLoading) return;
+        
+        const scrollTop = $(window).scrollTop();
+        const windowHeight = $(window).height();
+        const documentHeight = $(document).height();
+        
+        if (scrollTop + windowHeight >= documentHeight - 100) {
+          loadMoreKeywords();
+        }
+      });
+      
+      // Setup word selection
+      setupWordSelection();
+    });
+    
+    function setupWordSelection() {
+      $(document).on('contextmenu', '#leaderboard-container', function(e) {
+        const selection = window.getSelection();
+        const text = selection.toString().trim();
+        
+        if (text.length > 0 && text.length < 50) {
+          e.preventDefault();
+          selectedWord = text;
+          const tooltip = $('#word-tooltip');
+          
+          tooltip.css({
+            top: (e.pageY + 10) + 'px',
+            left: (e.pageX + 10) + 'px'
+          });
+          tooltip.addClass('show');
+        } else {
+          $('#word-tooltip').removeClass('show');
+        }
+      });
+      
+      $(document).on('click', function(e) {
+        if (!$(e.target).closest('#word-tooltip').length) {
+          $('#word-tooltip').removeClass('show');
+        }
+      });
+      
+      $(document).on('selectionchange', function() {
+        const selection = window.getSelection();
+        const text = selection.toString().trim();
+        if (text.length === 0) {
+          $('#word-tooltip').removeClass('show');
+        }
+      });
+    }
+    
+    function defineSelectedWord() {
+      if (!selectedWord) {
+        console.log('No word selected');
+        return;
+      }
+      
+      console.log('Defining word:', selectedWord);
+      
+      const apiKey = localStorage.getItem('groq_api_key');
+      const model = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
+      
+      if (!apiKey) {
+        alert('Please set your Groq API key in settings first.');
+        return;
+      }
+      
+      $('#word-tooltip').removeClass('show');
+      
+      // Show modal
+      const modal = $('#definition-modal');
+      modal.addClass('active');
+      modal.css('display', 'flex');
+      
+      $('#definition-loading').removeClass('hidden');
+      $('#definition-content').addClass('hidden');
+      
+      const subjectNames = {
+        'biology': 'biology',
+        'chemistry': 'chemistry',
+        'physics': 'physics'
+      };
+      const subjectName = subjectNames[currentSubject] || 'science';
+      
+      const prompt = `You are a ${subjectName} tutor. Provide a concise but informative definition of the following ${subjectName} term. Keep it to 1-2 sentences maximum. Be clear and educational but not overly verbose.
+
+Term: ${selectedWord}
+
+Provide a concise definition:`;
+      
+      fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: [
+            {
+              role: 'user',
+              content: prompt
+            }
+          ],
+          temperature: 0.7,
+          max_tokens: 500
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          throw new Error(data.error.message || 'API Error');
+        }
+        
+        const definition = data.choices[0].message.content;
+        $('#definition-loading').addClass('hidden');
+        $('#definition-content').removeClass('hidden');
+        $('#definition-text').html(`<strong>${selectedWord}</strong> - ${definition}`);
+      })
+      .catch(error => {
+        console.error('Error generating definition:', error);
+        $('#definition-loading').addClass('hidden');
+        $('#definition-content').removeClass('hidden');
+        $('#definition-text').html('<p class="text-red-600">Error generating definition. Please check your API key in settings.</p>');
+      });
+    }
+    
+    // Make function globally accessible
+    window.defineSelectedWord = defineSelectedWord;
+    
+    function closeDefinitionModal(event) {
+      if (!event || $(event.target).hasClass('definition-modal') || $(event.target).closest('button').length) {
+        $('#definition-modal').removeClass('active');
+        $('#definition-modal').css('display', 'none');
+      }
+    }
+    
+    // Make function globally accessible
+    window.closeDefinitionModal = closeDefinitionModal;
+    
+    function toggleSection(sectionId) {
+      const section = $('#' + sectionId);
+      const arrowId = sectionId.replace('-section', '-arrow');
+      const arrow = $('#' + arrowId);
+      
+      section.toggleClass('expanded');
+      arrow.toggleClass('rotated');
+    }
+    
+    async function loadQuestions(subject) {
+      try {
+        const response = await fetch(`${subject}/questionBank.json`);
+        allQuestions = await response.json();
+        
+        // Extract available years and test types
+        availableYears.clear();
+        availableTestTypes.clear();
+        
+        allQuestions.forEach(q => {
+          // Parse ID format: "YY-YY-TYPE-N-qN"
+          const match = q.id.match(/^(\d{2}-\d{2})-(TMSCA|UIL|VCM)-/);
+          if (match) {
+            availableYears.add(match[1]);
+            availableTestTypes.add(match[2]);
+          }
+        });
+        
+        // Initialize all as selected
+        selectedYears = new Set(availableYears);
+        selectedTestTypes = new Set(availableTestTypes);
+        
+        // Populate filter checkboxes
+        populateFilters();
+        
+        // Generate leaderboard
+        generateLeaderboard();
+      } catch (error) {
+        console.error('Error loading questions:', error);
+        $('#leaderboard-container').html(`
+          <div class="text-center text-red-600">
+            <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+            <p>Error loading questions. Please refresh the page.</p>
+          </div>
+        `);
+      }
+    }
+    
+    function populateFilters() {
+      // Years
+      const yearsContainer = $('#years-container');
+      yearsContainer.empty();
+      
+      Array.from(availableYears).sort().reverse().forEach(year => {
+        const label = $(`
+          <label class="flex items-center gap-2 cursor-pointer">
+            <div class="filter-checkbox checked">
+              <input type="checkbox" class="year-checkbox" value="${year}" checked>
+            </div>
+            <span class="text-gray-900 font-medium">${year}</span>
+          </label>
+        `);
+        yearsContainer.append(label);
+      });
+      
+      // Test Types
+      const testTypesContainer = $('#test-types-container');
+      testTypesContainer.empty();
+      
+      ['TMSCA', 'UIL', 'VCM'].forEach(type => {
+        if (availableTestTypes.has(type)) {
+          const label = $(`
+            <label class="flex items-center gap-2 cursor-pointer">
+              <div class="filter-checkbox checked">
+                <input type="checkbox" class="test-type-checkbox" value="${type}" checked>
+              </div>
+              <span class="text-gray-900 font-medium">${type}</span>
+            </label>
+          `);
+          testTypesContainer.append(label);
+        }
+      });
+      
+      // Initialize checkboxes
+      $('.year-checkbox, .test-type-checkbox').on('change', function() {
+        const checkbox = $(this).closest('label').find('.filter-checkbox');
+        checkbox.toggleClass('checked', this.checked);
+        
+        if ($(this).hasClass('year-checkbox')) {
+          if (this.checked) {
+            selectedYears.add($(this).val());
+          } else {
+            selectedYears.delete($(this).val());
+          }
+        } else {
+          if (this.checked) {
+            selectedTestTypes.add($(this).val());
+          } else {
+            selectedTestTypes.delete($(this).val());
+          }
+        }
+        
+        displayedCount = 0;
+        generateLeaderboard();
+      });
+    }
+    
+    function generateLeaderboard() {
+      keywordCounts = {};
+      
+      // Filter questions by selected years and test types
+      const filteredQuestions = allQuestions.filter(q => {
+        const match = q.id.match(/^(\d{2}-\d{2})-(TMSCA|UIL|VCM)-/);
+        if (!match) return false;
+        
+        const year = match[1];
+        const testType = match[2];
+        
+        return selectedYears.has(year) && selectedTestTypes.has(testType);
+      });
+      
+      // Count keywords
+      filteredQuestions.forEach(q => {
+        q.keywords.forEach(keyword => {
+          const lowerKeyword = keyword.toLowerCase();
+          if (!keywordCounts[lowerKeyword]) {
+            keywordCounts[lowerKeyword] = {
+              count: 0,
+              questions: []
+            };
+          }
+          keywordCounts[lowerKeyword].count++;
+          keywordCounts[lowerKeyword].questions.push(q.id);
+        });
+      });
+      
+      // Sort by count
+      sortedKeywords = Object.entries(keywordCounts)
+        .sort((a, b) => b[1].count - a[1].count);
+      
+      displayedCount = 0;
+      displayKeywords();
+    }
+    
+    function displayKeywords() {
+      const container = $('#leaderboard-container');
+      
+      if (sortedKeywords.length === 0) {
+        container.html(`
+          <div class="text-center text-gray-500">
+            <i class="fas fa-info-circle text-4xl mb-4"></i>
+            <p>No keywords found with the selected filters.</p>
+          </div>
+        `);
+        return;
+      }
+      
+      // If this is the first load, create the table structure
+      if (displayedCount === 0) {
+        const table = $(`
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="border-b-2 border-gray-300">
+                  <th class="text-left py-4 px-4 font-bold text-gray-900">Rank</th>
+                  <th class="text-left py-4 px-4 font-bold text-gray-900">Keyword</th>
+                  <th class="text-left py-4 px-4 font-bold text-gray-900">Frequency</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body"></tbody>
+            </table>
+          </div>
+        `);
+        container.html(table);
+      }
+      
+      const tbody = $('#leaderboard-body');
+      const maxCount = Math.min(displayedCount + ITEMS_PER_PAGE, sortedKeywords.length);
+      const maxFrequency = sortedKeywords[0][1].count;
+      
+      for (let i = displayedCount; i < maxCount; i++) {
+        const [keyword, data] = sortedKeywords[i];
+        const row = $(`
+          <tr class="border-b border-gray-200 hover:bg-gray-50 transition-colors">
+            <td class="py-4 px-4 font-semibold text-gray-900">#${i + 1}</td>
+            <td class="py-4 px-4 font-medium text-gray-900 capitalize">${keyword}</td>
+            <td class="py-4 px-4">
+              <span class="font-semibold text-gray-900">${data.count}</span>
+            </td>
+          </tr>
+        `);
+        tbody.append(row);
+      }
+      
+      displayedCount = maxCount;
+      
+      // Show loading indicator if there are more items
+      if (displayedCount < sortedKeywords.length) {
+        if ($('#loading-indicator').length === 0) {
+          const loadingIndicator = $(`
+            <div id="loading-indicator" class="text-center text-gray-500 mt-4">
+              <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+              <p>Scroll for more...</p>
+            </div>
+          `);
+          container.append(loadingIndicator);
+        }
+      } else {
+        $('#loading-indicator').remove();
+      }
+      
+      isLoading = false;
+    }
+    
+    function loadMoreKeywords() {
+      if (displayedCount >= sortedKeywords.length || isLoading) {
+        return;
+      }
+      
+      isLoading = true;
+      displayKeywords();
+    }
+    
+    function selectAllYears() {
+      $('.year-checkbox').prop('checked', true).trigger('change');
+    }
+    
+    function deselectAllYears() {
+      $('.year-checkbox').prop('checked', false).trigger('change');
+    }
+    
+    function selectAllTestTypes() {
+      $('.test-type-checkbox').prop('checked', true).trigger('change');
+    }
+    
+    function deselectAllTestTypes() {
+      $('.test-type-checkbox').prop('checked', false).trigger('change');
+    }
+  </script>
+</body>
+</html>
+
