@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulate - Physics</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    html, body {
+        overflow: scroll;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+        display: none;
+    }
+    
+    body {
+      background: #fafafa;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    .navbar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem 0;
+    }
+    
+    #navbar-placeholder {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .content-wrapper {
+      padding-top: 0;
+    }
+    
+    .option-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .option-btn:hover:not(:disabled) {
+      transform: translateX(4px);
+      background-color: #f0f0f0;
+    }
+    
+    .option-btn.correct {
+      background-color: #22c55e;
+      color: white;
+      border-color: #22c55e;
+    }
+    
+    .option-btn.incorrect {
+      background-color: #ef4444;
+      color: white;
+      border-color: #ef4444;
+    }
+    
+    .option-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    
+    .question-arrow {
+      position: absolute;
+      top: 12px;
+      right: 24px;
+      width: 40px;
+      height: 40px;
+      background: white;
+      border: 1px solid black;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .question-arrow:hover {
+      background: #f0f0f0;
+    }
+    
+    .question-arrow.visible {
+      display: flex;
+    }
+    
+    .question-arrow i {
+      color: black;
+    }
+    
+    /* Custom Select Styling */
+    #formula-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.5rem center;
+      padding-right: 3.5rem;
+    }
+    
+    #formula-select:focus {
+      border-color: black;
+      outline: none;
+    }
+    
+    #formula-select {
+      border-color: black;
+    }
+    
+    #formula-select option {
+      padding: 0.5rem;
+      background: white;
+      color: black;
+    }
+    
+    #formula-select option:checked,
+    #formula-select option:hover {
+      background: black !important;
+      color: white !important;
+    }
+    
+    /* For browsers that support it */
+    #formula-select:focus option:checked {
+      background: black !important;
+      color: white !important;
+    }
+    
+    /* Custom radio button styling */
+    input[type="radio"] {
+      accent-color: black;
+    }
+    
+    #question-count:focus {
+      border-color: black;
+      outline: none;
+    }
+    
+    /* AI Explanation Button */
+    .ai-explanation-btn {
+      display: none;
+      cursor: pointer;
+    }
+    
+    .ai-explanation-btn.visible {
+      display: block;
+      margin-top: 16px;
+    }
+    
+    .ai-explanation-btn.clicked {
+      display: none;
+    }
+    
+    /* AI Explanation Container */
+    .ai-explanation {
+      margin-top: 16px;
+      padding: 16px;
+      background: #f9fafb;
+      border-left: 4px solid black;
+      border-radius: 8px;
+    }
+    
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: black;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 2000;
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+    
+    .toast.show {
+      display: block;
+    }
+    
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+    
+    .open-ended-input {
+      width: 100%;
+      padding: 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 1.125rem;
+      margin-top: 1rem;
+    }
+    
+    .open-ended-input:focus {
+      border-color: black;
+      outline: none;
+    }
+    
+    #check-answer-btn {
+      transition: all 0.3s ease;
+    }
+    
+    #check-answer-btn.incorrect {
+      background-color: #ef4444 !important;
+      color: white !important;
+      border: none !important;
+    }
+    
+    #check-answer-btn.correct {
+      background-color: #22c55e !important;
+      color: white !important;
+      border: none !important;
+    }
+    
+    #check-answer-btn.freeplay {
+      background-color: white;
+      color: black;
+      border: 2px solid black;
+    }
+    
+    #check-answer-btn.freeplay:hover {
+      background-color: #f0f0f0;
+    }
+    
+    #progress-bar {
+      background-color: black !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <div id="navbar-placeholder"></div>
+  </div>
+  
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-5xl mx-auto mt-12">
+    <!-- Setup Screen -->
+    <div id="setup-screen" class="mb-16">
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Select Formula</h2>
+        <select id="formula-select" class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none text-lg appearance-none bg-white pr-10">
+          <option value="">Select a formula...</option>
+        </select>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Number of Questions</h2>
+        <input type="number" id="question-count" min="1" max="10" placeholder="Leave blank for freeplay" class="w-full p-4 border-2 border-gray-200 rounded-lg focus:border-black focus:outline-none text-lg">
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 text-center md:text-left">Question Type</h2>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="question-type" value="multiple-choice" checked class="w-5 h-5">
+            <span class="text-lg font-medium">Multiple Choice</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="question-type" value="open-ended" class="w-5 h-5">
+            <span class="text-lg font-medium">Open-Ended</span>
+          </label>
+        </div>
+      </div>
+      
+      <button onclick="startGame()" class="w-full bg-black text-white py-4 rounded-lg font-semibold text-lg transition-all hover:-translate-y-1">
+        Generate Questions
+      </button>
+    </div>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="hidden mb-16 text-center">
+      <i class="fas fa-spinner fa-spin text-6xl text-black mb-4"></i>
+      <p class="text-xl text-gray-600" id="loading-text">Generating question with AI...</p>
+    </div>
+    
+    <!-- Game Screen -->
+    <div id="game-screen" class="hidden">
+      <!-- Progress Bar -->
+      <div id="progress-container" class="mb-8 hidden">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-sm font-medium text-gray-600">Question <span id="current-question-num">1</span> of <span id="total-questions">0</span></span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div id="progress-bar" class="bg-black h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+        </div>
+      </div>
+      
+      <!-- Question Card -->
+      <div class="question-card bg-white rounded-xl p-8 border-2 border-gray-200 mb-6 relative hidden">
+        <div class="question-arrow" id="question-arrow" onclick="nextQuestion()">
+          <i class="fas fa-arrow-right"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 transition-all" id="question-text" style="padding-right: 60px;"></h2>
+        <div class="space-y-3" id="options-container"></div>
+        <div id="open-ended-container" class="hidden">
+          <input type="text" id="open-ended-answer" placeholder="Enter your answer..." class="open-ended-input" autocomplete="off">
+          <button id="check-answer-btn" onclick="checkOpenEnded()" class="mt-4 w-full bg-blue-500 text-white py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+            Check Answer
+          </button>
+          
+          <!-- AI Explanation Button -->
+          <button id="ai-explanation-btn" class="ai-explanation-btn w-full py-3 rounded-lg font-semibold bg-black text-white transition-colors">
+            Generate AI Explanation
+          </button>
+          
+          <!-- Loading Indicator -->
+          <div id="ai-loading" class="hidden mt-4 text-center">
+            <i class="fas fa-spinner fa-spin text-2xl text-gray-600"></i>
+            <p class="text-gray-600 mt-2">Generating explanation...</p>
+          </div>
+          
+          <!-- AI Explanation Display -->
+          <div id="ai-explanation" class="hidden"></div>
+        </div>
+        
+        <!-- AI Explanation Button for Multiple Choice -->
+        <button id="ai-explanation-btn-mc" class="ai-explanation-btn w-full py-3 rounded-lg font-semibold bg-black text-white transition-colors">
+          Generate AI Explanation
+        </button>
+        
+        <!-- Loading Indicator for MC -->
+        <div id="ai-loading-mc" class="hidden mt-4 text-center">
+          <i class="fas fa-spinner fa-spin text-2xl text-gray-600"></i>
+          <p class="text-gray-600 mt-2">Generating explanation...</p>
+        </div>
+        
+        <!-- AI Explanation Display for MC -->
+        <div id="ai-explanation-mc" class="hidden"></div>
+      </div>
+      
+      <!-- Toast Notification -->
+      <div id="toast" class="toast"></div>
+      
+      <!-- Results Screen -->
+      <div id="results-screen" class="hidden">
+        <div class="bg-white rounded-xl p-10 border-2 border-gray-200 text-center">
+          <div class="text-6xl mb-4">🎉</div>
+          <h2 class="text-4xl font-bold text-gray-900 mb-4">Quiz Complete!</h2>
+          <p class="text-2xl text-gray-600 mb-6">Final Score: <span id="final-score" class="font-bold text-blue-600">0</span>/<span id="final-total">0</span></p>
+          <div class="flex gap-4 justify-center">
+            <button onclick="restartGame()" class="bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-600 transition-colors">
+              Start New Quiz
+            </button>
+            <a href="index.html" class="bg-gray-200 text-gray-800 px-8 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors">
+              Back to Physics
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let formulas = {};
+    let questions = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let selectedAnswer = null;
+    let showingFeedback = false;
+    let questionType = 'multiple-choice';
+    let isFreeplay = true;
+    let targetQuestionCount = 0;
+    let currentQuestion = null;
+    
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('../navbar.html');
+      loadFormulas();
+      
+      // Add click handlers for AI explanation buttons
+      $(document).on('click', '#ai-explanation-btn', function() {
+        generateAIExplanation(true);
+      });
+      
+      $(document).on('click', '#ai-explanation-btn-mc', function() {
+        generateAIExplanation(false);
+      });
+    });
+    
+    async function loadFormulas() {
+      try {
+        const response = await fetch('json/formulas.json');
+        formulas = await response.json();
+        
+        const select = $('#formula-select');
+        Object.keys(formulas).forEach(formulaName => {
+          select.append(`<option value="${formulaName}">${formulaName}</option>`);
+        });
+      } catch (error) {
+        console.error('Error loading formulas:', error);
+        alert('Error loading formulas. Please refresh the page.');
+      }
+    }
+    
+    async function startGame() {
+      const selectedFormula = $('#formula-select').val();
+      const questionCountVal = $('#question-count').val().trim();
+      
+      if (!selectedFormula) {
+        alert('Please select a formula.');
+        return;
+      }
+      
+      // Check if freeplay or fixed count
+      if (questionCountVal === '') {
+        isFreeplay = true;
+        targetQuestionCount = 0;
+      } else {
+        isFreeplay = false;
+        targetQuestionCount = parseInt(questionCountVal);
+        if (!targetQuestionCount || targetQuestionCount < 1 || targetQuestionCount > 10) {
+          alert('Please enter a valid number of questions (1-10) or leave blank for freeplay.');
+          return;
+        }
+      }
+      
+      $('#setup-screen').addClass('hidden');
+      $('#loading-screen').removeClass('hidden');
+      
+      const apiKey = localStorage.getItem('groq_api_key');
+      const model = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
+      
+      if (!apiKey) {
+        $('#loading-screen').addClass('hidden');
+        alert('Please set your Groq API key in settings first.');
+        return;
+      }
+      
+      questionType = $('input[name="question-type"]:checked').val();
+      const formula = formulas[selectedFormula];
+      
+      // Reset game state
+      currentQuestionIndex = 0;
+      score = 0;
+      selectedAnswer = null;
+      showingFeedback = false;
+      questions = [];
+      
+      $('#loading-screen').removeClass('hidden');
+      $('#game-screen').removeClass('hidden');
+      $('#results-screen').addClass('hidden');
+      $('.question-card').addClass('hidden'); // Hide question card during loading
+      
+      if (isFreeplay) {
+        $('#progress-container').addClass('hidden');
+        $('#check-answer-btn').addClass('freeplay');
+      } else {
+        $('#progress-container').removeClass('hidden');
+        $('#total-questions').text(targetQuestionCount);
+        $('#check-answer-btn').removeClass('freeplay');
+      }
+      
+      // Generate first question
+      $('#loading-text').text('Generating question with AI...');
+      await generateNextQuestion(selectedFormula, formula);
+    }
+    
+    async function generateNextQuestion(selectedFormula, formula) {
+      $('#loading-screen').removeClass('hidden');
+      $('#loading-text').text('Generating question with AI...');
+      const apiKey = localStorage.getItem('groq_api_key');
+      const model = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
+      
+      let prompt = '';
+      if (questionType === 'multiple-choice') {
+        prompt = `You are a physics tutor. Generate exactly 1 multiple-choice practice problem for the following physics formula.
+
+Formula: ${formula}
+Formula Name: ${selectedFormula}
+
+CRITICAL INSTRUCTIONS:
+1. Return ONLY plain text JSON - no markdown code blocks, no explanations, no backticks
+2. NEVER NEVER NEVER state any formulas in the question - students should recall formulas themselves
+3. DO NOT include the formula in the question - students should recall it themselves
+4. DO NOT include calculations or work in answer choices - only provide the final numerical answer
+5. Answer choices should be simple values like "0.059 L", "5.8 × 10⁻³", "125 J/mol", etc. - NOT "V=nRT/P=..." or any calculations
+6. DO NOT use LaTeX \\times or any LaTeX symbols between numbers and units - just write units normally like "755 mmHg" not "755\\times mmHg"
+7. Use LaTeX math notation with $ delimiters ONLY for mathematical formulas and expressions, not for units
+8. Escape all backslashes properly in JSON (use \\\\ for single backslash in LaTeX)
+9. DO NOT include information that can be found in a periodic table (atomic masses, atomic numbers, etc.) - the student has a periodic table available
+10. Keep questions concise and focused - avoid unnecessary verbosity
+11. Return a valid JSON object (not array) with this exact structure:
+
+{"question":"Question text with $LaTeX$ math (NO FORMULA)","options":["0.059 L","0.59 L","5.9 L","59 L","590 L"],"answer":0}
+
+Where answer is the 0-based index (0=A, 1=B, 2=C, 3=D, 4=E).
+
+Make questions challenging but appropriate for AP Physics. Include realistic numbers and scenarios.`;
+      } else {
+        prompt = `You are a physics tutor. Generate exactly 1 open-ended practice problem for the following physics formula.
+
+Formula: ${formula}
+Formula Name: ${selectedFormula}
+
+CRITICAL INSTRUCTIONS:
+1. Return ONLY plain text JSON - no markdown code blocks, no explanations, no backticks
+2. NEVER NEVER NEVER state any formulas in the question - students should recall formulas themselves
+3. DO NOT include the formula in the question - students should recall it themselves
+4. DO NOT use LaTeX \\times or any LaTeX symbols between numbers and units - just write units normally like "755 mmHg" not "755\\times mmHg"
+5. Use LaTeX math notation with $ delimiters ONLY for mathematical formulas and expressions, not for units
+6. Escape all backslashes properly in JSON (use \\\\ for single backslash in LaTeX)
+7. DO NOT include information that can be found in a periodic table (atomic masses, atomic numbers, etc.) - the student has a periodic table available
+8. Keep questions concise and focused - avoid unnecessary verbosity
+9. For the answer, provide it in FULL UNEVALUATED JAVASCRIPT form that can be evaluated with eval() in JavaScript
+10. Examples: If the answer is square root of 3 divided by 2, return "Math.sqrt(3)/2" not "0.866"
+11. Examples: If the answer is 5.8 times 10 to the -3, return "5.8e-3" or "5.8 * Math.pow(10, -3)"
+12. Examples: If the answer involves pi, use "Math.PI", if it involves e, use "Math.E"
+13. DO NOT evaluate the expression - give the JavaScript code that would evaluate to the answer
+14. DO NOT mention scientific notation or JavaScript in the question - the system handles parsing automatically
+15. Return a valid JSON object (not array) with this exact structure:
+
+{"question":"Question text with $LaTeX$ math (NO FORMULA)","answer":"Math.sqrt(3)/2","answerFormat":"normal"}
+
+Where answerFormat is either "scientific" or "normal", but the answer field should always be unevaluated JavaScript.
+
+Make questions challenging but appropriate for AP Physics. Include realistic numbers and scenarios.`;
+      }
+
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              {
+                role: 'user',
+                content: prompt
+              }
+            ],
+            temperature: 0.8,
+            max_tokens: 1000
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error.message || 'API Error');
+        }
+        
+        let responseText = data.choices[0].message.content.trim();
+        
+        // Remove markdown code blocks if present
+        if (responseText.startsWith('```')) {
+          responseText = responseText.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+        }
+        
+        responseText = responseText.trim();
+        
+        // Try to extract JSON object
+        const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          responseText = jsonMatch[0];
+        }
+        
+        const question = JSON.parse(responseText);
+        questions.push(question);
+        currentQuestion = question;
+        
+        $('#loading-screen').addClass('hidden');
+        $('.question-card').removeClass('hidden'); // Show question card when ready
+        displayQuestion();
+      } catch (error) {
+        console.error('Error generating question:', error);
+        $('#loading-screen').addClass('hidden');
+        $('#setup-screen').removeClass('hidden');
+        showToast('AI encountered an error. Try again or check your API key.');
+      }
+    }
+    
+    function showToast(message) {
+      const toast = $('#toast');
+      toast.text(message);
+      toast.addClass('show');
+      setTimeout(() => {
+        toast.removeClass('show');
+      }, 5000);
+    }
+    
+    async function displayQuestion() {
+      // Check if we need to show results (only in fixed mode)
+      if (!isFreeplay && currentQuestionIndex >= targetQuestionCount) {
+        showResults();
+        return;
+      }
+      
+      // If we've exhausted questions and in freeplay, generate a new one
+      if (isFreeplay && currentQuestionIndex >= questions.length) {
+        const selectedFormula = $('#formula-select').val();
+        const formula = formulas[selectedFormula];
+        $('.question-card').addClass('hidden'); // Hide question card while generating
+        $('#loading-screen').removeClass('hidden');
+        $('#loading-text').text('Generating next question...');
+        await generateNextQuestion(selectedFormula, formula);
+        return;
+      }
+      
+      const question = questions[currentQuestionIndex];
+      currentQuestion = question;
+      selectedAnswer = null;
+      showingFeedback = false;
+      $('#question-arrow').removeClass('visible');
+      
+      // Reset button styling
+      $('#check-answer-btn').removeClass('incorrect correct').text('Check Answer');
+      if (isFreeplay) {
+        $('#check-answer-btn').addClass('freeplay');
+      } else {
+        $('#check-answer-btn').removeClass('freeplay');
+      }
+      
+      // Reset question text padding
+      $('#question-text').css('padding-right', '0px');
+      
+      // Hide AI explanation elements
+      $('#ai-explanation-btn').removeClass('visible clicked');
+      $('#ai-explanation-btn-mc').removeClass('visible clicked');
+      $('#ai-loading').addClass('hidden');
+      $('#ai-loading-mc').addClass('hidden');
+      $('#ai-explanation').addClass('hidden').empty();
+      $('#ai-explanation-mc').addClass('hidden').empty();
+      
+      if (!isFreeplay) {
+        $('#current-question-num').text(currentQuestionIndex + 1);
+        const progress = ((currentQuestionIndex) / targetQuestionCount) * 100;
+        $('#progress-bar').css('width', progress + '%');
+      }
+      
+      $('.question-card').removeClass('hidden'); // Ensure question card is visible
+      $('#question-text').text(question.question);
+      
+      if (questionType === 'multiple-choice') {
+        $('#options-container').removeClass('hidden');
+        $('#open-ended-container').addClass('hidden');
+        
+        const optionsContainer = $('#options-container');
+        optionsContainer.empty();
+        
+        question.options.forEach((option, index) => {
+          const optionBtn = $(`
+            <button class="option-btn w-full text-left p-4 bg-gray-50 border-2 border-gray-200 rounded-lg font-medium" 
+                    onclick="selectOption(${index})" 
+                    data-index="${index}">
+              ${String.fromCharCode(65 + index)}. ${option}
+            </button>
+          `);
+          optionsContainer.append(optionBtn);
+        });
+      } else {
+        $('#options-container').addClass('hidden');
+        $('#open-ended-container').removeClass('hidden');
+        $('#open-ended-answer').val('').prop('disabled', false);
+        $('#open-ended-feedback').addClass('hidden').empty();
+      }
+      
+      if (window.MathJax) {
+        MathJax.typesetPromise([document.getElementById('question-text'), document.getElementById('options-container')]);
+      }
+    }
+    
+    function parseScientificNotation(str) {
+      // First try to evaluate as JavaScript expression
+      try {
+        // Replace common math functions if needed
+        const result = eval(str);
+        if (typeof result === 'number' && !isNaN(result)) {
+          return result;
+        }
+      } catch (e) {
+        // If eval fails, try parsing as scientific notation
+      }
+      
+      // Handle scientific notation like 5.8e-3 or 6.7e4
+      const match = str.match(/^([+-]?\d*\.?\d+)[eE]([+-]?\d+)$/);
+      if (match) {
+        return parseFloat(match[1]) * Math.pow(10, parseInt(match[2]));
+      }
+      // Handle normal decimal
+      return parseFloat(str);
+    }
+    
+    function formatAnswer(value) {
+      // Format to 3 significant figures or 2 decimal places, whichever is more applicable
+      if (Math.abs(value) >= 1) {
+        // For values >= 1, use 2 decimal places
+        return value.toFixed(2);
+      } else {
+        // For values < 1, use 3 significant figures
+        const magnitude = Math.floor(Math.log10(Math.abs(value)));
+        const factor = Math.pow(10, 2 - magnitude);
+        return (Math.round(value * factor) / factor).toPrecision(3);
+      }
+    }
+    
+    function checkOpenEnded() {
+      if (showingFeedback) return;
+      
+      const userAnswer = $('#open-ended-answer').val().trim();
+      const question = currentQuestion;
+      
+      if (!userAnswer) {
+        alert('Please enter an answer.');
+        return;
+      }
+      
+      const userValue = parseScientificNotation(userAnswer);
+      const correctValue = parseScientificNotation(question.answer);
+      
+      if (isNaN(userValue) || isNaN(correctValue)) {
+        alert('Invalid answer format. Please enter a number or scientific notation (e.g., 5.8e-3).');
+        return;
+      }
+      
+      const tolerance = 0.10; // 10% tolerance
+      const difference = Math.abs(userValue - correctValue);
+      const percentError = difference / Math.abs(correctValue);
+      const isCorrect = percentError <= tolerance;
+      
+      showingFeedback = true;
+      $('#open-ended-answer').prop('disabled', true);
+      $('#question-arrow').addClass('visible');
+      
+      const btn = $('#check-answer-btn');
+      
+      if (isCorrect) {
+        score++;
+        const formattedAnswer = formatAnswer(correctValue);
+        btn.removeClass('incorrect').addClass('correct').text(`Correct answer: ${formattedAnswer}`);
+        // Don't show AI explanation button for correct answers
+      } else {
+        const formattedAnswer = formatAnswer(correctValue);
+        btn.removeClass('correct').addClass('incorrect').text(`Incorrect answer (correct answer: ${formattedAnswer})`);
+        // Show AI explanation button only for incorrect answers
+        setTimeout(() => {
+          $('#ai-explanation-btn').addClass('visible');
+        }, 100);
+      }
+    }
+    
+    function selectOption(index) {
+      if (showingFeedback) return;
+      
+      selectedAnswer = index;
+      const question = currentQuestion;
+      const isCorrect = index === question.answer;
+      
+      $('.option-btn').prop('disabled', true);
+      
+      $(`.option-btn[data-index="${question.answer}"]`).addClass('correct');
+      
+      if (!isCorrect) {
+        $(`.option-btn[data-index="${index}"]`).addClass('incorrect');
+        // Show AI explanation button only for incorrect answers
+        setTimeout(() => {
+          $('#ai-explanation-btn-mc').addClass('visible');
+        }, 100);
+      } else {
+        score++;
+        // Don't show AI explanation button for correct answers
+      }
+      
+      showingFeedback = true;
+      $('#question-arrow').addClass('visible');
+      // Adjust question text padding when arrow appears
+      $('#question-text').css('padding-right', '60px');
+    }
+    
+    async function generateAIExplanation(isOpenEnded = false) {
+      const apiKey = localStorage.getItem('groq_api_key');
+      const model = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
+      
+      if (!apiKey) {
+        alert('Please set your Groq API key in settings first.');
+        return;
+      }
+      
+      const btnId = isOpenEnded ? '#ai-explanation-btn' : '#ai-explanation-btn-mc';
+      const loadingId = isOpenEnded ? '#ai-loading' : '#ai-loading-mc';
+      const explanationId = isOpenEnded ? '#ai-explanation' : '#ai-explanation-mc';
+      
+      // Show loading, hide button and previous explanation
+      $(btnId).addClass('clicked').removeClass('visible');
+      $(loadingId).removeClass('hidden');
+      $(explanationId).addClass('hidden').empty();
+      
+      // Build prompt
+      const question = currentQuestion;
+      const selectedFormula = $('#formula-select').val();
+      const formula = formulas[selectedFormula];
+      
+      let prompt = '';
+      if (questionType === 'multiple-choice') {
+        const optionsText = question.options.map((opt, idx) => 
+          `${String.fromCharCode(65 + idx)}. ${opt}`
+        ).join('\n');
+        const correctAnswer = String.fromCharCode(65 + question.answer);
+        
+        prompt = `You are a physics tutor helping a student understand a physics formula problem.
+
+Formula: ${formula}
+Formula Name: ${selectedFormula}
+
+Question: ${question.question}
+
+Answer Choices:
+${optionsText}
+
+The correct answer is ${correctAnswer}: ${question.options[question.answer]}
+
+Please provide a clear, concise explanation of why this answer is correct. Focus on the chemistry concepts involved and explain how to use the formula. Keep your explanation under 150 words.`;
+      } else {
+        prompt = `You are a physics tutor helping a student understand a physics formula problem.
+
+Formula: ${formula}
+Formula Name: ${selectedFormula}
+
+Question: ${question.question}
+
+The correct answer is ${question.answer}
+
+Please provide a clear, concise explanation of why this answer is correct. Focus on the chemistry concepts involved and explain how to use the formula. Keep your explanation under 150 words.`;
+      }
+      
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            model: model,
+            messages: [
+              {
+                role: 'user',
+                content: prompt
+              }
+            ],
+            temperature: 0.7,
+            max_tokens: 300
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.error) {
+          throw new Error(data.error.message || 'API Error');
+        }
+        
+        const explanation = data.choices[0].message.content;
+        
+        // Hide loading, show explanation
+        $(loadingId).addClass('hidden');
+        $(explanationId).removeClass('hidden').html(`
+          <div class="ai-explanation">
+            <h3 class="font-bold text-gray-900 mb-2">AI Explanation:</h3>
+            <p class="text-gray-700">${explanation}</p>
+          </div>
+        `);
+      } catch (error) {
+        console.error('Error generating explanation:', error);
+        $(loadingId).addClass('hidden');
+        $(explanationId).removeClass('hidden').html(`
+          <div class="ai-explanation border-red-500">
+            <p class="text-red-600">Error generating explanation. Please check your API key in settings.</p>
+          </div>
+        `);
+      }
+    }
+    
+    function nextQuestion() {
+      if (questionType === 'open-ended') {
+        $('#open-ended-answer').prop('disabled', false);
+      }
+      currentQuestionIndex++;
+      displayQuestion();
+    }
+    
+    // Make functions globally accessible
+    window.startGame = startGame;
+    window.selectOption = selectOption;
+    window.nextQuestion = nextQuestion;
+    window.checkOpenEnded = checkOpenEnded;
+    window.restartGame = restartGame;
+    window.generateAIExplanation = generateAIExplanation;
+    
+    function showResults() {
+      $('#game-screen').addClass('hidden');
+      $('#results-screen').removeClass('hidden');
+      $('#final-score').text(score);
+      $('#final-total').text(targetQuestionCount);
+    }
+    
+    function restartGame() {
+      $('#setup-screen').removeClass('hidden');
+      $('#game-screen').addClass('hidden');
+      $('#results-screen').addClass('hidden');
+      $('#question-arrow').removeClass('visible');
+    }
+    
+    // Make functions globally accessible
+    window.startGame = startGame;
+    window.selectOption = selectOption;
+    window.nextQuestion = nextQuestion;
+    window.checkOpenEnded = checkOpenEnded;
+    window.restartGame = restartGame;
+  </script>
+</body>
+</html>
+
