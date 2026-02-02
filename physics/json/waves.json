@@ -1,0 +1,28 @@
+{
+  "Period of a Spring-Mass System": "$T = 2\\pi \\sqrt{\\frac{m}{k}}$",
+  "Period of a Simple Pendulum": "$T = 2\\pi \\sqrt{\\frac{l}{g}}$",
+  "Period of a Physical Pendulum": "$T = 2\\pi \\sqrt{\\frac{I}{mgd}}$",
+  "Frequency of Open-Open Apparatus": "$f = \\frac{nv}{2L}$",
+  "Frequency of Closed-Closed Apparatus": "$f = \\frac{nv}{4L}$",
+  "Velocity-Tension Relation": "$v = \\sqrt{\\frac{T}{\\mu}}$",
+  "Velocity of a Wave": "$v = f\\lambda$",
+  "Doppler Shift": "$f = f_0 \\frac{v + v_o}{v + v_s}$",
+  "Velocity of Sound": "$v = 331\\sqrt{1 + \\frac{T}{273}}$",
+  "Intensity Definition": "$I = \\frac{P}{A}$",
+  "Decibel Definition": "$\\beta = 10 \\log \\frac{I}{10^{-12}}$",
+  "Perfect Absorber Radiation Pressure": "$P = \\frac{I}{c}$",
+  "Perfect Reflector Radiation Pressure": "$P = \\frac{2I}{c}$",
+  "Energy of Light": "$E = \\frac{hc}{\\lambda}$",
+  "deBrogile Wavelength": "$\\lambda = \\frac{h}{p}$",
+  "Velocity of Light in Medium": "$v = \\frac{c}{n}$",
+  "Snell's Law": "$n_1 \\sin \\theta_1 = n_2 \\sin \\theta_2$",
+  "Malus' Law": "$I = \\frac{I_o \\cos^2 \\theta}{2}$",
+  "Compton Scattering": "$\\Delta \\lambda = \\frac{h}{mc}(1 - \\cos \\theta)$",
+  "Single Slit Diffraction": "$a \\sin \\theta = m\\lambda$",
+  "Wein's Law": "$T = \\frac{0.0029}{\\lambda}$"
+}
+
+
+
+
+

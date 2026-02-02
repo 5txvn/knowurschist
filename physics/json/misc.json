@@ -1,0 +1,17 @@
+{
+  "Heat Engine Efficiency": "$\\eta = \\frac{W}{Q_{\\text{in}}} = \\frac{Q_{\\text{in}} - Q_{\\text{out}}}{Q_{\\text{in}}}$",
+  "Carnot Efficiency": "$\\eta = 1 - \\frac{T_c}{T_h}$",
+  "Heisenberg's Uncertainty Principle": "$\\Delta E \\Delta t = \\Delta x \\Delta p \\geq \\frac{h}{4\\pi}$",
+  "Entropy": "$\\Delta S = \\frac{Q}{T}$",
+  "Quantum Probability Definition": "$P(a \\leq x \\leq b) = \\int_a^b |\\psi(x,t)|^2 dx$",
+  "Normalization Constant Definition": "$\\int_{-\\infty}^{\\infty} |\\psi(x)|^2 dx = 1$",
+  "Quantum Expectation Value": "$\\langle x \\rangle = \\int_{-\\infty}^{\\infty} x|\\psi(x)|^2 dx$",
+  "Root-Mean-Square (RMS) Definition": "$\\text{RMS} = \\sqrt{\\frac{\\int_a^b (f(x))^2 dx}{T}}$",
+  "Additive/Subtractive Error Propagation": "$\\Delta Q = \\sqrt{(\\Delta A)^2 + (\\Delta B)^2}$",
+  "Multiplicative/Divisive Error Propagation": "$\\frac{\\Delta Q}{Q} = \\sqrt{\\left(\\frac{\\Delta A}{A}\\right)^2 + \\left(\\frac{\\Delta B}{B}\\right)^2}$"
+}
+
+
+
+
+

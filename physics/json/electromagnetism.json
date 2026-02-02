@@ -1,0 +1,38 @@
+{
+  "Coulomb's Law": "$F_E = \\frac{kq_1 q_2}{r^2}$",
+  "Electrostatic Force": "$F_E = qE$",
+  "Point Charge Electric Field": "$E = \\frac{kq}{r^2}$",
+  "Electric Potential": "$V = \\frac{kq}{r}$",
+  "Electric Potential Energy": "$U_e = qV = \\frac{kq_1 q_2}{r}$",
+  "Electric Field Across Potential Difference": "$E = \\frac{V}{d}$",
+  "Gauss' Law": "$EA = \\frac{Q}{\\epsilon_0}$",
+  "Resistance": "$R = \\frac{\\rho L}{A}$",
+  "Conductance": "$G = \\frac{1}{R}$",
+  "Conductivity": "$\\sigma = \\frac{1}{\\rho}$",
+  "Ohm's Law": "$V = IR$",
+  "Electrical Power": "$P = VI$",
+  "Capacitance": "$C = \\frac{\\kappa \\epsilon_0 A}{d} = \\frac{Q}{V}$",
+  "Capacitor Energy": "$U_e = \\frac{1}{2}QV = \\frac{1}{2}CV^2$",
+  "Voltage with Charging Capacitor": "$V = V_0(1 - e^{-\\frac{t}{RC}})$",
+  "Current Transformer Ratio": "$n_p I_p = n_s I_s$",
+  "Voltage Transformer Ratio": "$\\frac{V_p}{V_s} = \\frac{N_p}{N_s}$",
+  "Power Transformer Ratio": "$V_p I_p = V_s I_s$",
+  "Ampere's Law": "$Bs = \\mu_0 I$",
+  "Coil Magnetic Field": "$B = \\frac{\\mu_0 I}{2R}$",
+  "Faraday's Law of Induction": "$\\epsilon = -N \\frac{d\\Phi}{dt} = -M \\frac{dI}{dt}$",
+  "Magnetic Flux": "$\\Phi = \\vec{B} \\cdot \\vec{A}$",
+  "Magnetic Field Force on Charged Particle": "$F_B = q(\\vec{v} \\times \\vec{B})$",
+  "Magnetic Field Force on a Current-Carrying Wire": "$F = I(\\vec{I} \\times \\vec{B})$",
+  "EMF Induced in a Moving Rod": "$\\epsilon = Blv$",
+  "Poynting Vector (Intensity) Magnitude": "$|\\vec{S}| = \\frac{EB}{2\\mu_0}$",
+  "Electric/Magnetic Field Relation": "$v = \\frac{E}{B}$",
+  "Force Between Wires": "$F = \\frac{\\mu_0 I_1 I_2 L}{2\\pi r}$",
+  "Inductor Energy": "$U_e = \\frac{1}{2}LI^2$",
+  "Solenoid Magnetic Field": "$\\mu \\frac{n}{l} I$",
+  "Ampere-Maxwell Equation": "$Bs = \\mu_0 \\epsilon_0 \\frac{d\\Phi_E}{dt}$"
+}
+
+
+
+
+

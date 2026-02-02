@@ -1,0 +1,15 @@
+{
+  "Velocity Definition": "$v_{\\text{avg}} = \\frac{\\Delta x}{\\Delta t}$",
+  "Acceleration Definition": "$a_{\\text{avg}} = \\frac{\\Delta v}{\\Delta t}$",
+  "Displacement": "$\\Delta x = v_o t + \\frac{1}{2} a t^2$",
+  "No-Time Kinematic": "$v^2 = v_o^2 + 2a \\Delta x$",
+  "Projectile Range": "$R = \\frac{v_o^2 \\sin 2\\theta}{g}$",
+  "Projectile Height": "$H = \\frac{v_o^2 \\sin^2 \\theta}{2g}$",
+  "Projectile Time of Flight": "$t = \\frac{2v_o \\sin \\theta}{g}$",
+  "Escape Velocity": "$v = \\sqrt{\\frac{2GM}{R}}$"
+}
+
+
+
+
+

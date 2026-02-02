@@ -1,0 +1,22 @@
+{
+  "Volumetric Flow Rate": "$Q = Av$",
+  "Ideal Gas Law": "$PV = nRT$",
+  "Work Done on Gas (Isobaric)": "$W = -P \\Delta V$",
+  "Work Done on Gas (Isothermal)": "$W = nRT \\ln \\frac{V_f}{V_i}$",
+  "Heat Flow (Isovolumetric)": "$Q = nC_v \\Delta T$",
+  "Heat Flow (Isobaric)": "$Q = nC_p \\Delta T$",
+  "Equipartition Theorem": "$U = \\frac{fnRT}{2}$",
+  "Constant Volume Molar Heat Capacity": "$C_V = \\frac{f}{2}R$",
+  "Constant Pressure Molar Heat Capacity": "$C_P = C_V + R$",
+  "Adiabatic Index Definition": "$\\gamma = \\frac{C_P}{C_V}$",
+  "Adiabatic Process": "$P_1 V_1^\\gamma = P_2 V_2^\\gamma$",
+  "Buoyant Force": "$F_B = \\rho gV$",
+  "Bernoulli's Law": "$P_1 + \\frac{1}{2}\\rho v_1^2 + \\rho gh_1 = P_2 + \\frac{1}{2}\\rho v_2^2 + \\rho gh_2$",
+  "Linear Thermal Expansion": "$\\Delta L = \\alpha L_0 \\Delta T$",
+  "Volumetric Thermal Expansion": "$\\Delta V = \\beta V_0 \\Delta T$"
+}
+
+
+
+
+

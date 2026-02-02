@@ -1,0 +1,18 @@
+{
+  "Parallel Gravity Ramp Component": "$F_{g \\parallel} = F_g \\sin \\theta$",
+  "Perpendicular Gravity Ramp Component": "$F_{g \\perp} = F_g \\cos \\theta$",
+  "Frictional Force": "$f = \\mu N$",
+  "Spring Force": "$F_s = -kx$",
+  "Kinetic Energy": "$K = \\frac{1}{2}mv^2$",
+  "Gravitational Potential Energy": "$U_g = mgh$",
+  "Elastic Potential Energy": "$U_s = \\frac{1}{2}kx^2$",
+  "Thermal/Frictional Energy": "$E_{\\text{th}} = d \\mu F_N$",
+  "Work-Kinetic Energy Theorem": "$W = \\Delta K$",
+  "Power Definition": "$P = \\frac{W}{t} = Fv$",
+  "Pressure Definition": "$P = \\frac{F}{A}$"
+}
+
+
+
+
+

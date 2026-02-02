@@ -1,0 +1,14 @@
+{
+  "Impedance Magnitude": "$|Z| = \\frac{V}{I} = \\sqrt{R^2 + (X_L - X_C)^2}$",
+  "Resistance": "$R = |Z| \\cos \\phi$",
+  "Reactance": "$X = |Z| \\sin \\phi$",
+  "Inductive Reactance": "$X_L = 2\\pi fL$",
+  "Capacitive Reactance": "$X_C = \\frac{1}{2\\pi fC}$",
+  "Resonance Frequency": "$f = \\frac{1}{2\\pi} \\sqrt{\\frac{1}{LC}}$",
+  "Power Factor": "$\\text{PF} = \\cos \\phi$"
+}
+
+
+
+
+
