@@ -1,0 +1,89 @@
+Guard Cells - In the epidermis of leaves/stems, responsible for opening & closing stomata
+
+Vessel Elements - Water pipes in xylem, reinforced with lignin
+
+Sieve Cells - Highway, long cells in phloem that allow sugar to flow, lack nucleus/ribosomes
+
+Companion Cells - Life support for sieve cells, loads sugar into sieve tube using ATP
+
+Endemic - Species native to only one geographic location
+
+Positive tropism - Growth towards stimulus
+
+Negative tropism - Growth away from stimulus
+
+Bacteria - Prokaryotic unicellular domain, cell walls contain peptidoglycan, DNA is circular, binary fission reproduction (E. coli, Streptococcus)
+
+Archaea - Prokaryotic domain, no peptidoglycan, unique membrane lipids, live in extreme environments (hyperthermophiles, halophiles, methanogens)
+
+Eukarya - Eukaryotic domain, linear chromosomes, complex cellular organization (Animalia, Plantae, Fungi, Protista)
+
+Innate behavior - Behavior an organism is born with
+
+Classical conditioning - Organism associates previously neutral stimulus with response-triggering stimulus, learning via association
+
+Imprinting - Irreversible learning process that occurs early in life (ducks following first moving object)
+
+Operant conditioning - Strength of behavior is modified by reinforcement or punishment, learning via consequence
+
+Xylem - Vascular tissue that transports water and minerals upwards, made of dead cells
+
+Dermal Tissue - Outer protective tissue of plants, contains stomata for gas exchange
+
+Apical Meristem - Region of actively dividing cells at tips of shoots and roots
+
+Phloem - Vascular tissue that transports sugars and nutrients, made of living cells
+
+Microbiology - Study of microscopic organisms
+
+Virology - Branch of microbiology focused on viruses
+
+Carpology - Study of fruits and seeds
+
+Ethology - Study of animal behavior
+
+Stoma/Stomata - Pores on leaf’s surface, allows for gas exchange
+
+Anther - Part of stamen that produces pollen
+
+Stamen - Male reproductive structure of flower, contains anther and filament
+
+Filament - Stalk of stamen that holds up anther
+
+Pistil/Carpel - Female reproductive structure of flower, contains stigma, style, and ovary
+
+Stigma - Top part of pistil that receives pollen
+
+Style - Stalk of pistil that connects stigma and ovary
+
+Ovary - Base of pistil where ovules are produced and seeds develop
+
+Ovule - Structure inside ovary that develops into seed after fertilization
+
+Sepal - Leaf-like structure that protects flower bud
+
+Petal - Colorful part of flower that attracts pollinators
+
+Pseudopod - Temporary extension of cell in amoebas used for movement or food consumption
+
+Mucilaginous - Tissue that’s thick and rich in mucilage (carb that retains water and provides protection)
+
+Capsule - Slime layer, mucilaginous coating that covers bacterial cell walls
+
+Archaeplastida - Primary photosynthetic organisms, evolved from ancestor who swallowed cyanobacterium (red algae, green algae, land plants)
+
+Stramenopiles - Includes diatoms and giant kelp/brown algae, hairy flagella (SAR)
+
+Alveolates - Includes dinoflagellates and malaria-causing parasites (SAR)
+
+Rhizarians - Mostly amoeba-like organisms w/thread-like pseudopods (SAR)
+
+Excavata - Has feeding groove excavated from a side of the body, unicellular and move w/flagella (Euglena, Giardia, Trypanosoma)
+
+Amoebozoa - Classic amoeba, move using pseudopodia (tube-shaped extensions)
+
+Opisthokonta - Includes broad range of life, from animals to fungi, contains single posterior flagellum at some point (sperm cell)
+
+Sporophyte - Dominant, diploid plant generation
+
+Gametophyte - Haploid plant generation

@@ -1,0 +1,59 @@
+Genetic Drift - Random changes in allele frequency due to chance
+
+Homologous - Structures w/different functions but same evolutionary origin (arm, wing)
+
+Vestigial - Structure that lost most its function through evolution (appendix)
+
+Analogous - Structures w/similar functions but different evolutionary origin
+
+Punctuated Equilibrium - Species experience equilibrium interrupted by rapid environmental evolutionary change
+
+Convergent Evolution - Unrelated species evolve similar traits due to similar environments
+
+Parallel evolution - Related species evolve in similar ways due to similar environments
+
+Homology - Traits in different species share common ancestry
+
+Gradualism - Evolution is slow and steady
+
+Coevolution - Species influence each other’s evolution due to close ecological interactions
+
+Adaptive Radiation - Single species rapidly diversifies into many different species with different niches
+
+Fitness - Ability of organism to survive and reproduce in an environment
+
+Prezygotic Isolation - Barriers that prevent fertilization before zygotes form
+
+Postzygotic Isolation - Barriers after fertilization occurs
+
+Temporal Isolation - Species mate at different times
+
+Geographic Isolation - Populations are separated by physical barriers
+
+Behavioral Isolation - Different species have different courtship behaviors
+
+Mechanical Isolation - Different species have incompatible reproductive organs
+
+Gametic Isolation - Sperm and egg cannot fuse together
+
+Reduced Hybrid Variability - Embryo dies early
+
+Reduced Hybrid Fertility - Hybrid survives but is sterile
+
+Hybrid Breakdown - First-generation hybrid is viable, later generations aren’t
+
+Directional Selection - Favors one extreme phenotype
+
+Stabilizing Selection - Favors intermediate phenotypes
+
+Disruptive/Diversifying Selection - Favors both extremes, against the intermediate
+
+Sympatric Speciation - Formation of a new species without geographic isolation
+
+Allopatric Speciation - Formation of a new species with geographic isolation
+
+Founder Effect - Reduced genetic diversity in a small starting population
+
+Atavism - Re-emergence of an organism’s ancestral trait
+
+Translational Species - Exhibits ancestral and descendant species characteristics

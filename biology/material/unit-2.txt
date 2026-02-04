@@ -1,0 +1,85 @@
+Quiescent cells - Temporarily inactive and in G0, but can re-enter the cell cycle
+
+Senescent cells - In G0 permanently, have exited the cell cycle (neurons)
+
+Binary fission - Cell splits into two equal parts (bacteria, amoeba)
+
+Budding - New organism grows as a small outgrowth from parent (yeast, hydra)
+
+Fragmentation - Parent breaks into pieces, forming new organisms
+
+Isogamy - Fusion of morphologically similar gametes (algae)
+
+Anisogamy - Fusion of different-sized gametes (most animals/plants)
+
+Oogamy - Special form of anisogamy, large non-motile egg + small motile sperm (humans, mammals)
+
+Pericentric Chromosomal Inversion - Inversion which includes centromere
+
+Paracentric Chromosomal Inversion - Inversion which occurs within ONE chromosomal arm
+
+SSBPs - Prevent reannealing (regluing) of DNA
+
+Bacterial transformation - Taking free DNA from environment and incorporating it into the genome
+
+Bacterial conjugation - Directly transferring DNA to another bacterium through sex pilus
+
+Interphase - Cell grows and copies DNA
+
+Prophase - DNA coils into chromosomes
+
+Metaphase - Chromosomes align in middle of cell
+
+Anaphase - Chromosomes are pulled apart
+
+Telophase - Two new nuclei form
+
+Cytokinesis - Cell membrane pinches and two identical cells form
+
+G1 Phase - Cell grows, carries out normal functions, prepares to replicate DNA
+
+S Phase - Synthesis, cell replicates DNA
+
+G2 Phase - Cell grows, checks for DNA errors, prepares for mitosis
+
+Proto-oncogenes - Codes for proteins that regulate cell growth, division, and differentiation
+
+Oncogene - Mutated proto-oncogene that causes uncontrolled cell growth
+
+Tumor suppressor gene - Gene that codes for proteins that slow cell division and repair DNA (p53)
+
+Apoptosis - Programmed cell death
+
+Aneuploidy - Abnormal number of one chromosome set, includes monosomy and trisomy
+
+Monosomy - One copy of a chromosome (2n-1)
+
+Turner Syndrome - Monosomy X (missing one sex chromosome)
+
+Trisomy - Three copies of a chromosome (2n+1)
+
+Down Syndrome - Trisomy 21
+
+Edward’s Syndrome - Trisomy 18
+
+Patau Syndrome - Trisomy 13
+
+Polyploidy - More than 2 sets of chromosomes (3n, 4n, …)
+
+DNA Polymerase - Synthesizes DNA by adding nucleotides to chain
+
+Helicase - Unwinds DNA at replication forks
+
+Primase - Lays down RNA primers to start DNA synthesis
+
+Ligase - Joins Okazaki fragments on lagging strang
+
+Topoisomerase - Relieves supercoiling of DNA
+
+Telomerase - Adds repetitive sequences to ends of chromosomes (telomeres)
+
+Cleavage Furrow - Shallow groove that forms on surface of cells during cytokinesis
+
+Differentiation - Cell becomes specialized in function
+
+Tissue Tropism - Affinity of viruses to infect a particular type of cell

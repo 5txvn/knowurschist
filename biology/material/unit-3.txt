@@ -1,0 +1,21 @@
+Cofactor - Non-protein chemical compound required for an enzyme’s activity
+
+Coenzyme - Small organic molecule that binds to enzymes and assists in catalysis, derived from vitamins
+
+Competitive Inhibitor - Binds to active site, blocks substrate from binding
+
+Non-competitive Inhibitor - Binds to allosteric site, changing enzyme shape and reducing activity
+
+Irreversible Inhibitor - Permanently inactivates enzyme through covalent binding
+
+Substrate - Molecule upon which an enzyme acts
+
+C3 - Most common plant type (~85%), includes rice, wheat, soybeans, most trees in cool, moist environments, occurs when CO2 is fixed into 3-PGA, photorespiration occurs at higher temps
+
+C4 - Adapted to hot, dry environments, includes corn, sugarcane, millet, CO2 is instead fixed into 4-carbon compound, reduces photorespiration
+
+CAM - Adapted to extremely dry environments, CO2 fixation is temporally separated rather than spatially since stomata open at night and close during the day
+
+Catabolic/Exergonic - Breaks down molecules, releases energy
+
+Anabolic - Builds up molecules, requires energy

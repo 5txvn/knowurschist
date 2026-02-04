@@ -133,3 +133,15 @@ Glycosidic Bond - Covalently links monosaccharides
 Peptide Bond - Covalently links amino acids
 
 Phosphodiester Bond - Covalently links nucleotides
+
+CAP - Catabolite Activator Protein, enhances expression of glucose-metabolizing genes
+
+dNTP - Deoxyribonucleotide Triphosphate, building blocks of DNA (nitrogenous base, sugar molecule, three phosphate groups)
+
+Phosphatase - Removes phosphate groups
+
+Phosphorylase - Adds phosphate groups
+
+Perforated - Structure/tissue that has holes/openings (i.e., membranes)
+
+Channel Proteins - Proteins that create pores for ions or molecules to passively transport

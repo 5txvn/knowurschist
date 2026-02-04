@@ -1,0 +1,43 @@
+Epistasis - One gene modifies the expression of another gene
+
+Incomplete dominance - Heterozygote shows intermediate phenotype (pink rose)
+
+Codominance - Both alleles are fully expressed at the same time (AB blood)
+
+Pleiotropy - Single gene affects multiple seemingly unrelated traits
+
+Polygenic inheritance - Trait is controlled by multiple genes
+
+Multiple alleles - More than two alleles exist in population for gene (blood)
+
+Hemizygous - Having only one copy of a gene instead of two (sex genes)
+
+Law of Segregation - Each organism has two alleles for a gene, separated in meiosis and eventually recombine
+
+Law of Independent Assortment - Alleles of different genes separate independently (eye color independent to hair color)
+
+Law of Dominance - Dominant alleles mask recessive ones
+
+Heredity - Passing of traits from parents to offspring
+
+Southern Blot - Detects if specific DNA sequence is present
+
+Northern Blot - Detects if RNA (usually mRNA) sequence is present/whether gene is being expressed
+
+Western Blot - Detects presence of proteins and their size
+
+Eastern Blot - Detects post-translational modifications of proteins
+
+Southwestern Blot - Detects DNA-binding proteins
+
+Northwestern Blot - Detects RNA-binding proteins
+
+Plasmids - Small, circular DNA molecules in bacteria used in genetic engineering
+
+Vectors - Tools like plasmids or viruses used to transfer genetic material
+
+Wild Phenotype - Normal characteristics exhibited by organism (no mutations)
+
+Autosome - Chromosome that isn’t linked to sex
+
+Locus - Location on a chromosome where a particular gene is found

@@ -1,0 +1,53 @@
+Aminoacyl-tRNA - Charged tRNA, has attached amino acid
+
+30S - Prokaryotic small ribosomal subunit, binds mRNA and decodes codons, has 21 proteins and 16S rRNA
+
+40S - Eukaryotic small ribosomal subunit, binds mRNA and decodes codons, has 33 proteins and 18 rRNA
+
+50S - Prokaryotic large ribosomal subunit, peptidyl transferase and tRNA binding, has 33 proteins, 23S rRNA, 5S rRNA
+
+60S - Eukaryotic large ribosomal subunit, peptidyl transferase and tRNA binding, has 49 proteins, 28S rRNA, 5.8S rRNA, 5S rRNA
+
+Chaperone Protein - assists in proper folding of polypeptides
+
+Ubiquitin - Small protein that marks other proteins for degradation by proteasome
+
+Inducer - Molecule that activates gene expression by preventing repressors from blocking transcription or activating activators
+
+Promoter - DNA sequence where RNA polymerase binds to start transcription
+
+Repressor - Protein that binds to operator to block transcription of gene
+
+Corepressor - Molecule that activates repressor so it can bind to DNA
+
+RNA Polymerase - Synthesizes RNA from DNA template during transcription
+
+Silent Mutation - Single nucleotide changes but amino acid stays the same
+
+Missense Mutation - Single nucleotide changes and codes for different amino acid
+
+Nonsense Mutation - Single nucleotide changes and creates stop codon
+
+Insertion - Nucleotides are added to DNA sequences (frameshift)
+
+Deletion - Nucleotides are removed from DNA sequences (frameshift)
+
+Chromosome Duplication - Segment of chromosome is copied, makes chromosomes look longer
+
+Chromosome Translocation - Chromosome parts break off and attach to one another
+
+Chromosome Deletion - Segment of chromosome is lost
+
+Chromosome Inversion - Segment of chromosome is flipped
+
+tRNA - Transfers amino acids to ribosomes, contains acceptor stem, T, D, anticodon, and variable loops
+
+Mutagen - Factor that causes mutations in DNA
+
+Carcinogen - Mutagen that specifically increases cancer risk
+
+Apoptosis - Programmed cell death
+
+Somatic mutation - Mutation in a non-reproductive cell, not passed to offspring
+
+Germline mutation - Mutation in a reproductive cell, can be passed to offspring

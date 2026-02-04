@@ -1,0 +1,117 @@
+Squamous Epithelial - Single-layer flat cells, lines alveoli and blood vessels
+
+Cuboidal Epithelial - Single-layer cube cells, line kidney tubules, secretory portions of small glands
+
+Columnar Epithelial - Single-layer tall cells, line digestive tract
+
+Transitional Epithelial - Specialized stratified shape-changing cells, line urinary bladder
+
+Continuous Conduction - Travel of action potential down unmyelinated axons, slow (0.5-10 m/s) because it uses more pumps
+
+Saltatory Conduction - Travel of action potential down myelinated axons, 15-30x faster b/c electrical signals jump
+
+HPA Axis - Stress response, hypothalamus releases CRH, this stimulates pituitary to release ACTH, this triggers the release of cortisol in the adrenal glands
+
+Dendrite - Branched extensions that receive neurotransmitter signals, carrying them to cell body
+
+Soma - Cell body of neuron containing nucleus
+
+Axon - Long projection that conducts electrical impulses to other cells
+
+Axon hillock - Region where axon behind, sums incoming signals and determines action potential
+
+Myelin sheath - Fatty insulating covering around axons that increase transmission speed
+
+Nodes of Ranvier - Gaps between myelin segments, regenerates action potential
+
+Axon terminal - End of axon that releases neurotransmitters into synapse
+
+Synapse - Functional junction where neurons communicate
+
+Synaptic cleft - Small gap between presynaptic and postsynaptic cells
+
+Presynaptic Neuron - Neuron that releases neurotransmitters
+
+Postsynaptic Neuron - Neuron that receives signals
+
+Glial cells - Non-neuronal cells that support, protect, and maintain neurons
+
+Astrocytes - Glial cells that regulate the chemical environment
+
+Oligodendrocytes - Glial cells that form myelin in CNS
+
+Schwann cells - Glial cells that form myelin in PNS
+
+Lymphocytes - WBCs for adaptive immune response, includes B cells, T cells, NK cells
+
+T cells - WBC that controls cell-mediated immunity, recognizing and killing infected cells or activating other immune cells
+
+B cells - WBC involved in humoral immunity, producing antibodies that bind to antigens and neutralize pathogens
+
+Erythrocytes - RBC that transports oxygen to lungs and carries carbon dioxide to lungs
+
+Neutrophils - WBC and first-responder phagocyte, destroying bacteria and fungi
+
+Eosinophils - WBC involved in fighting parasites and allergic reactions, red/orange
+
+Basophiles - WBC that releases histamine, triggering inflammation and allergic responses, not abundant and dark purple
+
+Monocyte - Very large kidney-shaped WBC that become macrophages (engulf bacteria, debris, viruses, etc.)
+
+Right atrium (RA) - Receives deoxygenated blood from body
+
+Right ventricle (RV) - Pumps blood to lungs
+
+Left atrium (LA) - Receives oxygenated blood from lungs
+
+Left ventricle (LV) - Pumps oxygen-rich blood to body
+
+Valves - Prevents backflow of blood
+
+Tricuspid valve - Between RA and RV, atrioventricular
+
+Pulmonary valve - Between RV and PA, semilunar
+
+Mitral/bicuspid valve - Between LA and LV, atrioventricular
+
+Aortic valve - Between LV and aorta, semilunar
+
+Blood - Fluid connective tissue transporting substances
+
+Platelets - Help w/blood clotting
+
+White Blood Cells - Fight infection
+
+Red Blood Cells - Carry oxygen using hemoglobin
+
+Plasma - Liquid portion of blood carrying nutrients, hormones, wastes
+
+Arteries - Thick vessels that carry oxygenated blood away from the heart
+
+Pulmonary artery (PA) - Carries blood away from heart for oxygenation
+
+Arterioles - Smaller branches of arteries leading to capillaries
+
+Capillaries - Thin vessels where exchange of gases and nutrients occurs
+
+Venules - Small veins collecting blood from capillaries
+
+Veins - Vessels that carry deoxygenated blood back to heart
+
+Pulmonary veins (PV) - Carries oxygenated blood towards the heart
+
+Aorta - Largest artery, carries blood from LV to body
+
+Carotid - Major arteries in the neck, critical for brain oxygenation
+
+Vena Cava - Largest veins, superior is upper body, inferior is lower, returns blood to RA
+
+Osteoblasts - Bone-building cells that produce and secrete bone matrix
+
+Myofibril - Long, threadlike structures in muscle cells, made of repeating sarcomeres
+
+Axon - Long extension of neuron that carries electrical impulses
+
+Open Circulatory System - Fluid (hemolymph) bathes organs and tissues directly (invertebrae)
+
+Hypercalcemia - Elevated blood calcium, caused by hyperparathyroidism, vitamin D toxicity, cancer
