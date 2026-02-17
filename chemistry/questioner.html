@@ -230,6 +230,17 @@
       color: black;
     }
     
+    .ref-or-arrow-slot {
+      position: absolute;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    #reference-sheet-btn.hidden-slot {
+      display: none;
+    }
+    
     .question-card {
       position: relative;
     }
@@ -240,6 +251,90 @@
         display: none !important;
       }
     }
+    
+    /* Reference modal - same design as settings */
+    #reference-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 1001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    #reference-modal.active {
+      display: flex;
+    }
+    
+    #reference-modal .modal-inner {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: 800px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #reference-modal iframe {
+      width: 100%;
+      height: 75vh;
+      border: none;
+      border-radius: 8px;
+    }
+    
+    /* Question image - centered */
+    #question-image-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    
+    .question-image-wrap {
+      margin: 1rem 0;
+      border: 4px dotted black;
+      padding: 4px;
+      display: inline-block;
+      cursor: pointer;
+    }
+    
+    .question-image-wrap img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    
+    /* Image enlarge modal */
+    #image-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1001;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    #image-modal.active {
+      display: flex;
+    }
+    
+    #image-modal .modal-inner {
+      max-width: 95vw;
+      max-height: 95vh;
+      position: relative;
+    }
+    
+    #image-modal .modal-inner img {
+      max-width: 100%;
+      max-height: 90vh;
+      display: block;
+    }
   </style>
 </head>
 <body>
@@ -247,6 +342,29 @@
     <div id="navbar-placeholder"></div>
   </div>
   
+  
+  <!-- Reference PDF Modal (settings-style) -->
+  <div id="reference-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[1001] hidden items-center justify-center" onclick="closeReferenceModal(event)">
+    <div class="bg-white border-2 border-gray-200 rounded-2xl p-6 max-w-4xl w-full mx-4 shadow-2xl max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-black">Reference Sheet</h2>
+        <button type="button" onclick="closeReferenceModal()" class="text-gray-600 hover:text-black transition-colors">
+          <i class="fas fa-times text-2xl"></i>
+        </button>
+      </div>
+      <iframe id="reference-iframe" src="" title="Reference PDF" class="flex-1 min-h-[70vh] w-full border rounded-lg"></iframe>
+    </div>
+  </div>
+  
+  <!-- Image enlarge modal -->
+  <div id="image-modal" class="fixed inset-0 bg-black/80 z-[1001] hidden items-center justify-center p-4" onclick="closeImageModal(event)">
+    <div class="max-w-[95vw] max-h-[95vh] relative" onclick="event.stopPropagation()">
+      <button type="button" onclick="closeImageModal()" class="absolute -top-10 right-0 text-white hover:text-gray-300">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+      <img id="image-modal-img" src="" alt="">
+    </div>
+  </div>
   
   <!-- Modal -->
   <div class="modal" id="question-modal" onclick="closeModal(event)">
@@ -452,17 +570,22 @@
       
       <!-- Question Card -->
       <div class="question-card bg-white rounded-xl p-8 border-2 border-gray-200 mb-6">
-        <div class="mb-6 flex items-center gap-3 relative">
+        <div class="mb-6 flex items-center gap-3 relative pr-20">
           <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Unit <span id="question-unit"></span></span>
           <span class="text-xs text-gray-400">•</span>
           <span class="text-xs text-gray-500" id="question-id-display"></span>
-          <button onclick="showQuestionModal()" class="text-gray-500 hover:text-gray-700">
+          <button onclick="showQuestionModal()" class="text-gray-500 hover:text-gray-700 flex items-center">
             <i class="fas fa-info-circle"></i>
           </button>
-          <div class="question-arrow" id="question-arrow" onclick="nextQuestion()" style="position: absolute; right: 0;">
+          <div class="flex-1 min-w-0"></div>
+          <button type="button" id="reference-sheet-btn" onclick="openReferenceModal()" class="ref-or-arrow-slot flex items-center justify-center w-10 h-10 text-black hover:bg-gray-100 rounded-full transition-colors shrink-0" title="Reference sheet">
+            <i class="fas fa-file-pdf text-xl"></i>
+          </button>
+          <div class="question-arrow ref-or-arrow-slot" id="question-arrow" onclick="nextQuestion()" style="display: none;">
             <i class="fas fa-arrow-right"></i>
           </div>
         </div>
+        <div id="question-image-container" class="mb-4" style="display: none;"></div>
         <h2 class="text-2xl font-bold text-gray-900 mb-6 mt-4" id="question-text"></h2>
         
         <div class="space-y-3" id="options-container"></div>
@@ -711,6 +834,65 @@
       return shuffled;
     }
     
+    function hasQuestionImage(q) {
+      if (q == null) return false;
+      if (!('data' in q)) return false;
+      const d = q.data;
+      if (d === false) return false;
+      if (typeof d === 'string' || d === true) return true;
+      return false;
+    }
+    
+    function questionImageSrc(id) {
+      return 'images/' + id + '.png';
+    }
+    
+    function questionImageAlt(id) {
+      const readable = id.replace(/-/g, ' ');
+      return '(' + readable + ' reference image)';
+    }
+    
+    function getReferencePdfPath(questionId) {
+      const match = questionId.match(/^(.+)-q\d+$/);
+      const base = match ? match[1] : questionId;
+      return 'references/' + base + '.pdf';
+    }
+    
+    async function openReferenceModal() {
+      if (!currentQuestion) return;
+      const refPath = getReferencePdfPath(currentQuestion.id);
+      const defaultPath = 'references/TMSCA.pdf';
+      let src = refPath;
+      try {
+        const r = await fetch(refPath, { method: 'HEAD' });
+        if (!r.ok) src = defaultPath;
+      } catch (_) {
+        src = defaultPath;
+      }
+      const iframe = document.getElementById('reference-iframe');
+      iframe.src = src;
+      $('#reference-modal').addClass('active').removeClass('hidden').addClass('flex');
+    }
+    
+    function closeReferenceModal(event) {
+      if (!event || $(event.target).attr('id') === 'reference-modal' || $(event.target).closest('button').length) {
+        $('#reference-modal').removeClass('active').addClass('hidden').removeClass('flex');
+        document.getElementById('reference-iframe').src = '';
+      }
+    }
+    
+    function openImageModal(src, alt) {
+      $('#image-modal-img').attr('src', src).attr('alt', alt);
+      $('#image-modal').addClass('active').removeClass('hidden').addClass('flex');
+    }
+    
+    function closeImageModal(event) {
+      if (!event || $(event.target).attr('id') === 'image-modal' || $(event.target).closest('button').length) {
+        $('#image-modal').removeClass('active').addClass('hidden').removeClass('flex');
+        $('#image-modal-img').attr('src', '');
+      }
+    }
+    
     function displayQuestion() {
       // Check if we need to loop questions
       if (!isFreeplay && currentQuestionIndex >= targetQuestionCount) {
@@ -727,6 +909,7 @@
       selectedAnswer = null;
       showingFeedback = false;
       $('#question-arrow').removeClass('visible');
+      $('#reference-sheet-btn').removeClass('hidden-slot');
       
       // Update progress (only in fixed mode)
       if (!isFreeplay) {
@@ -739,6 +922,30 @@
       $('#question-unit').text(currentQuestion.unit);
       $('#question-id-display').text(currentQuestion.id);
       $('#question-text').text(currentQuestion.question);
+      
+      // Question image (if data is string or true)
+      const imgContainer = $('#question-image-container');
+      imgContainer.hide().empty();
+      if (hasQuestionImage(currentQuestion)) {
+        const src = questionImageSrc(currentQuestion.id);
+        const alt = questionImageAlt(currentQuestion.id);
+        const wrap = $('<div class="question-image-wrap my-4" role="button" tabindex="0" title="Click to enlarge"></div>');
+        const img = $('<img src="' + src + '" alt="' + alt.replace(/"/g, '&quot;') + '">');
+        img.on('error', function() {
+          $(this).attr('alt', alt);
+        });
+        wrap.append(img);
+        wrap.on('click', function() {
+          openImageModal(src, alt);
+        });
+        wrap.on('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openImageModal(src, alt);
+          }
+        });
+        imgContainer.append(wrap).show();
+      }
       
       // Display options
       const optionsContainer = $('#options-container');
@@ -789,6 +996,7 @@
       }
       
       showingFeedback = true;
+      $('#reference-sheet-btn').addClass('hidden-slot');
       $('#question-arrow').addClass('visible');
       updateStats();
     }
