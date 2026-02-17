@@ -64,143 +64,312 @@
       position: fixed;
       border-radius: 50%;
       z-index: 0;
-      transition: transform 0.1s ease-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.5s ease;
     }
     
-    
-    .planet-1 {
-      width: clamp(120px, 12vw, 180px);
-      height: clamp(120px, 12vw, 180px);
-      background: linear-gradient(135deg, #8B4513 0%, #A0522D 50%, #CD853F 100%);
-      top: 15%;
-      right: 8%;
-      box-shadow: inset -30px -30px 0px rgba(0,0,0,0.3), inset 15px 15px 0px rgba(255,255,255,0.1);
+    .planets-desktop.planet:hover {
+      transform: scale(1.1);
     }
     
-    .planet-1::before {
-      content: '';
-      position: absolute;
-      width: 45px;
-      height: 45px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 50%;
-      top: 20%;
-      left: 30%;
+    .planet-2.planets-desktop.planet:hover {
+      transform: translateX(-50%) scale(1.1);
     }
     
-    .planet-1::after {
-      content: '';
-      position: absolute;
-      width: 30px;
-      height: 30px;
-      background: rgba(0,0,0,0.3);
-      border-radius: 50%;
-      bottom: 25%;
-      right: 20%;
-    }
-    
-    .planet-2 {
-      width: clamp(110px, 11vw, 160px);
-      height: clamp(110px, 11vw, 160px);
-      background: linear-gradient(135deg, #4169E1 0%, #1E90FF 50%, #87CEEB 100%);
-      top: 20%;
-      left: 5%;
-      box-shadow: inset -25px -25px 0px rgba(0,0,0,0.3), inset 12px 12px 0px rgba(255,255,255,0.1);
-    }
-    
-    .planet-2::before {
-      content: '';
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 50%;
-      top: 30%;
-      left: 25%;
-    }
-    
-    .planet-3 {
-      width: clamp(100px, 10vw, 150px);
-      height: clamp(100px, 10vw, 150px);
-      background: linear-gradient(135deg, #FF6347 0%, #FF4500 50%, #FF8C00 100%);
-      bottom: 15%;
-      right: 8%;
-      box-shadow: inset -22px -22px 0px rgba(0,0,0,0.3), inset 11px 11px 0px rgba(255,255,255,0.1);
-    }
-    
-    .planet-3::before {
-      content: '';
-      position: absolute;
-      width: 35px;
-      height: 35px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 50%;
-      top: 25%;
-      left: 40%;
-    }
-    
-    .planet-4 {
-      width: clamp(115px, 11.5vw, 170px);
-      height: clamp(115px, 11.5vw, 170px);
-      background: linear-gradient(135deg, #9370DB 0%, #BA55D3 50%, #DA70D6 100%);
-      bottom: 20%;
-      left: 5%;
-      box-shadow: inset -28px -28px 0px rgba(0,0,0,0.3), inset 14px 14px 0px rgba(255,255,255,0.1);
-    }
-    
-    .planet-4::before {
-      content: '';
-      position: absolute;
-      width: 42px;
-      height: 42px;
-      background: rgba(0,0,0,0.4);
-      border-radius: 50%;
-      top: 35%;
-      right: 30%;
-    }
-    
-    .scroll-arrow {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: bounce 2s infinite;
+    .planets-desktop.planet {
+      z-index: 20;
       cursor: pointer;
-      z-index: 10;
-      transition: opacity 0.3s ease;
     }
     
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-10px); }
+    .planet-link {
+      text-decoration: none;
+      cursor: pointer;
+      color: white;
     }
     
-    .card {
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.15);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
+    .planet-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      pointer-events: none;
     }
     
-    .card:hover {
-      background: rgba(255, 255, 255, 0.25);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-5px);
+    .planet-link i {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(24px, 2.5vw, 36px);
+      color: white;
     }
     
-    .card-button {
-      background: rgba(255, 255, 255, 0.2);
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      transition: all 0.3s ease;
+    /* Hide icons on desktop, show on mobile */
+    @media (min-width: 1024px) {
+      .planets-desktop .planet-link i {
+        display: none;
+      }
     }
     
-    .card-button:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.6);
+    /* Varied rock animations - different ranges, timing, easing */
+    @keyframes planet-rock-1 {
+      0%, 100% { transform: rotate(-13deg); }
+      50% { transform: rotate(11deg); }
+    }
+    @keyframes planet-rock-2 {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(15deg); }
+    }
+    @keyframes planet-rock-3 {
+      0%, 100% { transform: rotate(-16deg); }
+      45% { transform: rotate(9deg); }
+    }
+    @keyframes planet-rock-m1 {
+      0%, 100% { transform: rotate(-11deg); }
+      50% { transform: rotate(12deg); }
+    }
+    @keyframes planet-rock-m2 {
+      0%, 100% { transform: rotate(-14deg); }
+      55% { transform: rotate(10deg); }
+    }
+    @keyframes planet-rock-m3 {
+      0%, 100% { transform: rotate(-9deg); }
+      50% { transform: rotate(14deg); }
+    }
+    
+    /* Planet 1 - slightly larger */
+    .planet-1 {
+      width: clamp(235px, 23vw, 355px);
+      height: clamp(235px, 23vw, 355px);
+      top: 8%;
+      left: 4%;
+    }
+    .planet-1 .planet-inner {
+      background: linear-gradient(135deg, #166534 0%, #22c55e 50%, #4ade80 100%);
+      box-shadow: inset -28px -28px 0 rgba(0,0,0,0.28), inset 14px 14px 0 rgba(255,255,255,0.1);
+      animation: planet-rock-1 2.3s ease-in-out infinite;
+    }
+    
+    /* Planet 2 - middle size */
+    .planet-2 {
+      width: clamp(205px, 20vw, 310px);
+      height: clamp(205px, 20vw, 310px);
+      bottom: 12%;
+      left: 50%;
+      top: auto;
+      right: auto;
+      transform: translateX(-50%);
+    }
+    .planet-2 .planet-inner {
+      background: linear-gradient(135deg, #6b21a8 0%, #9333ea 50%, #a855f7 100%);
+      box-shadow: inset -28px -28px 0 rgba(0,0,0,0.28), inset 14px 14px 0 rgba(255,255,255,0.1);
+      animation: planet-rock-2 3.7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
+    
+    /* Planet 3 - slightly larger */
+    .planet-3 {
+      width: clamp(245px, 24vw, 365px);
+      height: clamp(245px, 24vw, 365px);
+      top: 32%;
+      right: 4%;
+      bottom: auto;
+      left: auto;
+    }
+    .planet-3 .planet-inner {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+      box-shadow: inset -28px -28px 0 rgba(0,0,0,0.28), inset 14px 14px 0 rgba(255,255,255,0.1);
+      animation: planet-rock-3 2.1s ease-in-out infinite;
+    }
+    
+    .planets-mobile {
+      display: none;
+    }
+    
+    /* Craters: desktop - larger, asymmetrical */
+    @media (min-width: 1024px) {
+      .planet-1 .planet-inner::before {
+        content: '';
+        position: absolute;
+        width: 52px;
+        height: 52px;
+        background: rgba(0,0,0,0.38);
+        border-radius: 50%;
+        top: 20%;
+        left: 26%;
+      }
+      .planet-1 .planet-inner::after {
+        content: '';
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        background: rgba(0,0,0,0.32);
+        border-radius: 50%;
+        bottom: 26%;
+        right: 24%;
+      }
+      .planet-2 .planet-inner::before {
+        content: '';
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        background: rgba(0,0,0,0.38);
+        border-radius: 50%;
+        top: 30%;
+        right: 26%;
+      }
+      .planet-2 .planet-inner::after {
+        content: '';
+        position: absolute;
+        width: 34px;
+        height: 34px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 50%;
+        bottom: 24%;
+        left: 32%;
+      }
+      .planet-3 .planet-inner::before {
+        content: '';
+        position: absolute;
+        width: 44px;
+        height: 44px;
+        background: rgba(0,0,0,0.38);
+        border-radius: 50%;
+        top: 16%;
+        left: 36%;
+      }
+      .planet-3 .planet-inner::after {
+        content: '';
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        background: rgba(0,0,0,0.32);
+        border-radius: 50%;
+        bottom: 32%;
+        right: 26%;
+      }
     }
     
     @media (max-width: 1023px) {
-      .planet {
+      .planets-desktop {
+        display: none;
+      }
+      
+      .planets-mobile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3.5rem;
+        padding: 2rem 0;
+      }
+      
+      .planets-mobile .planet-link {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        transition: transform 0.5s ease;
+      }
+      
+      .planets-mobile .planet-1 {
+        width: clamp(188px, 52vw, 268px);
+        height: clamp(188px, 52vw, 268px);
+      }
+      .planets-mobile .planet-2 {
+        width: clamp(172px, 48vw, 248px);
+        height: clamp(172px, 48vw, 248px);
+      }
+      .planets-mobile .planet-3 {
+        width: clamp(195px, 54vw, 272px);
+        height: clamp(195px, 54vw, 272px);
+      }
+      
+      .planets-mobile .planet-link:hover {
+        transform: scale(1.1);
+      }
+      
+      /* Mobile: planets slightly off horizontal center */
+      .planets-mobile .planet-1 { transform: translateX(-10%); }
+      .planets-mobile .planet-1:hover { transform: translateX(-10%) scale(1.1); }
+      .planets-mobile .planet-2 { transform: translateX(8%); }
+      .planets-mobile .planet-2:hover { transform: translateX(8%) scale(1.1); }
+      .planets-mobile .planet-3 { transform: translateX(-6%); }
+      .planets-mobile .planet-3:hover { transform: translateX(-6%) scale(1.1); }
+      
+      .planets-mobile .planet-1 .planet-inner {
+        animation: planet-rock-m1 2.6s ease-in-out infinite;
+      }
+      .planets-mobile .planet-2 .planet-inner {
+        animation: planet-rock-m2 3.3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      }
+      .planets-mobile .planet-3 .planet-inner {
+        animation: planet-rock-m3 2.4s ease-in-out infinite;
+      }
+      
+      /* Craters on mobile - slightly larger than before, asymmetrical */
+      .planets-mobile .planet-1 .planet-inner::before {
+        content: '';
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        background: rgba(0,0,0,0.38);
+        border-radius: 50%;
+        top: 22%;
+        left: 30%;
+      }
+      .planets-mobile .planet-1 .planet-inner::after {
+        content: '';
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        background: rgba(0,0,0,0.32);
+        border-radius: 50%;
+        bottom: 30%;
+        right: 20%;
+      }
+      .planets-mobile .planet-2 .planet-inner::before {
+        content: '';
+        position: absolute;
+        width: 32px;
+        height: 32px;
+        background: rgba(0,0,0,0.38);
+        border-radius: 50%;
+        top: 28%;
+        right: 30%;
+      }
+      .planets-mobile .planet-2 .planet-inner::after {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: rgba(0,0,0,0.3);
+        border-radius: 50%;
+        bottom: 26%;
+        left: 38%;
+      }
+      .planets-mobile .planet-3 .planet-inner::before {
+        content: '';
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        background: rgba(0,0,0,0.38);
+        border-radius: 50%;
+        top: 20%;
+        left: 42%;
+      }
+      .planets-mobile .planet-3 .planet-inner::after {
+        content: '';
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        background: rgba(0,0,0,0.32);
+        border-radius: 50%;
+        bottom: 38%;
+        right: 30%;
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .planets-mobile {
         display: none;
       }
     }
@@ -210,82 +379,19 @@
   <div class="galaxy-bg"></div>
   <div class="stars" id="stars"></div>
   
-  <!-- Planets -->
-  <div class="planet planet-1 hidden lg:block" data-speed="0.5" data-direction-x="1"></div>
-  <div class="planet planet-2 hidden lg:block" data-speed="0.3" data-direction-x="-1"></div>
-  <div class="planet planet-3 hidden lg:block" data-speed="0.4" data-direction-x="1"></div>
-  <div class="planet planet-4 hidden lg:block" data-speed="0.6" data-direction-x="-1"></div>
+  <!-- Planets (desktop) -->
+  <a href="biology/index.html" class="planet planet-link planet-1 planets-desktop hidden lg:flex" aria-label="Biology"><span class="planet-inner"></span></a>
+  <a href="chemistry/index.html" class="planet planet-link planet-2 planets-desktop hidden lg:flex" aria-label="Chemistry"><span class="planet-inner"></span></a>
+  <a href="physics/index.html" class="planet planet-link planet-3 planets-desktop hidden lg:flex" aria-label="Physics"><span class="planet-inner"></span></a>
   
   <!-- Main Landing Section -->
   <section class="relative min-h-screen flex flex-col items-center justify-center z-10">
-    <h1 class="text-7xl md:text-9xl font-black text-white mb-6 text-center drop-shadow-2xl px-4">
-      Know Ur Schist
-    </h1>
-    <p class="text-xl md:text-2xl text-white/90 mb-16 text-center px-4">
-      THE destination for UIL science preparation
-    </p>
-    
-    <div class="scroll-arrow" onclick="scrollToContent()">
-      <i class="fas fa-chevron-down text-white text-4xl"></i>
+    <!-- Planets (mobile): vertical stack -->
+    <div class="planets-mobile">
+      <a href="biology/index.html" class="planet planet-link planet-1" aria-label="Biology"><span class="planet-inner"></span></a>
+      <a href="chemistry/index.html" class="planet planet-link planet-2" aria-label="Chemistry"><span class="planet-inner"></span></a>
+      <a href="physics/index.html" class="planet planet-link planet-3" aria-label="Physics"><span class="planet-inner"></span></a>
     </div>
-  </section>
-  
-  <!-- Subject Cards Section -->
-  <section id="subjects" class="relative min-h-screen flex flex-col items-center justify-center z-10 py-10 px-4">
-    <div class="flex flex-col md:flex-row gap-8 w-full items-center justify-center mb-16 mx-[0px]">
-      <!-- Biology Card -->
-      <div class="card rounded-xl p-10 text-white w-full md:w-1/4 text-center flex flex-col">
-        <i class="fas fa-dna text-7xl mb-6"></i>
-        <h2 class="text-4xl font-bold mb-4">Biology</h2>
-        <p class="text-white/90 text-lg mb-6 leading-relaxed">Master life sciences and prepare for UIL competitions.</p>
-        <a href="biology/index.html" class="mt-auto border-2 border-white/60 rounded-lg px-8 py-4 text-lg font-semibold hover:bg-white/20 transition-all hover:border-white/80">
-          Explore Biology →
-        </a>
-      </div>
-      
-      <!-- Chemistry Card -->
-      <div class="card rounded-xl p-10 text-white w-full md:w-1/4 text-center flex flex-col">
-        <i class="fas fa-flask text-7xl mb-6"></i>
-        <h2 class="text-4xl font-bold mb-4">Chemistry</h2>
-        <p class="text-white/90 text-lg mb-6 leading-relaxed">Explore the molecular world and master chemical reactions.</p>
-        <a href="chemistry/index.html" class="mt-auto border-2 border-white/60 rounded-lg px-8 py-4 text-lg font-semibold hover:bg-white/20 transition-all hover:border-white/80">
-          Explore Chemistry →
-        </a>
-      </div>
-      
-      <!-- Physics Card -->
-      <div class="card rounded-xl p-10 text-white w-full md:w-1/4 text-center flex flex-col">
-        <i class="fas fa-rocket text-7xl mb-6"></i>
-        <h2 class="text-4xl font-bold mb-4">Physics</h2>
-        <p class="text-white/90 text-lg mb-6 leading-relaxed">Understand the fundamental laws of the universe.</p>
-        <a href="physics/index.html" class="mt-auto border-2 border-white/60 rounded-lg px-8 py-4 text-lg font-semibold hover:bg-white/20 transition-all hover:border-white/80">
-          Explore Physics →
-        </a>
-      </div>
-    </div>
-    
-    <!-- Divider -->
-    <div class="w-3/4 h-[3px] bg-white/30 my-16 mb-32"></div>
-    
-    <!-- Statistics Card -->
-    <div class="card rounded-xl p-10 text-white w-3/4 text-center">
-      <h2 class="text-5xl font-bold mb-12">By The Numbers...</h2>
-      <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
-        <div class="flex-1">
-          <div class="text-5xl font-bold mb-2" id="stat-biology">0</div>
-          <div class="text-xl text-white/90">Biology Questions</div>
-        </div>
-        <div class="flex-1">
-          <div class="text-5xl font-bold mb-2" id="stat-chemistry">0</div>
-          <div class="text-xl text-white/90">Chemistry Questions</div>
-        </div>
-        <div class="flex-1">
-          <div class="text-5xl font-bold mb-2" id="stat-physics">0</div>
-          <div class="text-xl text-white/90">Physics Questions</div>
-        </div>
-      </div>
-    </div>
-    
   </section>
   
   <script>
@@ -305,151 +411,8 @@
       }
     }
     
-    // Animate planets with JavaScript
-    let animationTime = 0;
-    function animatePlanets() {
-      animationTime += 0.016; // ~60fps
-      
-      $('.planet').each(function() {
-        const $planet = $(this);
-        const speed = parseFloat($planet.data('speed')) || 0.5;
-        const directionX = parseFloat($planet.data('direction-x')) || 1;
-        const scrollTop = $(window).scrollTop();
-        
-        // Parallax from scroll - faster movement to get planets off screen
-        const parallaxY = -scrollTop * speed * 2.5;
-        const parallaxX = scrollTop * speed * 1.0 * directionX;
-        
-        // Individual animations
-        let animX = 0, animY = 0, animRotate = 0;
-        
-        if ($planet.hasClass('planet-1')) {
-          // Float animation
-          animX = Math.sin(animationTime * 0.5) * 10;
-          animY = Math.cos(animationTime * 0.5) * -15;
-        } else if ($planet.hasClass('planet-2')) {
-          // Rotation animation
-          animRotate = (animationTime * 18) % 360; // 20s rotation
-        } else if ($planet.hasClass('planet-3')) {
-          // Float animation
-          animX = Math.sin(animationTime * 0.7) * -12;
-          animY = Math.cos(animationTime * 0.7) * 10;
-        } else if ($planet.hasClass('planet-4')) {
-          // Combined float and rotate
-          animX = Math.sin(animationTime * 0.4) * 15;
-          animY = Math.cos(animationTime * 0.4) * -10;
-          animRotate = Math.sin(animationTime * 0.4) * 5;
-        }
-        
-        // Combine parallax and animation
-        $planet.css({
-          'transform': `translate(${parallaxX + animX}px, ${parallaxY + animY}px) rotate(${animRotate}deg)`
-        });
-      });
-      
-      requestAnimationFrame(animatePlanets);
-    }
-    
-    // Start animation loop
-    animatePlanets();
-    
-    // Handle scroll arrow fade out
-    function handleScrollArrow() {
-      const scrollTop = $(window).scrollTop();
-      const windowHeight = $(window).height();
-      const subjectsSection = $('#subjects');
-      const subjectsTop = subjectsSection.offset().top;
-      const halfwayPoint = subjectsTop / 4; // Fade out faster
-      
-      if (scrollTop > halfwayPoint) {
-        $('.scroll-arrow').css('opacity', 0);
-      } else {
-        const fadeProgress = scrollTop / halfwayPoint;
-        $('.scroll-arrow').css('opacity', Math.max(0, 1 - fadeProgress));
-      }
-    }
-    
-    $(window).on('scroll', handleScrollArrow);
-    
-    function scrollToContent() {
-      const subjectsSection = document.getElementById('subjects');
-      const startPosition = window.pageYOffset;
-      const targetPosition = subjectsSection.offsetTop;
-      const distance = targetPosition - startPosition;
-      const duration = 2000; // 2 seconds
-      let start = null;
-      
-      function step(timestamp) {
-        if (!start) start = timestamp;
-        const progress = timestamp - start;
-        const progressPercent = Math.min(progress / duration, 1);
-        
-        // Easing function (ease-in-out)
-        const ease = progressPercent < 0.5 
-          ? 2 * progressPercent * progressPercent 
-          : 1 - Math.pow(-2 * progressPercent + 2, 2) / 2;
-        
-        window.scrollTo(0, startPosition + distance * ease);
-        
-        if (progress < duration) {
-          requestAnimationFrame(step);
-        }
-      }
-      
-      requestAnimationFrame(step);
-    }
-    
-    // Animate statistics count-up
-    function animateCountUp(elementId, targetValue, duration = 5000) {
-      const element = document.getElementById(elementId);
-      const startValue = 0;
-      const startTime = performance.now();
-      
-      function updateCount(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Easing function (ease-out)
-        const ease = 1 - Math.pow(1 - progress, 3);
-        const currentValue = Math.floor(startValue + (targetValue - startValue) * ease);
-        
-        element.textContent = currentValue.toLocaleString();
-        
-        if (progress < 1) {
-          requestAnimationFrame(updateCount);
-        } else {
-          element.textContent = targetValue.toLocaleString();
-        }
-      }
-      
-      requestAnimationFrame(updateCount);
-    }
-    
-    // Start count-up animation when statistics section is visible
-    let statsAnimated = false;
-    function checkStatsVisibility() {
-      const statsCard = document.getElementById('stat-biology');
-      if (!statsCard || statsAnimated) return;
-      
-      const rect = statsCard.closest('.card').getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-      
-      if (isVisible && !statsAnimated) {
-        statsAnimated = true;
-        animateCountUp('stat-biology', 738);
-        animateCountUp('stat-chemistry', 74);
-        animateCountUp('stat-physics', 0);
-      }
-    }
-    
-    // Initialize
     $(document).ready(function() {
       createStars();
-      handleScrollArrow();
-      
-      // Check stats visibility on scroll
-      $(window).on('scroll', checkStatsVisibility);
-      checkStatsVisibility(); // Check on initial load
     });
   </script>
 </body>
