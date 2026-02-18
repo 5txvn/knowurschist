@@ -14,6 +14,9 @@
   <title>Know Ur Schist - UIL Science Preparation</title>
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&display=swap" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <style>
     html, body {
@@ -83,6 +86,95 @@
       cursor: pointer;
     }
     
+    /* Planet label: white cursive text in center (desktop and mobile) */
+    .planet-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Dancing Script', 'Brush Script MT', cursive;
+      font-size: clamp(1.25rem, 2.2vw, 2rem);
+      font-weight: 600;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 0 20px rgba(0,0,0,0.3);
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    /* Moons: 5 decorative moons, further out, desktop only; below planets in z-order */
+    .moon {
+      position: fixed;
+      border-radius: 50%;
+      z-index: 10;
+      pointer-events: none;
+    }
+    
+    .moon-inner {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+    
+    .moon-1 {
+      width: clamp(32px, 4.5vw, 56px);
+      height: clamp(32px, 4.5vw, 56px);
+      top: 2%;
+      left: 12%;
+    }
+    .moon-1 .moon-inner {
+      background: linear-gradient(145deg, #9ca3af 0%, #e5e7eb 50%, #f9fafb 100%);
+      box-shadow: inset -5px -5px 0 rgba(0,0,0,0.18), inset 2px 2px 0 rgba(255,255,255,0.5);
+    }
+    
+    .moon-2 {
+      width: clamp(40px, 5.5vw, 68px);
+      height: clamp(40px, 5.5vw, 68px);
+      top: 18%;
+      left: 46%;
+    }
+    .moon-2 .moon-inner {
+      background: linear-gradient(145deg, #6b7280 0%, #9ca3af 45%, #d1d5db 100%);
+      box-shadow: inset -6px -6px 0 rgba(0,0,0,0.22), inset 3px 3px 0 rgba(255,255,255,0.35);
+    }
+    
+    .moon-3 {
+      width: clamp(28px, 3.8vw, 48px);
+      height: clamp(28px, 3.8vw, 48px);
+      bottom: 28%;
+      left: 18%;
+    }
+    .moon-3 .moon-inner {
+      background: linear-gradient(145deg, #d1d5db 0%, #f3f4f6 60%, #ffffff 100%);
+      box-shadow: inset -4px -4px 0 rgba(0,0,0,0.12), inset 2px 2px 0 rgba(255,255,255,0.6);
+    }
+    
+    .moon-4 {
+      width: clamp(36px, 5vw, 62px);
+      height: clamp(36px, 5vw, 62px);
+      bottom: 8%;
+      right: 24%;
+    }
+    .moon-4 .moon-inner {
+      background: linear-gradient(145deg, #4b5563 0%, #6b7280 40%, #9ca3af 100%);
+      box-shadow: inset -5px -5px 0 rgba(0,0,0,0.28), inset 2px 2px 0 rgba(255,255,255,0.2);
+    }
+    
+    .moon-5 {
+      width: clamp(44px, 6vw, 72px);
+      height: clamp(44px, 6vw, 72px);
+      top: 12%;
+      right: 10%;
+    }
+    .moon-5 .moon-inner {
+      background: linear-gradient(145deg, #e5e7eb 0%, #f3f4f6 50%, #ffffff 100%);
+      box-shadow: inset -5px -5px 0 rgba(0,0,0,0.15), inset 3px 3px 0 rgba(255,255,255,0.5);
+    }
+    
+    @media (max-width: 1023px) {
+      .moon { display: none !important; }
+    }
+    
     .planet-link {
       text-decoration: none;
       cursor: pointer;
@@ -96,19 +188,6 @@
       pointer-events: none;
     }
     
-    .planet-link i {
-      position: relative;
-      z-index: 1;
-      font-size: clamp(24px, 2.5vw, 36px);
-      color: white;
-    }
-    
-    /* Hide icons on desktop, show on mobile */
-    @media (min-width: 1024px) {
-      .planets-desktop .planet-link i {
-        display: none;
-      }
-    }
     
     /* Varied rock animations - different ranges, timing, easing */
     @keyframes planet-rock-1 {
@@ -136,12 +215,12 @@
       50% { transform: rotate(14deg); }
     }
     
-    /* Planet 1 - slightly larger */
+    /* Planet 1 - biology, spaced out */
     .planet-1 {
       width: clamp(235px, 23vw, 355px);
       height: clamp(235px, 23vw, 355px);
-      top: 8%;
-      left: 4%;
+      top: 10%;
+      left: 8%;
     }
     .planet-1 .planet-inner {
       background: linear-gradient(135deg, #166534 0%, #22c55e 50%, #4ade80 100%);
@@ -149,11 +228,11 @@
       animation: planet-rock-1 2.3s ease-in-out infinite;
     }
     
-    /* Planet 2 - middle size */
+    /* Planet 2 - chemistry, middle, spaced out */
     .planet-2 {
       width: clamp(205px, 20vw, 310px);
       height: clamp(205px, 20vw, 310px);
-      bottom: 12%;
+      bottom: 14%;
       left: 50%;
       top: auto;
       right: auto;
@@ -165,12 +244,12 @@
       animation: planet-rock-2 3.7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
     }
     
-    /* Planet 3 - slightly larger */
+    /* Planet 3 - physics, spaced out */
     .planet-3 {
       width: clamp(245px, 24vw, 365px);
       height: clamp(245px, 24vw, 365px);
-      top: 32%;
-      right: 4%;
+      top: 34%;
+      right: 8%;
       bottom: auto;
       left: auto;
     }
@@ -259,6 +338,15 @@
         align-items: center;
         gap: 3.5rem;
         padding: 2rem 0;
+      }
+      
+      .planets-mobile .planet {
+        position: relative;
+        z-index: 2;
+      }
+      
+      .planets-mobile .planet-label {
+        font-size: clamp(1.1rem, 5vw, 1.6rem);
       }
       
       .planets-mobile .planet-link {
@@ -379,18 +467,25 @@
   <div class="galaxy-bg"></div>
   <div class="stars" id="stars"></div>
   
-  <!-- Planets (desktop) -->
-  <a href="biology/index.html" class="planet planet-link planet-1 planets-desktop hidden lg:flex" aria-label="Biology"><span class="planet-inner"></span></a>
-  <a href="chemistry/index.html" class="planet planet-link planet-2 planets-desktop hidden lg:flex" aria-label="Chemistry"><span class="planet-inner"></span></a>
-  <a href="physics/index.html" class="planet planet-link planet-3 planets-desktop hidden lg:flex" aria-label="Physics"><span class="planet-inner"></span></a>
+  <!-- Moons (desktop only, 5 moons further out, varied size/color) -->
+  <div class="moon moon-1 hidden lg:block" aria-hidden="true"><span class="moon-inner"></span></div>
+  <div class="moon moon-2 hidden lg:block" aria-hidden="true"><span class="moon-inner"></span></div>
+  <div class="moon moon-3 hidden lg:block" aria-hidden="true"><span class="moon-inner"></span></div>
+  <div class="moon moon-4 hidden lg:block" aria-hidden="true"><span class="moon-inner"></span></div>
+  <div class="moon moon-5 hidden lg:block" aria-hidden="true"><span class="moon-inner"></span></div>
+  
+  <!-- Planets (desktop) with labels -->
+  <a href="biology/index.html" class="planet planet-link planet-1 planets-desktop hidden lg:flex" aria-label="Biology"><span class="planet-inner"></span><span class="planet-label -rotate-[20deg]">biology</span></a>
+  <a href="chemistry/index.html" class="planet planet-link planet-2 planets-desktop hidden lg:flex" aria-label="Chemistry"><span class="planet-inner"></span><span class="planet-label rotate-[35deg]">chemistry</span></a>
+  <a href="physics/index.html" class="planet planet-link planet-3 planets-desktop hidden lg:flex" aria-label="Physics"><span class="planet-inner"></span><span class="planet-label -rotate-[25deg]">physics</span></a>
   
   <!-- Main Landing Section -->
   <section class="relative min-h-screen flex flex-col items-center justify-center z-10">
-    <!-- Planets (mobile): vertical stack -->
+    <!-- Planets (mobile): vertical stack, no moons -->
     <div class="planets-mobile">
-      <a href="biology/index.html" class="planet planet-link planet-1" aria-label="Biology"><span class="planet-inner"></span></a>
-      <a href="chemistry/index.html" class="planet planet-link planet-2" aria-label="Chemistry"><span class="planet-inner"></span></a>
-      <a href="physics/index.html" class="planet planet-link planet-3" aria-label="Physics"><span class="planet-inner"></span></a>
+      <a href="biology/index.html" class="planet planet-link planet-1" aria-label="Biology"><span class="planet-inner"></span><span class="planet-label -rotate-[20deg]">biology</span></a>
+      <a href="chemistry/index.html" class="planet planet-link planet-2" aria-label="Chemistry"><span class="planet-inner"></span><span class="planet-label rotate-[25deg]">chemistry</span></a>
+      <a href="physics/index.html" class="planet planet-link planet-3" aria-label="Physics"><span class="planet-inner"></span><span class="planet-label -rotate-[25deg]">physics</span></a>
     </div>
   </section>
   
