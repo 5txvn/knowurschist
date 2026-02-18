@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fill in the Blank - Biology | Know Ur Schist</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    html, body { overflow-x: hidden; }
+    body { background: #fafafa; min-height: 100vh; }
+    .navbar-container { display: flex; justify-content: center; align-items: center; padding: 1rem 0; }
+    #navbar-placeholder { width: 100%; display: flex; justify-content: center; }
+    .unit-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border-radius: 20px;
+      box-shadow: 8px 8px 16px rgba(0,0,0,0.08), -8px -8px 16px rgba(255,255,255,0.8);
+      border: 2px solid #000;
+    }
+    .unit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 12px 12px 24px rgba(0,0,0,0.15), -12px -12px 24px rgba(255,255,255,0.9);
+    }
+    .fill-blank-input {
+      border: none;
+      border-bottom: 2px solid #000;
+      background: rgba(0, 0, 0, 0.06);
+      padding: 2px 6px;
+      font-size: inherit;
+      font-family: inherit;
+      border-radius: 2px;
+      box-sizing: border-box;
+    }
+    .fill-blank-input:focus {
+      outline: none;
+      border-bottom-color: #000;
+    }
+    .fill-blank-input.correct {
+      border-bottom-color: #22c55e;
+      background: rgba(34, 197, 94, 0.12);
+      color: #166534;
+    }
+    .fill-content p { margin-bottom: 0.75rem; }
+    .fill-content p:last-child { margin-bottom: 0; }
+    .fill-content li { margin-bottom: 0.75rem; }
+    .fill-content li.has-blanks { margin-bottom: 1.25rem; }
+    .fill-content .blank-wrapper { display: inline-block; margin: 0 2px; }
+    .fill-content p.has-blanks { margin-bottom: 1.25rem; min-height: 1.5em; }
+    .fill-content ol, .fill-content ul { margin-bottom: 1rem; }
+    .fill-content ul { padding-left: 1.5rem; }
+    .fill-content ol {
+      padding-left: 2.25rem;
+      list-style-type: decimal;
+      list-style-position: outside;
+    }
+    .fill-content ol li { display: list-item; }
+    .keycap {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #333;
+      background: linear-gradient(180deg, #f5f5f5 0%, #e0e0e0 100%);
+      border: 1px solid #333;
+      border-radius: 4px;
+      box-shadow: 0 2px 0 #333, 0 3px 1px rgba(0,0,0,0.1);
+      margin: 0 2px;
+    }
+    .fill-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.25rem;
+    }
+    .fill-header-row h2 { margin: 0; }
+    .fill-top-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .fill-back-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid #000;
+      border-radius: 8px;
+      color: #000;
+      text-decoration: none;
+    }
+    .fill-back-btn:hover { background: rgba(0,0,0,0.06); color: #000; }
+  </style>
+</head>
+<body>
+  <div class="navbar-container">
+    <div id="navbar-placeholder"></div>
+  </div>
+
+  <div class="content-wrapper pb-12 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto md:mt-12">
+    <!-- Module list (shown when no ?module= in URL) -->
+    <div id="module-list" class="mb-16">
+      <div class="space-y-4">
+        <a href="fillInTheBlank.html?module=glycolysis" class="unit-card bg-white p-6 flex items-center gap-4 block no-underline text-inherit w-full">
+          <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-atom text-white text-xl"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-bold text-gray-900 text-lg">Glycolysis</h3>
+            <p class="text-gray-600 text-sm">Anaerobic process in the cytosol</p>
+          </div>
+          <i class="fas fa-arrow-right text-black"></i>
+        </a>
+        <a href="fillInTheBlank.html?module=pyruvateOxidation" class="unit-card bg-white p-6 flex items-center gap-4 block no-underline text-inherit w-full">
+          <div class="w-12 h-12 bg-black rounded-xl flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-atom text-white text-xl"></i>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-bold text-gray-900 text-lg">Pyruvate Oxidation</h3>
+            <p class="text-gray-600 text-sm">Mitochondrial matrix stage before Citric Acid Cycle</p>
+          </div>
+          <i class="fas fa-arrow-right text-black"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Fill view (shown when ?module= is set) -->
+    <div id="fill-view" class="hidden">
+      <div class="bg-white rounded-2xl p-8 md:p-10 border-2 border-gray-200 shadow-sm">
+        <div class="fill-header-row">
+          <h2 id="fill-title" class="text-2xl md:text-3xl font-bold text-gray-900"></h2>
+          <div class="fill-top-right">
+            <a href="fillInTheBlank.html" class="fill-back-btn" aria-label="Back to modules">
+              <i class="fas fa-arrow-left"></i>
+            </a>
+            <span id="score-display" class="text-gray-900 font-semibold">
+              <span id="score-count">0</span> / <span id="score-total">0</span>
+            </span>
+          </div>
+        </div>
+        <p id="fill-hint-text" class="text-gray-500 text-sm my-8">
+          Press <kbd class="keycap">Enter</kbd> to give up on a blank, <kbd class="keycap">↑</kbd> for a hint.
+        </p>
+        <div id="fill-content" class="fill-content text-gray-800 leading-relaxed"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('../navbar.html');
+    });
+
+    const MODULES = {
+      glycolysis: { title: 'Glycolysis', file: 'fills/glycolysis.md' },
+      pyruvateOxidation: { title: 'Pyruvate Oxidation', file: 'fills/pyruvateOxidation.md' }
+    };
+
+    function getModuleFromQuery() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('module') || '';
+    }
+
+    function parseBlanks(text) {
+      const parts = [];
+      const re = /\{([^}]+)\}/g;
+      let lastIndex = 0;
+      let m;
+      while ((m = re.exec(text)) !== null) {
+        if (m.index > lastIndex) {
+          parts.push({ type: 'text', value: text.slice(lastIndex, m.index) });
+        }
+        parts.push({ type: 'blank', answer: m[1].trim() });
+        lastIndex = m.index + m[0].length;
+      }
+      if (lastIndex < text.length) {
+        parts.push({ type: 'text', value: text.slice(lastIndex) });
+      }
+      return parts;
+    }
+
+    function renderMarkdownWithBlanks(md) {
+      const html = marked.parse(md);
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      const textNodes = [];
+      const collect = (node) => {
+        if (node.nodeType === Node.TEXT_NODE && /\{[^}]+\}/.test(node.textContent)) {
+          textNodes.push(node);
+          return;
+        }
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          for (const child of Array.from(node.childNodes)) collect(child);
+        }
+      };
+      collect(div);
+      for (const node of textNodes) {
+        const parts = parseBlanks(node.textContent);
+        const frag = document.createDocumentFragment();
+        for (const p of parts) {
+          if (p.type === 'text') {
+            frag.appendChild(document.createTextNode(p.value));
+          } else {
+            const span = document.createElement('span');
+            span.className = 'blank-wrapper';
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'fill-blank-input';
+            input.dataset.answer = p.answer;
+            input.dataset.hintLevel = '0';
+            input.autocomplete = 'off';
+            const len = Math.max(p.answer.length, 6);
+            input.size = len;
+            input.maxLength = len;
+            input.style.minWidth = (len + 1) + 'ch';
+            span.appendChild(input);
+            frag.appendChild(span);
+          }
+        }
+        node.parentNode.replaceChild(frag, node);
+      }
+      div.querySelectorAll('p').forEach(p => {
+        if (p.querySelector('.fill-blank-input')) p.classList.add('has-blanks');
+      });
+      div.querySelectorAll('li').forEach(li => {
+        if (li.querySelector('.fill-blank-input')) li.classList.add('has-blanks');
+      });
+      return div.innerHTML;
+    }
+
+    function extractBlanksFromHtml(container) {
+      return Array.from(container.querySelectorAll('.fill-blank-input'));
+    }
+
+    function runFillView(moduleKey) {
+      const mod = MODULES[moduleKey];
+      if (!mod) {
+        document.getElementById('module-list').classList.remove('hidden');
+        return;
+      }
+      document.getElementById('module-list').classList.add('hidden');
+      document.getElementById('fill-view').classList.remove('hidden');
+      document.getElementById('fill-title').textContent = mod.title;
+
+      fetch(mod.file)
+        .then(r => r.text())
+        .then(md => {
+          const html = renderMarkdownWithBlanks(md);
+          const contentEl = document.getElementById('fill-content');
+          contentEl.innerHTML = html;
+
+          const inputs = extractBlanksFromHtml(contentEl);
+          const total = inputs.length;
+          document.getElementById('score-total').textContent = total;
+          document.getElementById('score-count').textContent = '0';
+
+          let correctCount = 0;
+          let currentIndex = 0;
+
+          function updateScore() {
+            document.getElementById('score-count').textContent = correctCount;
+          }
+
+          function focusBlank(index) {
+            if (index >= 0 && index < inputs.length) {
+              inputs[index].focus();
+              currentIndex = index;
+            }
+          }
+
+          function advanceToNext() {
+            correctCount++;
+            updateScore();
+            const next = inputs.findIndex(inp => !inp.classList.contains('correct'));
+            if (next !== -1) {
+              focusBlank(next);
+            }
+          }
+
+          inputs.forEach((input, index) => {
+            input.addEventListener('input', function() {
+              const answer = (this.dataset.answer || '').trim();
+              const val = this.value.trim();
+              if (answer && val.toLowerCase() === answer.toLowerCase()) {
+                this.classList.add('correct');
+                this.value = answer;
+                this.readOnly = true;
+                this.disabled = true;
+                advanceToNext();
+              }
+            });
+
+            input.addEventListener('keydown', function(e) {
+              const answer = (this.dataset.answer || '').trim();
+              if (!answer) return;
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                if (this.classList.contains('correct')) return;
+                this.value = answer;
+                this.classList.add('correct');
+                this.readOnly = true;
+                this.disabled = true;
+                advanceToNext();
+                return;
+              }
+              if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (this.classList.contains('correct')) return;
+                let hintLevel = parseInt(this.dataset.hintLevel || '0', 10);
+                hintLevel = Math.min(hintLevel + 1, answer.length);
+                this.dataset.hintLevel = String(hintLevel);
+                this.value = answer.slice(0, hintLevel);
+                return;
+              }
+            });
+
+            input.addEventListener('focus', function() {
+              currentIndex = inputs.indexOf(this);
+            });
+          });
+
+          if (inputs.length > 0) {
+            focusBlank(0);
+          }
+        })
+        .catch(err => {
+          document.getElementById('fill-content').innerHTML = '<p class="text-red-600">Could not load module. Try again or go back to modules.</p>';
+        });
+    }
+
+    const moduleKey = getModuleFromQuery();
+    if (moduleKey) {
+      runFillView(moduleKey);
+    }
+  </script>
+</body>
+</html>
