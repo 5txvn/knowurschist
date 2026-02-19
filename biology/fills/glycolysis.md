@@ -1,6 +1,6 @@
-Overview: {Anaerobic} process that occurs entirely in the {cytosol}, used in almost every living organism. 
+**Overview**: {Anaerobic} process that occurs entirely in the {cytosol}, used in almost every living organism. 
 
-Inputs: Glucose, NAD+, 2 ATP
+**Inputs**: Glucose, NAD+, 2 ATP
 
 **Outputs**: 2 Pyruvates, 2 NADH, 4 ATP, 2 H2O
 
