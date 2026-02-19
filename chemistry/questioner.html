@@ -570,7 +570,7 @@
       
       <!-- Question Card -->
       <div class="question-card bg-white rounded-xl p-8 border-2 border-gray-200 mb-6">
-        <div class="mb-6 flex items-center gap-3 relative pr-20">
+        <div class="mb-6 flex items-center gap-3 relative">
           <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Unit <span id="question-unit"></span></span>
           <span class="text-xs text-gray-400">•</span>
           <span class="text-xs text-gray-500" id="question-id-display"></span>
@@ -578,15 +578,17 @@
             <i class="fas fa-info-circle"></i>
           </button>
           <div class="flex-1 min-w-0"></div>
-          <button type="button" id="reference-sheet-btn" onclick="openReferenceModal()" class="ref-or-arrow-slot flex items-center justify-center w-10 h-10 text-black hover:bg-gray-100 rounded-full transition-colors shrink-0" title="Reference sheet">
-            <i class="fas fa-file-pdf text-xl"></i>
-          </button>
-          <div class="question-arrow ref-or-arrow-slot" id="question-arrow" onclick="nextQuestion()" style="display: none;">
+          <div class="question-arrow" id="question-arrow" onclick="nextQuestion()">
             <i class="fas fa-arrow-right"></i>
           </div>
         </div>
         <div id="question-image-container" class="mb-4" style="display: none;"></div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-6 mt-4" id="question-text"></h2>
+        <div class="flex flex-wrap items-center gap-2 mb-6 mt-4">
+          <h2 class="text-2xl font-bold text-gray-900 inline" id="question-text"></h2>
+          <button type="button" id="reference-sheet-btn" onclick="openReferenceModal()" class="inline-flex items-center justify-center px-3 py-1.5 text-black border border-black rounded-full text-sm font-medium hover:bg-gray-100 transition-colors shrink-0 align-middle" title="Reference sheet">
+            <i class="fas fa-file-pdf mr-1"></i> PDF
+          </button>
+        </div>
         
         <div class="space-y-3" id="options-container"></div>
       </div>
@@ -656,6 +658,17 @@
         } else {
           $('#keyword-suggestions').addClass('hidden');
         }
+      });
+
+      // Enter key moves to next question
+      $(document).on('keydown', function(e) {
+        if (e.key !== 'Enter') return;
+        if ($(e.target).closest('input, textarea, select').length) return;
+        if ($('#quiz-screen').hasClass('hidden')) return;
+        if ($('#results-screen').hasClass('hidden') === false) return;
+        if (filteredQuestions.length === 0) return;
+        e.preventDefault();
+        nextQuestion();
       });
     });
     
@@ -909,7 +922,6 @@
       selectedAnswer = null;
       showingFeedback = false;
       $('#question-arrow').removeClass('visible');
-      $('#reference-sheet-btn').removeClass('hidden-slot');
       
       // Update progress (only in fixed mode)
       if (!isFreeplay) {
@@ -996,7 +1008,6 @@
       }
       
       showingFeedback = true;
-      $('#reference-sheet-btn').addClass('hidden-slot');
       $('#question-arrow').addClass('visible');
       updateStats();
     }
