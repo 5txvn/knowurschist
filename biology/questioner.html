@@ -723,6 +723,17 @@
           $('#question-count-container').removeClass('hidden');
         }
       });
+
+      // Enter key moves to next question
+      $(document).on('keydown', function(e) {
+        if (e.key !== 'Enter') return;
+        if ($(e.target).closest('input, textarea, select').length) return;
+        if ($('#quiz-screen').hasClass('hidden')) return;
+        if (!$('#results-screen').hasClass('hidden')) return;
+        if (filteredQuestions.length === 0) return;
+        e.preventDefault();
+        nextQuestion();
+      });
     });
     
     async function loadQuestions() {
