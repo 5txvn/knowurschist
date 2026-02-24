@@ -410,9 +410,13 @@
         <h4 class="font-semibold text-gray-900 mb-4">Options:</h4>
         <div class="space-y-3" id="modal-options"></div>
       </div>
-      <div>
+      <div class="mb-8">
         <h4 class="font-semibold text-gray-900 mb-4">Keywords:</h4>
         <div class="flex flex-wrap gap-2" id="modal-keywords"></div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-900 mb-4">Unit:</h4>
+        <p class="text-gray-700 inline">Unit <span id="modal-unit-num"></span> – <span id="modal-unit-name"></span></p>
       </div>
     </div>
   </div>
@@ -1353,6 +1357,9 @@ Please provide a clear, concise explanation of why this answer is correct. Focus
         const tag = $(`<div class="px-3 py-1 bg-gray-200 text-gray-800 rounded-lg text-sm">${keyword}</div>`);
         keywordsContainer.append(tag);
       });
+      
+      $('#modal-unit-num').text(currentQuestion.unit);
+      $('#modal-unit-name').text(unitNames[currentQuestion.unit] || ('Unit ' + currentQuestion.unit));
       
       $('#question-modal').addClass('active');
     }
