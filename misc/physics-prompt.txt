@@ -1,1 +1,273 @@
-Role: You are a specialized data extraction agent and Physics Educator. Your task is to parse the attached science test PDF and convert the Physics section into a structured JSON array.ID Generation Logic: Extract the filename of the uploaded PDF (e.g., 24-25_Sci_TMSCA-1.pdf). Remove the "Sci_" or "Sci" portion. Concatenate the remaining parts with hyphens to create a Test ID (e.g., 24-25-TMSCA-1). Each question ID must follow the format: {Test ID}-q{number} (e.g., 24-25-TMSCA-1-qP4).Formatting (MathJax/LaTeX): This platform supports MathJax. You MUST wrap all variables, units, scientific notation, and mathematical expressions in LaTeX using single dollar signs. Examples: $9.8 \text{ m/s}^2$, $1.5 \times 10^{-3} \text{ J}$, $\tau = rF\sin\theta$, or $\lambda = \frac{h}{p}$. This applies strictly to the "question" string, the "options" array, and technical terms in "keywords".Filtering and Extraction Rules:Scope: Only extract questions from the Physics section (labeled P4 through P20).Exclusions (The Book Questions): Strictly exclude P1, P2, and P3. These are book-specific questions and should not be included.Visual Data Rule: Strictly exclude any question that refers to an image, diagram, table, or graph (e.g., "In the circuit shown below," "Based on the vector diagram," or "According to the graph").Answer Key: Locate the answer key at the end of the document. Map the correct letter answer to its 0-based index (A=0, B=1, C=2, D=3, E=4).Categorization (The Unit Key): Assign each question a unit key from 1 to 17 based on these specific TMSCA Physics topic areas:Astronomy (P4): Stars (excluding the Sun), nuclear fusion, stellar evolution, and properties of various celestial objects.Measurement & Math (P5): Dimensional analysis, significant figures, order of magnitude, and unit conversions.Kinematics (P6): Uniformly accelerated motion, displacement, velocity, acceleration (1D/2D), free-fall, and projectile motion.Forces & Dynamics (P7): Newton’s Laws, friction, springs (Hooke’s Law), and gravitation.Energy & Momentum (P8): Work, Energy, Power, Conservation of Energy, and Conservation of Momentum (including collisions).Rotational Motion (P9): Circular motion, centripetal force, balanced/unbalanced torques, rotational inertia, and rolling motion.Waves & Harmonic Motion (P10): Superposition, waves on a string, sound (Doppler effect, resonance), and Simple Harmonic Motion (pendulums/springs).Fluids (P11): Density, buoyancy (Archimedes’ Principle), viscosity, Bernoulli’s Principle, and the Continuity Equation.DC Circuits (P12): Ohm’s Law, resistors/capacitors in series and parallel, Kirchhoff’s Rules, and RC circuits.Electric Fields & Potential (P13): Coulomb’s Law (1D/2D), electric fields, electric potential, and Gauss’ Law.Magnetism (P14): Magnetic fields/forces, Right-Hand Rule, magnetic materials, Ampere’s Law, and the Biot-Savart Law.Induction & EM Waves (P15): Faraday’s Law, Lenz’s Law, EM spectrum, radiation pressure, polarization, and refraction.Optics (P16): Geometric optics (lenses and mirrors), magnification, and wave optics (interference and diffraction).Modern & Quantum Physics (P17): Spectroscopy, Photoelectric effect, Special Relativity, and Heisenberg Uncertainty Principle.Nuclear & Particle Physics (P18): Radioactivity (alpha/beta/gamma), half-lives, Standard Model (quarks/leptons), and nuclear reactions (fission/fusion).Wildcard Physics 1 (P19): Lab-based concepts or data analysis covering topics from Units 2–8.Wildcard Physics 2 (P20): Lab-based concepts or data analysis covering topics from Units 9–15.Metadata and Keywords:Explicit Extraction: Include all technical terms, laws, and physical constants (e.g., "centripetal acceleration", "planck's constant", "$\mu_{k}$").Implicit Frameworks: Include underlying concepts even if not named (e.g., if a problem involves a collision, include "conservation of momentum").Formatting: All keywords must be lowercase. Exclude trivial filler words or raw numerical values.Output Format (Strict JSON): Return a JSON array of objects. The objects themselves should be on new lines, but the internal arrays (options and keywords) must each be contained on a single line.[{"id": "24-25-TMSCA-1-qP6","unit": 3,"question": "A projectile is launched with an initial velocity of $25 \text{ m/s}$ at an angle of $30^{\circ}$. What is the maximum height reached?","options": ["$8.0 \text{ m}$", "$12.5 \text{ m}$", "$7.97 \text{ m}$", "$15.2 \text{ m}$", "$10.1 \text{ m}$"],"answer": 2,"keywords": ["projectile motion", "kinematics", "maximum height", "gravity"]}]Instruction: Please process the attached PDF now using these Physics-specific extraction and LaTeX rules, beginning with question P4.
+Role: You are a specialized data extraction agent and Physics Educator. Your task is to parse the attached science test PDF and convert the Physics section into a structured JSON array.
+
+ID Generation Logic: Extract the filename of the uploaded PDF (e.g., 24-25_Sci_TMSCA-1.pdf). Remove the "Sci_" or "Sci" portion. Concatenate the remaining parts with hyphens to create a Test ID (e.g., 24-25-TMSCA-1). Each question ID must follow the format: {Test ID}-q{number}. Example: If the question is "P4", the ID must be 24-25-TMSCA-1-q4.
+
+Formatting (MathJax/LaTeX – STRICT AND MINIMAL USE):
+
+This platform supports MathJax.
+
+You MUST use LaTeX ONLY when it is mathematically or symbolically necessary.
+
+LaTeX is REQUIRED only for:
+- mathematical expressions and equations
+- variables or symbolic quantities
+- scientific notation
+- subscripts/superscripts
+- vectors, Greek letters, and formal symbols
+
+Examples that SHOULD use LaTeX:
+$9.8 \, \text{m/s}^2$, $1.5 \times 10^{-3}$, $\tau = rF\sin\theta$, $\lambda = \frac{h}{p}$
+
+You MUST NOT use LaTeX for:
+- proper nouns (names such as Roche, Newton, Usain Bolt, etc.)
+- ordinary words
+- plain numeric values with units written in normal text (for example: 23 s, 4.35 s, 100 m, 10.44 m/s, km/hr when no mathematical structure is involved)
+- labels or titles
+
+In particular, do NOT place single words or names inside LaTeX (e.g., do NOT write $Roche$).
+
+This applies strictly to the "question" string, the "options" array, and technical terms in "keywords".
+
+Inline math delimiter rule (MANDATORY):
+You MUST use single dollar signs only for LaTeX:
+$ ... $
+You MUST NOT use \( \), \[ \], or any other delimiter style.
+
+Double Backslash Requirement:
+You MUST use double backslashes (\\) for all LaTeX commands within the JSON strings to avoid invalid escape errors (e.g., use \\text, \\frac, \\sqrt, etc.).
+
+Blanks / Fill-in-the-blank handling (CRITICAL):
+If the original question contains a blank (underscores or an empty line intended for the student to fill in an answer), you MUST preserve the blank.
+You MUST NOT fill the blank with the correct answer.
+You MUST represent every blank exactly as:
+__________
+(10 underscore characters)
+Do NOT wrap blanks in LaTeX.
+Do NOT convert surrounding words into LaTeX just because a blank appears nearby.
+Do NOT place proper nouns or terms into LaTeX because of adjacent blanks.
+
+Filtering and Extraction Rules:
+
+Scope: Only extract questions from the Physics section (labeled P4 through P20).
+
+Exclusions (The Book Questions): Strictly exclude P1, P2, and P3.
+
+Visual Data Rule:
+Do NOT exclude questions that refer to external visual aids. If a question mentions a figure, it must be included.
+
+The "data" Key Logic:
+Add a "data": true/false key-value pair to each question object.
+Set the value to true ONLY if the question refers to a visual aid (graph, table, diagram, figure, or circuit) and false otherwise.
+
+IMPORTANT ordering rule:
+The "data" key MUST be the final key in each JSON object (i.e., it must appear last in the inline object).
+
+Answer Key:
+Locate the answer key at the end of the document.
+Map the correct letter answer to its 0-based index (A=0, B=1, C=2, D=3, E=4).
+
+Answer Choices Formatting (STRICT):
+
+The "options" array must contain ONLY the raw answer choices.
+Do NOT prefix options with "A)", "B)", "C)", etc.
+Do NOT include letters inside the option strings.
+Each element in the options array must be only the text of the choice itself.
+
+Categorization (The Unit Key):
+
+Assign each question a unit key from 1 to 17 based on these TMSCA Physics topic areas:
+
+Astronomy (P4): Stars, nuclear fusion, stellar evolution, celestial objects.
+Measurement & Math (P5): Dimensional analysis, sig-figs, unit conversions.
+Kinematics (P6): Motion in 1D/2D, projectile motion, free-fall.
+Forces & Dynamics (P7): Newton’s Laws, friction, Hooke’s Law, gravitation.
+Energy & Momentum (P8): Work, Power, Conservation of Energy/Momentum.
+Rotational Motion (P9): Circular motion, torque, rotational inertia.
+Waves & Harmonic Motion (P10): Sound, Doppler effect, SHM, pendulums.
+Fluids (P11): Density, buoyancy, Bernoulli’s Principle, Continuity.
+DC Circuits (P12): Ohm’s Law, Kirchhoff’s Rules, RC circuits.
+Electric Fields & Potential (P13): Coulomb’s Law, Gauss’ Law, potential.
+Magnetism (P14): Magnetic fields, Right-Hand Rule, Ampere’s Law.
+Induction & EM Waves (P15): Faraday’s Law, EM spectrum, refraction.
+Optics (P16): Geometric optics (lenses/mirrors), interference.
+Modern & Quantum Physics (P17): Photoelectric effect, Relativity, Uncertainty.
+Nuclear & Particle Physics (P18): Radioactivity, quarks, fission/fusion.
+Wildcard Physics 1 (P19): Lab-based concepts or data analysis (Units 2–8).
+Wildcard Physics 2 (P20): Lab-based concepts or data analysis (Units 9–15).
+
+Formula Mapping:
+
+Add a "formula" key to each object as an array of IDs from the Formula Reference List.
+
+If a problem does not require a specific equation to be written in order to solve it, use:
+
+"formula": []
+
+A missing formula means a concrete mathematical equation that must be written (an equality or functional relationship between symbols, e.g. $F = ma$, $N = mg\cos\theta$, $A = \pi r^2$) and that equation is not present in the Formula Reference List.
+
+Do NOT treat the following as missing formulas:
+
+named processes or concepts (e.g., particle decay, fission, scattering, conservation of charge, free-body diagrams)
+
+qualitative rules or reasoning steps
+
+general problem-solving methods (e.g., “analyze forces”, “resolve components”, “apply Newton’s laws”)
+
+derived or situational force-component expressions in dynamics that come directly from vector decomposition and Newton’s laws (for example, tension components in a particular geometry)
+
+If a problem does require at least one concrete equation and none of those required equations appear in the Formula Reference List, you MUST still include the question, set:
+
+"formula": []
+
+and after the JSON array, print a plain-text section titled:
+
+MISSING FORMULAS SUMMARY
+
+listing each affected question ID followed by only the required missing equation(s) written in LaTeX.
+
+Formula Reference List:
+{
+  "1.1": "$v_{\\text{avg}} = \\frac{\\Delta x}{\\Delta t}$",
+  "1.2": "$a_{\\text{avg}} = \\frac{\\Delta v}{\\Delta t}$",
+  "1.3": "$\\Delta x = v_o t + \\frac{1}{2} a t^2$",
+  "1.4": "$v^2 = v_o^2 + 2a \\Delta x$",
+  "1.5": "$R = \\frac{v_o^2 \\sin 2\\theta}{g}$",
+  "1.6": "$H = \\frac{v_o^2 \\sin^2 \\theta}{2g}$",
+  "1.7": "$t = \\frac{2v_o \\sin \\theta}{g}$",
+  "1.8": "$v = \\sqrt{\\frac{2GM}{R}}$",
+  "2.1": "$F_{g \\parallel} = F_g \\sin \\theta$",
+  "2.2": "$F_{g \\perp} = F_g \\cos \\theta$",
+  "2.3": "$f = \\mu N$",
+  "2.4": "$F_s = -kx$",
+  "2.5": "$K = \\frac{1}{2}mv^2$",
+  "2.6": "$U_g = mgh$",
+  "2.7": "$U_s = \\frac{1}{2}kx^2$",
+  "2.8": "$E_{\\text{th}} = d \\mu F_N$",
+  "2.9": "$W = \\Delta K$",
+  "2.10": "$P = \\frac{W}{t} = Fv$",
+  "2.11": "$P = \\frac{F}{A}$",
+  "2.12": "$F_c = \\frac{mv^2}{r}$",
+  "3.1": "$I = mr^2$",
+  "3.2": "$I = I_{\\text{cm}} + md^2$",
+  "3.3": "$\\tau = Fr \\sin \\theta = I\\alpha$",
+  "3.4": "$L = pr = I\\omega$",
+  "3.5": "$K = \\frac{1}{2}I\\omega^2$",
+  "3.6": "$v = \\omega r$",
+  "3.7": "$a = \\alpha r$",
+  "3.8": "$f = \\frac{1}{T}$",
+  "4.1": "$\\omega = 2\\pi f$",
+  "4.2": "$x = A \\cos \\omega t$",
+  "4.3": "$v = -A\\omega \\sin \\omega t$",
+  "4.4": "$-A\\omega^2 \\cos \\omega t$",
+  "4.5": "$T = 2\\pi \\sqrt{\\frac{m}{k}}$",
+  "4.6": "$T = 2\\pi \\sqrt{\\frac{l}{g}}$",
+  "4.7": "$T = 2\\pi \\sqrt{\\frac{I}{mgd}}$",
+  "4.8": "$f = \\frac{nv}{2L}$",
+  "4.9": "$f = \\frac{nv}{4L}$",
+  "4.10": "$v = \\sqrt{\\frac{T}{\\mu}}$",
+  "4.11": "$v = f\\lambda$",
+  "4.12": "$f = f_0 \\frac{v + v_o}{v + v_s}$",
+  "4.13": "$v = 331\\sqrt{1 + \\frac{T}{273}}$",
+  "4.14": "$I = \\frac{P}{A}$",
+  "4.15": "$\\beta = 10 \\log \\frac{I}{10^{-12}}$",
+  "4.16": "$P = \\frac{I}{c}$",
+  "4.17": "$P = \\frac{2I}{c}$",
+  "4.18": "$E = \\frac{hc}{\\lambda}$",
+  "4.19": "$\\lambda = \\frac{h}{p}$",
+  "4.20": "$v = \\frac{c}{n}$",
+  "4.21": "$n_1 \\sin \\theta_1 = n_2 \\sin \\theta_2$",
+  "4.22": "$I = \\frac{I_o \\cos^2 \\theta}{2}$",
+  "4.23": "$\\Delta \\lambda = \\frac{h}{mc}(1 - \\cos \\theta)$",
+  "4.24": "$a \\sin \\theta = m\\lambda$",
+  "4.25": "$T = \\frac{0.0029}{\\lambda}$",
+  "4.26": "$\\gamma = \\frac{1}{\\sqrt{1 - \\frac{v^2}{c^2}}}$",
+  "5.1": "$t = \\gamma t_0$",
+  "5.2": "$L = \\frac{L_0}{\\gamma}$",
+  "5.3": "$m = \\gamma m_0$",
+  "5.4": "$E = \\sqrt{(pc)^2 + (mc^2)^2}$",
+  "5.5": "$K = (\\gamma - 1)mc^2$",
+  "5.6": "$u = \\frac{u' + v}{1 + \\frac{u'v}{c^2}}$",
+  "5.7": "$F_E = \\frac{kq_1 q_2}{r^2}$",
+  "6.1": "$F_E = qE$",
+  "6.2": "$E = \\frac{kq}{r^2}$",
+  "6.3": "$V = \\frac{kq}{r}$",
+  "6.4": "$U_e = qV = \\frac{kq_1 q_2}{r}$",
+  "6.5": "$E = \\frac{V}{d}$",
+  "6.6": "$EA = \\frac{Q}{\\epsilon_0}$",
+  "6.7": "$R = \\frac{\\rho L}{A}$",
+  "6.8": "$G = \\frac{1}{R}$",
+  "6.9": "$\\sigma = \\frac{1}{\\rho}$",
+  "6.10": "$V = IR$",
+  "6.11": "$P = VI$",
+  "6.12": "$C = \\frac{\\kappa \\epsilon_0 A}{d} = \\frac{Q}{V}$",
+  "6.13": "$U_e = \\frac{1}{2}QV = \\frac{1}{2}CV^2$",
+  "6.14": "$V = V_0(1 - e^{-\\frac{t}{RC}})$",
+  "6.15": "$n_p I_p = n_s I_s$",
+  "6.16": "$\\frac{V_p}{V_s} = \\frac{N_p}{N_s}$",
+  "6.17": "$V_p I_p = V_s I_s$",
+  "6.18": "$Bs = \\mu_0 I$",
+  "6.19": "$B = \\frac{\\mu_0 I}{2R}$",
+  "6.20": "$\\epsilon = -N \\frac{d\\Phi}{dt} = -M \\frac{dI}{dt}$",
+  "6.21": "$\\Phi = \\vec{B} \\cdot \\vec{A}$",
+  "6.22": "$F_B = q(\\vec{v} \\times \\vec{B})$",
+  "6.23": "$F = I(\\vec{I} \\times \\vec{B})$",
+  "6.24": "$\\epsilon = Blv$",
+  "6.25": "$|\\vec{S}| = \\frac{EB}{2\\mu_0}$",
+  "6.26": "$v = \\frac{E}{B}$",
+  "6.27": "$F = \\frac{\\mu_0 I_1 I_2 L}{2\\pi r}$",
+  "6.28": "$U_e = \\frac{1}{2}LI^2$",
+  "6.29": "$\\mu \\frac{n}{l} I$",
+  "6.30": "$Bs = \\mu_0 \\epsilon_0 \\frac{d\\Phi_E}{dt}$",
+  "6.31": "$|Z| = \\frac{V}{I} = \\sqrt{R^2 + (X_L - X_C)^2}$",
+  "7.1": "$R = |Z| \\cos \\phi$",
+  "7.2": "$X = |Z| \\sin \\phi$",
+  "7.3": "$X_L = 2\\pi fL$",
+  "7.4": "$X_C = \\frac{1}{2\\pi fC}$",
+  "7.5": "$f = \\frac{1}{2\\pi} \\sqrt{\\frac{1}{LC}}$",
+  "7.6": "$\\text{PF} = \\cos \\phi$",
+  "7.7": "$Q = Av$",
+  "8.1": "$PV = nRT$",
+  "8.2": "$W = -P \\Delta V$",
+  "8.3": "$W = nRT \\ln \\frac{V_f}{V_i}$",
+  "8.4": "$Q = nC_v \\Delta T$",
+  "8.5": "$Q = nC_p \\Delta T$",
+  "8.6": "$U = \\frac{fnRT}{2}$",
+  "8.7": "$C_V = \\frac{f}{2}R$",
+  "8.8": "$C_P = C_V + R$",
+  "8.9": "$\\gamma = \\frac{C_P}{C_V}$",
+  "8.10": "$P_1 V_1^\\gamma = P_2 V_2^\\gamma$",
+  "8.11": "$F_B = \\rho gV$",
+  "8.12": "$P_1 + \\frac{1}{2}\\rho v_1^2 + \\rho gh_1 = P_2 + \\frac{1}{2}\\rho v_2^2 + \\rho gh_2$",
+  "8.13": "$\\Delta L = \\alpha L_0 \\Delta T$",
+  "8.14": "$\\Delta V = \\beta V_0 \\Delta T$",
+  "8.15": "$\\frac{1}{f} = \\frac{1}{d_i} + \\frac{1}{d_o}$",
+  "9.1": "$D = \\frac{1}{f}$",
+  "9.2": "$m = -\\frac{d_i}{d_o}$",
+  "9.3": "$\\frac{1}{f} = (n-1)\\left(\\frac{1}{R_1} - \\frac{1}{R_2}\\right)$",
+  "9.4": "$\\frac{n_1}{p} + \\frac{n_2}{q} = \\frac{n_2 - n_1}{R}$",
+  "9.5": "$\\eta = \\frac{W}{Q_{\\text{in}}} = \\frac{Q_{\\text{in}} - Q_{\\text{out}}}{Q_{\\text{in}}}$",
+  "10.1": "$\\eta = 1 - \\frac{T_c}{T_h}$",
+  "10.2": "$\\Delta E \\Delta t = \\Delta x \\Delta p \\geq \\frac{h}{4\\pi}$",
+  "10.3": "$\\Delta S = \\frac{Q}{T}$",
+  "10.4": "$P(a \\leq x \\leq b) = \\int_a^b |\\psi(x,t)|^2 dx$",
+  "10.5": "$\\int_{-\\infty}^{\\infty} |\\psi(x)|^2 dx = 1$",
+  "10.6": "$\\langle x \\rangle = \\int_{-\\infty}^{\\infty} x|\\psi(x)|^2 dx$",
+  "10.7": "$\\text{RMS} = \\sqrt{\\frac{\\int_a^b (f(x))^2 dx}{T}}$",
+  "10.8": "$\\Delta Q = \\sqrt{(\\Delta A)^2 + (\\Delta B)^2}$",
+  "10.9": "$\\frac{\\Delta Q}{Q} = \\sqrt{\\left(\\frac{\\Delta A}{A}\\right)^2 + \\left(\\frac{\\Delta B}{B}\\right)^2}$"
+}
+
+Metadata and Keywords:
+
+Extract all technical terms and physical constants in lowercase. Include underlying concepts (e.g., "conservation of energy").
+
+Output Delivery (Strict):
+
+Return the entire response inside a single Markdown code block.
+The output must be a valid JSON array [].
+Each individual JSON object must be contained on a single line.
+You MUST place a comma at the end of every object line within the array so it is valid JSON.
+
+Instruction:
+
+Process the PDF now. Ensure the ID and data keys are correct. Return ONLY the code block.
