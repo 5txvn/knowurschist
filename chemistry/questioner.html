@@ -287,7 +287,7 @@
       border-radius: 8px;
     }
     
-    /* Question image - centered */
+    /* Question image - bigger, resizable */
     #question-image-container {
       display: flex;
       justify-content: center;
@@ -298,14 +298,21 @@
       margin: 1rem 0;
       border: 4px dotted black;
       padding: 4px;
-      display: inline-block;
+      min-width: 420px;
+      min-height: 280px;
+      width: 560px;
+      height: 380px;
+      resize: both;
+      overflow: auto;
       cursor: pointer;
+      display: inline-block;
     }
     
     .question-image-wrap img {
       display: block;
-      max-width: 100%;
-      height: auto;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
     
     /* Image enlarge modal */
@@ -335,6 +342,75 @@
       max-height: 90vh;
       display: block;
     }
+    
+    .ai-explanation-btn {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      margin-top: 0;
+      transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+      cursor: pointer;
+    }
+    .ai-explanation-btn.visible {
+      max-height: 100px;
+      opacity: 1;
+      margin-top: 16px;
+    }
+    .ai-explanation-btn.clicked {
+      max-height: 0;
+      opacity: 0;
+      margin-top: 0;
+      overflow: hidden;
+    }
+    .ai-explanation {
+      margin-top: 16px;
+      padding: 16px;
+      background: #f9fafb;
+      border-left: 4px solid black;
+      border-radius: 8px;
+    }
+    
+    .calculator-floating-window {
+      position: fixed;
+      width: 360px;
+      height: 480px;
+      right: 24px;
+      bottom: 24px;
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      z-index: 1002;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .calculator-window-title {
+      padding: 10px 14px;
+      background: #f3f4f6;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: move;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 600;
+      color: #111;
+    }
+    .calculator-window-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      color: #6b7280;
+    }
+    .calculator-window-close:hover { color: #111; }
+    .calculator-window-iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+      border-radius: 0 0 10px 10px;
+    }
   </style>
 </head>
 <body>
@@ -354,6 +430,17 @@
       </div>
       <iframe id="reference-iframe" src="" title="Reference PDF" class="flex-1 min-h-[70vh] w-full border rounded-lg"></iframe>
     </div>
+  </div>
+  
+  <!-- Draggable calculator window (floating) -->
+  <div id="calculator-window" class="calculator-floating-window" style="display: none;">
+    <div class="calculator-window-title" id="calculator-drag-handle">
+      <span>Calculator</span>
+      <button type="button" onclick="closeCalculatorWindow()" class="calculator-window-close">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <iframe id="calculator-iframe" src="about:blank" title="Desmos Scientific Calculator" class="calculator-window-iframe"></iframe>
   </div>
   
   <!-- Image enlarge modal -->
@@ -378,9 +465,13 @@
         <h4 class="font-semibold text-gray-900 mb-4">Options:</h4>
         <div class="space-y-3" id="modal-options"></div>
       </div>
-      <div>
+      <div class="mb-8">
         <h4 class="font-semibold text-gray-900 mb-4">Keywords:</h4>
         <div class="flex flex-wrap gap-2" id="modal-keywords"></div>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-900 mb-4">Unit:</h4>
+        <p class="text-gray-700 inline">Unit <span id="modal-unit-num"></span> – <span id="modal-unit-name"></span></p>
       </div>
     </div>
   </div>
@@ -583,14 +674,29 @@
           </div>
         </div>
         <div id="question-image-container" class="mb-4" style="display: none;"></div>
-        <div class="flex flex-wrap items-center gap-2 mb-6 mt-4">
-          <h2 class="text-2xl font-bold text-gray-900 inline" id="question-text"></h2>
-          <button type="button" id="reference-sheet-btn" onclick="openReferenceModal()" class="inline-flex items-center justify-center px-3 py-1.5 text-black border border-black rounded-full text-sm font-medium hover:bg-gray-100 transition-colors shrink-0 align-middle" title="Reference sheet">
-            <i class="fas fa-file-pdf mr-1"></i> PDF
-          </button>
-        </div>
+        <p class="text-2xl font-bold text-gray-900 mb-6 mt-4">
+          <span id="question-text"></span>
+          <span class="question-pill inline-flex items-center rounded-full border border-black overflow-hidden shrink-0 align-middle ml-1">
+            <button type="button" onclick="openReferenceModal()" class="inline-flex items-center justify-center px-2 py-[4px] text-black hover:bg-gray-100 transition-colors" title="Reference sheet">
+              <i class="fas fa-file-pdf"></i>
+            </button>
+            <button type="button" onclick="openCalculatorWindow()" class="inline-flex items-center justify-center px-2 py-[4px] text-black border-l border-black hover:bg-gray-100 transition-colors" title="Calculator">
+              <i class="fas fa-calculator"></i>
+            </button>
+          </span>
+        </p>
         
         <div class="space-y-3" id="options-container"></div>
+        
+        <!-- AI Explanation Button -->
+        <button id="ai-explanation-btn" class="ai-explanation-btn w-full py-3 rounded-lg font-semibold bg-black text-white transition-colors">
+          Generate AI Explanation
+        </button>
+        <div id="ai-loading" class="hidden mt-4 text-center">
+          <i class="fas fa-spinner fa-spin text-2xl text-gray-600"></i>
+          <p class="text-gray-600 mt-2">Generating explanation...</p>
+        </div>
+        <div id="ai-explanation" class="hidden"></div>
       </div>
       
       <!-- Results Screen -->
@@ -649,6 +755,7 @@
     $(document).ready(function() {
       $('#navbar-placeholder').load('../navbar.html');
       loadQuestions();
+      initCalculatorDrag();
       
       // Keyword search
       $('#keyword-search').on('input', function() {
@@ -849,11 +956,7 @@
     
     function hasQuestionImage(q) {
       if (q == null) return false;
-      if (!('data' in q)) return false;
-      const d = q.data;
-      if (d === false) return false;
-      if (typeof d === 'string' || d === true) return true;
-      return false;
+      return q.data === true;
     }
     
     function questionImageSrc(id) {
@@ -906,6 +1009,41 @@
       }
     }
     
+    function openCalculatorWindow() {
+      const win = document.getElementById('calculator-window');
+      if (win.style.display === 'none') {
+        document.getElementById('calculator-iframe').src = 'https://www.desmos.com/scientific';
+        win.style.display = 'flex';
+      }
+    }
+    function closeCalculatorWindow() {
+      document.getElementById('calculator-window').style.display = 'none';
+      document.getElementById('calculator-iframe').src = 'about:blank';
+    }
+    function initCalculatorDrag() {
+      const el = document.getElementById('calculator-window');
+      const handle = document.getElementById('calculator-drag-handle');
+      if (!el || !handle) return;
+      let dx = 0, dy = 0, dragging = false;
+      handle.addEventListener('mousedown', function(e) {
+        if (e.button !== 0) return;
+        dragging = true;
+        const rect = el.getBoundingClientRect();
+        dx = e.clientX - rect.left;
+        dy = e.clientY - rect.top;
+      });
+      document.addEventListener('mousemove', function(e) {
+        if (!dragging) return;
+        let left = e.clientX - dx;
+        let top = e.clientY - dy;
+        el.style.left = left + 'px';
+        el.style.top = top + 'px';
+        el.style.right = 'auto';
+        el.style.bottom = 'auto';
+      });
+      document.addEventListener('mouseup', function() { dragging = false; });
+    }
+    
     function displayQuestion() {
       // Check if we need to loop questions
       if (!isFreeplay && currentQuestionIndex >= targetQuestionCount) {
@@ -922,6 +1060,9 @@
       selectedAnswer = null;
       showingFeedback = false;
       $('#question-arrow').removeClass('visible');
+      $('#ai-explanation-btn').removeClass('visible clicked');
+      $('#ai-loading').addClass('hidden');
+      $('#ai-explanation').addClass('hidden').empty();
       
       // Update progress (only in fixed mode)
       if (!isFreeplay) {
@@ -1009,6 +1150,9 @@
       
       showingFeedback = true;
       $('#question-arrow').addClass('visible');
+      setTimeout(function() {
+        $('#ai-explanation-btn').addClass('visible');
+      }, 100);
       updateStats();
     }
     
@@ -1062,11 +1206,13 @@
         keywordsContainer.append(tag);
       });
       
+      $('#modal-unit-num').text(currentQuestion.unit);
+      $('#modal-unit-name').text(unitNames[currentQuestion.unit] || ('Unit ' + currentQuestion.unit));
+      
       $('#question-modal').addClass('active');
       
-      // Render MathJax after modal content is populated
       if (window.MathJax) {
-        MathJax.typesetPromise([document.getElementById('modal-question-text'), document.getElementById('modal-options')]);
+        MathJax.typesetPromise([document.getElementById('modal-question-text'), document.getElementById('modal-options'), document.getElementById('modal-keywords')]);
       }
     }
     
@@ -1075,6 +1221,41 @@
         $('#question-modal').removeClass('active');
       }
     }
+    
+    async function generateAIExplanation() {
+      const apiKey = localStorage.getItem('groq_api_key');
+      const model = localStorage.getItem('groq_model') || 'llama-3.3-70b-versatile';
+      if (!apiKey) {
+        alert('Please set your Groq API key. In the browser console run: localStorage.setItem("groq_api_key", "your-key")');
+        return;
+      }
+      $('#ai-explanation-btn').addClass('clicked').removeClass('visible');
+      $('#ai-loading').removeClass('hidden');
+      $('#ai-explanation').addClass('hidden').empty();
+      const question = currentQuestion;
+      const optionsText = question.options.map((opt, idx) => String.fromCharCode(65 + idx) + '. ' + opt).join('\n');
+      const correctAnswer = String.fromCharCode(65 + question.answer);
+      const prompt = `You are a chemistry tutor helping a student understand a competition question.\n\nQuestion: ${question.question}\n\nAnswer Choices:\n${optionsText}\n\nThe correct answer is ${correctAnswer}: ${question.options[question.answer]}\n\nPlease provide a clear, concise explanation of why this answer is correct. Focus on the chemistry concepts involved. If the problem involves specific formulas or equations, explicitly state which formulas are used and how they apply. Keep your explanation under 150 words.`;
+      try {
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
+          body: JSON.stringify({ model: model, messages: [{ role: 'user', content: prompt }], temperature: 0.7, max_tokens: 300 })
+        });
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message || 'API Error');
+        const explanation = data.choices[0].message.content;
+        $('#ai-loading').addClass('hidden');
+        $('#ai-explanation').removeClass('hidden').html('<div class="ai-explanation"><h3 class="font-bold text-gray-900 mb-2">AI Explanation:</h3><p class="text-gray-700">' + explanation + '</p></div>');
+      } catch (error) {
+        console.error('Error generating explanation:', error);
+        $('#ai-loading').addClass('hidden');
+        $('#ai-explanation').removeClass('hidden').html('<div class="ai-explanation border-red-500"><p class="text-red-600">Error generating explanation. Check your API key in localStorage (groq_api_key).</p></div>');
+      }
+    }
+    $(document).ready(function() {
+      $(document).on('click', '#ai-explanation-btn', function() { generateAIExplanation(); });
+    });
   </script>
 </body>
 </html>
