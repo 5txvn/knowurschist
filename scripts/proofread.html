@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proofread – Question Bank</title>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; margin: 0; padding: 1rem 2rem 2rem; }
+    h1 { margin-top: 0; }
+    .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem; background: #fff; border-radius: 8px; border: 1px solid #e0e0e0; }
+    label { font-weight: 600; }
+    select { padding: 0.4rem 0.8rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 6px; }
+    input[type="text"] { padding: 0.4rem 0.8rem; font-size: 1rem; width: 220px; border: 1px solid #ccc; border-radius: 6px; }
+    button { padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer; background: #333; color: #fff; border: none; border-radius: 6px; }
+    button:hover { background: #555; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .card { background: #fff; border-radius: 12px; border: 1px solid #e0e0e0; padding: 1.5rem 2rem; margin-bottom: 1rem; }
+    .meta { color: #666; font-size: 0.9rem; margin-bottom: 0.75rem; }
+    .question-id { font-weight: 700; color: #333; }
+    .question-text { font-size: 1.15rem; line-height: 1.5; margin: 1rem 0; }
+    .options { margin: 1rem 0; }
+    .option { padding: 0.6rem 1rem; margin: 0.4rem 0; border-radius: 8px; border: 1px solid #e8e8e8; background: #fafafa; }
+    .option.correct { border-color: #22c55e; background: #f0fdf4; }
+    .option-label { font-weight: 600; margin-right: 0.5rem; }
+    .question-image-wrap { margin: 1rem 0; text-align: center; }
+    .question-image-wrap img { max-width: 100%; height: auto; max-height: 400px; border: 2px solid #ddd; border-radius: 8px; }
+    .question-image-wrap .img-error { color: #b91c1c; padding: 1rem; background: #fef2f2; border-radius: 8px; }
+    .nav { display: flex; gap: 0.5rem; align-items: center; margin-top: 1rem; }
+    .position { color: #666; font-size: 0.95rem; }
+    .empty { color: #888; padding: 2rem; text-align: center; }
+    .main-wrap { display: flex; gap: 1.5rem; margin-top: 1rem; align-items: flex-start; flex-wrap: wrap; }
+    .preview-col { flex: 1; min-width: 280px; }
+    .editor-col { flex: 1; min-width: 320px; }
+    .editor-col label { display: block; margin-bottom: 0.5rem; }
+    #json-status { font-size: 0.85rem; margin-top: 0.25rem; min-height: 1.25rem; }
+    #json-status.saved { color: #16a34a; }
+    #json-status.error { color: #b91c1c; }
+    #json-status.saving { color: #666; }
+    #json-editor {
+      width: 100%;
+      min-height: 360px;
+      font-family: ui-monospace, monospace;
+      font-size: 13px;
+      line-height: 1.4;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      resize: vertical;
+    }
+    #json-editor.invalid { border-color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <h1>Proofread – Question Bank</h1>
+  <div class="controls">
+    <label for="subject">Subject</label>
+    <select id="subject">
+      <option value="physics">Physics</option>
+      <option value="chemistry">Chemistry</option>
+      <option value="biology">Biology</option>
+    </select>
+    <button type="button" id="btn-load">Load questions</button>
+    <span style="margin-left: 0.5rem;"></span>
+    <label for="jump-id">Jump to ID</label>
+    <input type="text" id="jump-id" placeholder="e.g. 24-25-TMSCA-1-q4" />
+    <button type="button" id="btn-jump">Go</button>
+  </div>
+  <div class="main-wrap">
+    <div class="preview-col">
+      <div id="content">
+    <p class="empty">Select a subject and click “Load questions” to start.</p>
+  </div>
+      <div class="nav" id="nav" style="display: none;">
+    <button type="button" id="btn-prev">← Previous</button>
+    <span class="position" id="position"></span>
+    <button type="button" id="btn-next">Next →</button>
+      </div>
+    </div>
+    <div class="editor-col" id="editor-col" style="display: none;">
+      <label for="json-editor">Edit question JSON (saves automatically)</label>
+      <textarea id="json-editor" spellcheck="false"></textarea>
+      <div id="json-status"></div>
+    </div>
+  </div>
+
+  <script>
+    const SUBJECTS = { physics: 'Physics', chemistry: 'Chemistry', biology: 'Biology' };
+    let questions = [];
+    let currentIndex = 0;
+    let subject = 'physics';
+
+    const contentEl = document.getElementById('content');
+    const navEl = document.getElementById('nav');
+    const positionEl = document.getElementById('position');
+    const subjectEl = document.getElementById('subject');
+    const jumpIdEl = document.getElementById('jump-id');
+    const btnLoad = document.getElementById('btn-load');
+    const btnJump = document.getElementById('btn-jump');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const editorCol = document.getElementById('editor-col');
+    const jsonEditor = document.getElementById('json-editor');
+    const jsonStatus = document.getElementById('json-status');
+
+    var saveTimeout = null;
+    var useApi = false;
+
+    function apiBase() {
+      return '';
+    }
+
+    function getBankPath() {
+      return useApi ? (apiBase() + '/api/' + subject + '/questions') : ('../' + subject + '/questionBank.json');
+    }
+
+    function getImageBasePath() {
+      return useApi ? ('/' + subject + '/images/') : ('../' + subject + '/images/');
+    }
+
+    function hasQuestionImage(q) {
+      return q && q.data === true;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function renderOption(option, index, correctIndex) {
+      const isCorrect = index === correctIndex;
+      const label = String.fromCharCode(65 + index);
+      const div = document.createElement('div');
+      div.className = 'option' + (isCorrect ? ' correct' : '');
+      div.innerHTML = '<span class="option-label">' + label + '.</span><span class="option-text"></span>';
+      const textSpan = div.querySelector('.option-text');
+      textSpan.textContent = option;
+      return div;
+    }
+
+    function showQuestion() {
+      if (!questions.length) {
+        contentEl.innerHTML = '<p class="empty">No questions loaded.</p>';
+        navEl.style.display = 'none';
+        return;
+      }
+      const q = questions[currentIndex];
+      const imageBase = getImageBasePath();
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = 'Question <span class="question-id">' + escapeHtml(q.id) + '</span> (index ' + (currentIndex + 1) + ' of ' + questions.length + ')';
+      card.appendChild(meta);
+
+      const questionText = document.createElement('div');
+      questionText.className = 'question-text';
+      questionText.textContent = q.question;
+      card.appendChild(questionText);
+
+      if (hasQuestionImage(q)) {
+        const wrap = document.createElement('div');
+        wrap.className = 'question-image-wrap';
+        const img = document.createElement('img');
+        img.alt = 'Question image: ' + q.id;
+        img.src = imageBase + q.id + '.png';
+        img.onerror = function () {
+          this.style.display = 'none';
+          const err = document.createElement('div');
+          err.className = 'img-error';
+          err.textContent = 'Image not found: ' + imageBase + q.id + '.png';
+          wrap.appendChild(err);
+        };
+        wrap.appendChild(img);
+        card.appendChild(wrap);
+      }
+
+      const optionsTitle = document.createElement('div');
+      optionsTitle.style.marginTop = '1rem';
+      optionsTitle.style.fontWeight = '600';
+      optionsTitle.textContent = 'Answer choices';
+      card.appendChild(optionsTitle);
+
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'options';
+      (q.options || []).forEach(function (opt, i) {
+        optionsDiv.appendChild(renderOption(opt, i, q.answer));
+      });
+      card.appendChild(optionsDiv);
+
+      contentEl.innerHTML = '';
+      contentEl.appendChild(card);
+
+      positionEl.textContent = (currentIndex + 1) + ' / ' + questions.length;
+      navEl.style.display = 'flex';
+      btnPrev.disabled = currentIndex <= 0;
+      btnNext.disabled = currentIndex >= questions.length - 1;
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([questionText, optionsDiv]).catch(function (err) {
+          console.warn('MathJax typeset', err);
+        });
+      }
+      if (useApi && jsonEditor) {
+        editorCol.style.display = 'block';
+        jsonEditor.value = JSON.stringify(q, null, 2);
+        jsonEditor.classList.remove('invalid');
+        jsonStatus.textContent = '';
+        jsonStatus.className = '';
+      } else {
+        editorCol.style.display = 'none';
+      }
+    }
+
+    function refreshPreview() {
+      if (!questions.length) return;
+      const q = questions[currentIndex];
+      const imageBase = getImageBasePath();
+      const card = document.createElement('div');
+      card.className = 'card';
+      const meta = document.createElement('div');
+      meta.className = 'meta';
+      meta.innerHTML = 'Question <span class="question-id">' + escapeHtml(q.id) + '</span> (index ' + (currentIndex + 1) + ' of ' + questions.length + ')';
+      card.appendChild(meta);
+      const questionText = document.createElement('div');
+      questionText.className = 'question-text';
+      questionText.textContent = q.question;
+      card.appendChild(questionText);
+      if (hasQuestionImage(q)) {
+        const wrap = document.createElement('div');
+        wrap.className = 'question-image-wrap';
+        const img = document.createElement('img');
+        img.alt = 'Question image: ' + q.id;
+        img.src = imageBase + q.id + '.png';
+        img.onerror = function () { this.style.display = 'none'; };
+        wrap.appendChild(img);
+        card.appendChild(wrap);
+      }
+      const optionsTitle = document.createElement('div');
+      optionsTitle.style.marginTop = '1rem';
+      optionsTitle.style.fontWeight = '600';
+      optionsTitle.textContent = 'Answer choices';
+      card.appendChild(optionsTitle);
+      const optionsDiv = document.createElement('div');
+      optionsDiv.className = 'options';
+      (q.options || []).forEach(function (opt, i) {
+        optionsDiv.appendChild(renderOption(opt, i, q.answer));
+      });
+      card.appendChild(optionsDiv);
+      contentEl.innerHTML = '';
+      contentEl.appendChild(card);
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([questionText, optionsDiv]).catch(function () {});
+      }
+    }
+
+    async function loadQuestions() {
+      subject = subjectEl.value;
+      useApi = (location.protocol === 'http:' || location.protocol === 'https:');
+      btnLoad.disabled = true;
+      btnLoad.textContent = 'Loading…';
+      try {
+        const res = await fetch(getBankPath());
+        if (!res.ok) throw new Error(res.statusText);
+        questions = await res.json();
+        currentIndex = 0;
+        showQuestion();
+      } catch (e) {
+        contentEl.innerHTML = '<p class="empty" style="color:#b91c1c">Failed to load: ' + escapeHtml(e.message) + '</p>';
+        navEl.style.display = 'none';
+        editorCol.style.display = 'none';
+      }
+      btnLoad.disabled = false;
+      btnLoad.textContent = 'Load questions';
+    }
+
+    function jumpToId() {
+      const id = (jumpIdEl.value || '').trim();
+      if (!id || !questions.length) return;
+      const idx = questions.findIndex(function (q) { return q.id === id; });
+      if (idx === -1) {
+        contentEl.innerHTML = '<p class="empty" style="color:#b91c1c">No question with ID “' + escapeHtml(id) + '”.</p>';
+        return;
+      }
+      currentIndex = idx;
+      showQuestion();
+    }
+
+    subjectEl.addEventListener('change', function () { subject = subjectEl.value; });
+    btnLoad.addEventListener('click', loadQuestions);
+    btnJump.addEventListener('click', jumpToId);
+    jumpIdEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); jumpToId(); }
+    });
+    btnPrev.addEventListener('click', function () {
+      if (currentIndex > 0) {
+        currentIndex--;
+        showQuestion();
+      }
+    });
+    btnNext.addEventListener('click', function () {
+      if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        showQuestion();
+      }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.target.closest('input, select, textarea')) return;
+      if (questions.length === 0) return;
+      if (e.key === 'ArrowLeft') {
+        if (currentIndex > 0) { currentIndex--; showQuestion(); }
+        e.preventDefault();
+      } else if (e.key === 'ArrowRight') {
+        if (currentIndex < questions.length - 1) { currentIndex++; showQuestion(); }
+        e.preventDefault();
+      }
+    });
+
+    jsonEditor.addEventListener('input', function () {
+      if (!useApi || !questions.length) return;
+      if (saveTimeout) clearTimeout(saveTimeout);
+      var raw = jsonEditor.value.trim();
+      var parsed;
+      try {
+        parsed = JSON.parse(raw);
+        jsonEditor.classList.remove('invalid');
+        jsonStatus.textContent = '';
+      } catch (err) {
+        jsonEditor.classList.add('invalid');
+        jsonStatus.className = 'error';
+        jsonStatus.textContent = 'Invalid JSON';
+        return;
+      }
+      saveTimeout = setTimeout(async function () {
+        saveTimeout = null;
+        jsonStatus.className = 'saving';
+        jsonStatus.textContent = 'Saving…';
+        try {
+          const res = await fetch('/api/' + subject + '/questions/' + currentIndex, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(parsed)
+          });
+          if (!res.ok) {
+            const data = await res.json().catch(function () { return {}; });
+            throw new Error(data.error || res.statusText);
+          }
+          questions[currentIndex] = parsed;
+          jsonStatus.className = 'saved';
+          jsonStatus.textContent = 'Saved';
+          refreshPreview();
+        } catch (e) {
+          jsonStatus.className = 'error';
+          jsonStatus.textContent = 'Error: ' + e.message;
+        }
+      }, 500);
+    });
+  </script>
+</body>
+</html>
