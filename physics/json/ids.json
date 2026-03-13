@@ -79,6 +79,7 @@
   "4.27": "$\\left(\\frac{\\Delta F}{F}\\right)=\\left(\\frac{R_p}{R_s}\\right)^2$",
   "4.28": "$v=\\sqrt{\\frac B{\\rho}}$",
   "4.29": "$I=I_0e^{-\\mu x}$",
+  "4.30": "$\\tan(\\theta_B)=\\frac{n_2}{n_1}$",
   "5.1": "$\\gamma=\\frac{1}{\\sqrt{1-v^2/c^2}}$",
   "5.2": "$t=\\gamma t_0$",
   "5.3": "$L=\\frac{L_0}{\\gamma}$",
