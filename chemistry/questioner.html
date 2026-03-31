@@ -376,6 +376,10 @@
       height: 480px;
       right: 24px;
       bottom: 24px;
+      min-width: 280px;
+      min-height: 320px;
+      max-width: 96vw;
+      max-height: 90vh;
       background: white;
       border: 2px solid #e5e7eb;
       border-radius: 12px;
@@ -408,8 +412,19 @@
     .calculator-window-iframe {
       flex: 1;
       width: 100%;
+      min-height: 0;
       border: none;
       border-radius: 0 0 10px 10px;
+    }
+    .calculator-window-resize {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 16px;
+      height: 16px;
+      cursor: nwse-resize;
+      background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.15) 50%);
+      border-radius: 0 0 10px 0;
     }
   </style>
 </head>
@@ -432,7 +447,7 @@
     </div>
   </div>
   
-  <!-- Draggable calculator window (floating) -->
+  <!-- Draggable, resizable calculator window (floating) -->
   <div id="calculator-window" class="calculator-floating-window" style="display: none;">
     <div class="calculator-window-title" id="calculator-drag-handle">
       <span>Calculator</span>
@@ -440,7 +455,10 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <iframe id="calculator-iframe" src="about:blank" title="Desmos Scientific Calculator" class="calculator-window-iframe"></iframe>
+    <div class="relative flex-1 flex flex-col min-h-0">
+      <iframe id="calculator-iframe" src="about:blank" title="Desmos Scientific Calculator" class="calculator-window-iframe"></iframe>
+    </div>
+    <div id="calculator-resize-handle" class="calculator-window-resize" title="Resize"></div>
   </div>
   
   <!-- Image enlarge modal -->
@@ -676,17 +694,19 @@
         <div id="question-image-container" class="mb-4" style="display: none;"></div>
         <p class="text-2xl font-bold text-gray-900 mb-6 mt-4">
           <span id="question-text"></span>
-          <span class="question-pill inline-flex items-center rounded-full border border-black overflow-hidden shrink-0 align-middle ml-1">
-            <button type="button" onclick="openReferenceModal()" class="inline-flex items-center justify-center px-2 py-[4px] text-black hover:bg-gray-100 transition-colors" title="Reference sheet">
-              <i class="fas fa-file-pdf"></i>
-            </button>
-            <button type="button" onclick="openCalculatorWindow()" class="inline-flex items-center justify-center px-2 py-[4px] text-black border-l border-black hover:bg-gray-100 transition-colors" title="Calculator">
-              <i class="fas fa-calculator"></i>
-            </button>
-          </span>
         </p>
         
         <div class="space-y-3" id="options-container"></div>
+        <div class="flex gap-3 mt-3">
+          <button type="button" onclick="openCalculatorWindow()" class="flex-1 inline-flex items-center justify-center gap-2 p-4 bg-white border-2 border-black text-black rounded-lg font-medium hover:bg-gray-50 transition-colors" title="Calculator">
+            <i class="fas fa-calculator"></i>
+            <span>Calculator</span>
+          </button>
+          <button type="button" onclick="openReferenceModal()" class="flex-1 inline-flex items-center justify-center gap-2 p-4 bg-white border-2 border-black text-black rounded-lg font-medium hover:bg-gray-50 transition-colors" title="Reference sheet">
+            <i class="fas fa-file-pdf"></i>
+            <span>References</span>
+          </button>
+        </div>
         
         <!-- AI Explanation Button -->
         <button id="ai-explanation-btn" class="ai-explanation-btn w-full py-3 rounded-lg font-semibold bg-black text-white transition-colors">
@@ -1023,6 +1043,7 @@
     function initCalculatorDrag() {
       const el = document.getElementById('calculator-window');
       const handle = document.getElementById('calculator-drag-handle');
+      const resizeHandle = document.getElementById('calculator-resize-handle');
       if (!el || !handle) return;
       let dx = 0, dy = 0, dragging = false;
       handle.addEventListener('mousedown', function(e) {
@@ -1042,6 +1063,33 @@
         el.style.bottom = 'auto';
       });
       document.addEventListener('mouseup', function() { dragging = false; });
+      if (resizeHandle) {
+        let resizing = false, startX, startY, startW, startH;
+        resizeHandle.addEventListener('mousedown', function(e) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          resizing = true;
+          const rect = el.getBoundingClientRect();
+          startX = e.clientX;
+          startY = e.clientY;
+          startW = rect.width;
+          startH = rect.height;
+        });
+        document.addEventListener('mousemove', function(e) {
+          if (!resizing) return;
+          const dw = e.clientX - startX;
+          const dh = e.clientY - startY;
+          let w = Math.max(280, Math.min(window.innerWidth * 0.96, startW + dw));
+          let h = Math.max(320, Math.min(window.innerHeight * 0.9, startH + dh));
+          el.style.width = w + 'px';
+          el.style.height = h + 'px';
+          startX = e.clientX;
+          startY = e.clientY;
+          startW = w;
+          startH = h;
+        });
+        document.addEventListener('mouseup', function() { resizing = false; });
+      }
     }
     
     function displayQuestion() {

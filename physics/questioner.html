@@ -329,6 +329,10 @@
       height: 480px;
       right: 24px;
       bottom: 24px;
+      min-width: 280px;
+      min-height: 320px;
+      max-width: 96vw;
+      max-height: 90vh;
       background: white;
       border: 2px solid #e5e7eb;
       border-radius: 12px;
@@ -361,8 +365,19 @@
     .calculator-window-iframe {
       flex: 1;
       width: 100%;
+      min-height: 0;
       border: none;
       border-radius: 0 0 10px 10px;
+    }
+    .calculator-window-resize {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 16px;
+      height: 16px;
+      cursor: nwse-resize;
+      background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.15) 50%);
+      border-radius: 0 0 10px 0;
     }
   </style>
 </head>
@@ -384,7 +399,7 @@
     </div>
   </div>
   
-  <!-- Draggable calculator window (floating) -->
+  <!-- Draggable, resizable calculator window (floating) -->
   <div id="calculator-window" class="calculator-floating-window" style="display: none;">
     <div class="calculator-window-title" id="calculator-drag-handle">
       <span>Calculator</span>
@@ -392,7 +407,10 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <iframe id="calculator-iframe" src="about:blank" title="Desmos Scientific Calculator" class="calculator-window-iframe"></iframe>
+    <div class="relative flex-1 flex flex-col min-h-0">
+      <iframe id="calculator-iframe" src="about:blank" title="Desmos Scientific Calculator" class="calculator-window-iframe"></iframe>
+    </div>
+    <div id="calculator-resize-handle" class="calculator-window-resize" title="Resize"></div>
   </div>
   
   <!-- Image enlarge modal -->
@@ -673,17 +691,19 @@
         <div id="question-image-container" class="mb-4" style="display: none;"></div>
         <p class="text-2xl font-bold text-gray-900 mb-6 mt-4">
           <span id="question-text"></span>
-          <span class="question-pill inline-flex items-center rounded-full border border-black overflow-hidden shrink-0 align-middle ml-1">
-            <button type="button" onclick="openReferenceModal()" class="inline-flex items-center justify-center px-2 py-[4px] text-black hover:bg-gray-100 transition-colors" title="Reference sheet">
-              <i class="fas fa-file-pdf"></i>
-            </button>
-            <button type="button" onclick="openCalculatorWindow()" class="inline-flex items-center justify-center px-2 py-[4px] text-black border-l border-black hover:bg-gray-100 transition-colors" title="Calculator">
-              <i class="fas fa-calculator"></i>
-            </button>
-          </span>
         </p>
         
         <div class="space-y-3" id="options-container"></div>
+        <div class="flex gap-3 mt-3">
+          <button type="button" onclick="openCalculatorWindow()" class="flex-1 inline-flex items-center justify-center gap-2 p-4 bg-white border-2 border-black text-black rounded-lg font-medium hover:bg-gray-50 transition-colors" title="Calculator">
+            <i class="fas fa-calculator"></i>
+            <span>Calculator</span>
+          </button>
+          <button type="button" onclick="openReferenceModal()" class="flex-1 inline-flex items-center justify-center gap-2 p-4 bg-white border-2 border-black text-black rounded-lg font-medium hover:bg-gray-50 transition-colors" title="Reference sheet">
+            <i class="fas fa-file-pdf"></i>
+            <span>References</span>
+          </button>
+        </div>
         
         <button id="ai-explanation-btn" class="ai-explanation-btn w-full py-3 rounded-lg font-semibold bg-black text-white transition-colors">
           Generate AI Explanation
@@ -1063,6 +1083,7 @@
     function initCalculatorDrag() {
       const el = document.getElementById('calculator-window');
       const handle = document.getElementById('calculator-drag-handle');
+      const resizeHandle = document.getElementById('calculator-resize-handle');
       if (!el || !handle) return;
       let dx = 0, dy = 0, dragging = false;
       handle.addEventListener('mousedown', function(e) {
@@ -1082,6 +1103,33 @@
         el.style.bottom = 'auto';
       });
       document.addEventListener('mouseup', function() { dragging = false; });
+      if (resizeHandle) {
+        let resizing = false, startX, startY, startW, startH;
+        resizeHandle.addEventListener('mousedown', function(e) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          resizing = true;
+          const rect = el.getBoundingClientRect();
+          startX = e.clientX;
+          startY = e.clientY;
+          startW = rect.width;
+          startH = rect.height;
+        });
+        document.addEventListener('mousemove', function(e) {
+          if (!resizing) return;
+          const dw = e.clientX - startX;
+          const dh = e.clientY - startY;
+          let w = Math.max(280, Math.min(window.innerWidth * 0.96, startW + dw));
+          let h = Math.max(320, Math.min(window.innerHeight * 0.9, startH + dh));
+          el.style.width = w + 'px';
+          el.style.height = h + 'px';
+          startX = e.clientX;
+          startY = e.clientY;
+          startW = w;
+          startH = h;
+        });
+        document.addEventListener('mouseup', function() { resizing = false; });
+      }
     }
     
     function openImageModal(src, alt) {
@@ -1255,14 +1303,15 @@
       const formulasWrap = $('#modal-formulas-wrap');
       const formulasContainer = $('#modal-formulas');
       formulasContainer.empty();
-      const formulaBasePath = window.location.hostname.indexOf('github.io') !== -1 ? '/knowurschist/physics/formula.html/' : '/physics/formula.html/';
+      const formulaBasePath = window.location.hostname.indexOf('github.io') !== -1 ? '/knowurschist/physics/formula.html' : 'formula.html';
       if (Array.isArray(formulas) && formulas.length > 0) {
         formulas.forEach(function(id) {
           const latex = formulaLatexMap[id];
           if (latex) {
-            const href = formulaBasePath + encodeURIComponent(id);
-            const li = $('<li class="formula-latex text-gray-700"></li>');
-            li.append($('<a href="' + href + '" target="_blank" rel="noopener" class="text-blue-600 hover:underline">').html(latex));
+            const href = formulaBasePath + '?id=' + encodeURIComponent(id);
+            const li = $('<li class="formula-latex text-gray-700 flex items-center gap-2 flex-wrap"></li>');
+            li.append($('<a href="' + href + '" target="_blank" rel="noopener" class="text-black hover:underline">').html(latex));
+            li.append($('<span class="text-gray-500 font-mono text-sm">').text('(' + id + ')'));
             formulasContainer.append(li);
           }
         });
@@ -1304,9 +1353,8 @@
       $('#ai-explanation').addClass('hidden').empty();
       const question = currentQuestion;
       const optionsText = question.options.map((opt, idx) => String.fromCharCode(65 + idx) + '. ' + opt).join('\n');
-      const correctAnswer = String.fromCharCode(65 + question.answer);
       const formulaList = Array.isArray(question.formula) && question.formula.length > 0 ? '\n\nRelevant formula IDs for this problem: ' + question.formula.join(', ') + '. Explicitly state which of these formulas (or others) are used and how they apply.' : '';
-      const prompt = `You are a physics tutor helping a student understand a competition question.\n\nQuestion: ${question.question}\n\nAnswer Choices:\n${optionsText}\n\nThe correct answer is ${correctAnswer}: ${question.options[question.answer]}\n\nPlease provide a clear, concise explanation of why this answer is correct. Focus on the physics concepts and formulas involved. If the problem involves specific formulas, explicitly state which formulas are used and how they apply.${formulaList}\n\nKeep your explanation under 150 words.`;
+      const prompt = `You are a physics tutor helping a student understand a competition question. Do NOT use or trust any provided answer key—work through the problem yourself.\n\nQuestion: ${question.question}\n\nAnswer Choices:\n${optionsText}\n\nInstructions: Work through the problem step by step. Do all calculations yourself and derive the answer from the physics. Then explain your reasoning and which answer choice matches your result. Do not assume the answer key is correct. Focus on the physics concepts and formulas involved. If the problem involves specific formulas, state which formulas you use and how.${formulaList}\n\nKeep your explanation under 200 words.`;
       try {
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
           method: 'POST',
