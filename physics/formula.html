@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formula - Physics</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+    body { background: #fafafa; min-height: 100vh; }
+    #formula-content h1 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+    #formula-content p { margin-bottom: 0.75rem; }
+    #formula-content ul { list-style: disc; margin-left: 1.5rem; margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="navbar-container py-4 flex justify-center">
+    <div id="navbar-placeholder"></div>
+  </div>
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <div id="formula-loading" class="text-gray-500">Loading...</div>
+    <div id="formula-content" class="hidden bg-white rounded-xl p-8 border-2 border-gray-200">
+      <div id="formula-latex-only" class="text-2xl text-center py-4"></div>
+      <div id="formula-markdown" class="prose text-gray-700 mt-4"></div>
+      <p id="formula-id-label" class="mt-4 text-gray-500 font-mono text-sm"></p>
+    </div>
+    <div id="formula-error" class="hidden text-red-600 bg-red-50 p-4 rounded-lg"></div>
+  </div>
+  <script>
+    $(document).ready(function() {
+      $('#navbar-placeholder').load('../navbar.html');
+      loadFormula();
+    });
+    function getFormulaId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('id') || '';
+    }
+    function idToFilename(id) {
+      if (!id) return '';
+      return id.replace('.', '-') + '.md';
+    }
+    async function loadFormula() {
+      const id = getFormulaId();
+      const contentEl = $('#formula-content');
+      const loadingEl = $('#formula-loading');
+      const errorEl = $('#formula-error');
+      const latexOnlyEl = $('#formula-latex-only');
+      const markdownEl = $('#formula-markdown');
+      const idLabelEl = $('#formula-id-label');
+      contentEl.addClass('hidden');
+      errorEl.addClass('hidden');
+      if (!id) {
+        loadingEl.addClass('hidden');
+        errorEl.removeClass('hidden').text('No formula ID provided. Use ?id=1.4 for example.');
+        return;
+      }
+      const mdPath = 'formulas/' + idToFilename(id);
+      try {
+        const mdRes = await fetch(mdPath);
+        if (mdRes.ok) {
+          const markdown = await mdRes.text();
+          loadingEl.addClass('hidden');
+          contentEl.removeClass('hidden');
+          latexOnlyEl.empty().addClass('hidden');
+          markdownEl.removeClass('hidden').html(marked.parse(markdown));
+          idLabelEl.text('(' + id + ')');
+          if (window.MathJax) MathJax.typesetPromise([markdownEl[0]]);
+          document.title = 'Formula ' + id + ' - Physics';
+          return;
+        }
+      } catch (e) {
+        console.warn('No markdown for formula', id, e);
+      }
+      try {
+        const idsRes = await fetch('json/ids.json');
+        const ids = await idsRes.json();
+        const latex = ids[id];
+        loadingEl.addClass('hidden');
+        if (latex) {
+          contentEl.removeClass('hidden');
+          latexOnlyEl.removeClass('hidden').html(latex);
+          markdownEl.addClass('hidden').empty();
+          idLabelEl.text('(' + id + ')');
+          if (window.MathJax) MathJax.typesetPromise([latexOnlyEl[0]]);
+          document.title = 'Formula ' + id + ' - Physics';
+        } else {
+          errorEl.removeClass('hidden').text('Formula "' + id + '" not found.');
+        }
+      } catch (err) {
+        loadingEl.addClass('hidden');
+        errorEl.removeClass('hidden').text('Could not load formula: ' + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
