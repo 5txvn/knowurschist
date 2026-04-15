@@ -3,7 +3,7 @@ const path = require("path");
 
 const SCREENSHOT_FOLDER = String.raw`C:\Users\SL\Pictures\Screenshots`;
 const IDENTIFIER_FILE = "identifiers.json";
-const IMAGE_FOLDER = "../physics/images";
+const IMAGE_FOLDER = "../chemistry/images";
 
 function renameScreenshots() {
 

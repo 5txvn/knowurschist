@@ -1,8 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const QUESTION_FILE = "../physics/questionBank.json";
-const IMAGE_FOLDER = "../physics/images";
+const QUESTION_FILE = "../chemistry/questionBank.json";
+const IMAGE_FOLDER = "../chemistry/images";
 const OUTPUT_FILE = "identifiers.json";
 
 function findMissingImages() {
