@@ -25,11 +25,13 @@
       --primary-hover: #0050b0;
       --question-card-width: 720px;
     }
+    
     html, body {
-      overflow: auto;
+      overflow: hidden;
       scrollbar-width: none;
       -ms-overflow-style: none;
       font-family: Inter, system-ui, -apple-system, sans-serif;
+      height: 100%;
     }
     html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
     body {
@@ -37,6 +39,8 @@
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
+      touch-action: none;
+      overscroll-behavior: none;
     }
 
     #bg-interactive {
@@ -50,9 +54,8 @@
         radial-gradient(ellipse 85% 70% at 14% 96%, rgba(0, 0, 0, 0.045) 0%, transparent 52%);
       background-size: 24px 24px, 100% 100%;
       background-position: 0 0, 0 0;
-      transform: translate3d(0, 0, 0);
-      will-change: transform, background-position;
-      transition: transform 0.35s ease-out;
+      transform: none;
+      will-change: background-position;
     }
     #bg-interactive.bg-drift {
       animation: bgPatternDrift 48s linear infinite;
@@ -71,6 +74,47 @@
       z-index: 2;
     }
     #navbar-placeholder { width: 100%; display: flex; justify-content: center; }
+    #scratch-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      touch-action: none;
+    }
+    .scratch-hint {
+      position: fixed;
+      left: 1rem;
+      bottom: 1rem;
+      z-index: 16;
+      font-size: 0.8rem;
+      color: #334155;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 0;
+      animation: scratchHintBlink 1.3s ease-in-out infinite;
+      transition: opacity 0.2s ease;
+    }
+    .scratch-hint.hidden {
+      opacity: 0;
+      pointer-events: none;
+      animation: none;
+    }
+    @keyframes scratchHintBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+    .scratch-eraser-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 17;
+      pointer-events: none;
+      border: 1.5px solid rgba(15, 23, 42, 0.65);
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08);
+      transform: translate(-50%, -50%);
+      display: none;
+    }
 
     .question-shell {
       position: relative;
@@ -85,6 +129,10 @@
       border: 1px solid rgba(0, 0, 0, 0.06);
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
       padding: 2.65rem 1.5rem 1.75rem;
+      max-height: calc(100vh - 9rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
     @keyframes questionShellGlow {
       0% { background-position: 20% 86%, 0 0; }
@@ -94,21 +142,6 @@
     }
     @media (min-width: 768px) {
       .question-shell { padding: 2rem 2.25rem 1.75rem; }
-    }
-
-    .question-context-tag {
-      font-family: inherit;
-      font-size: 0.8125rem;
-      font-weight: 400;
-      letter-spacing: -0.01em;
-      color: #4b5563;
-      line-height: 1.45;
-      text-align: left;
-      flex: 1;
-      min-width: 0;
-    }
-    @media (min-width: 768px) {
-      .question-context-tag { font-size: 0.875rem; }
     }
 
     .options-grid {
@@ -369,7 +402,7 @@
 
     #question-image-container {
       display: flex;
-      justify-content: flex-start;
+      justify-content: center;
       width: 100%;
       margin-top: 1.75rem;
       margin-bottom: 1.25rem;
@@ -380,21 +413,20 @@
       padding: 0;
       display: inline-block;
       line-height: 0;
-      max-width: 100%;
+      max-width: fit-content;
       cursor: default;
       vertical-align: top;
       box-sizing: border-box;
-      resize: both;
-      overflow: auto;
-      min-width: 200px;
-      min-height: 140px;
-      max-width: 100%;
+      resize: none;
+      overflow: visible;
+      min-width: 0;
+      min-height: 0;
     }
     .question-image-wrap img {
       display: block;
       margin: 0;
       padding: 0;
-      max-width: 100%;
+      max-width: min(100%, 640px);
       width: auto;
       height: auto;
       max-height: 70vh;
@@ -460,30 +492,6 @@
     .quiz-tool-strip.ai-revealed .quiz-tool-col-ai {
       opacity: 1;
       pointer-events: auto;
-    }
-    .quiz-tool-surface-btn {
-      width: 100%;
-      min-height: 3.25rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0 0.75rem;
-      border-radius: 0.75rem;
-      border: 2px dashed #94a3b8;
-      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
-      color: #1e293b;
-      font-family: inherit;
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
-      transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
-    }
-    .quiz-tool-surface-btn:hover {
-      background: #e2e8f0;
-      border-color: #64748b;
-      color: #0f172a;
     }
     .quiz-tool-strip--no-calc-ref {
       grid-template-columns: minmax(0, 1fr);
@@ -611,6 +619,9 @@
     }
 
     #quiz-screen.quiz-screen-layout {
+      display: none;
+    }
+    #quiz-screen.quiz-screen-layout:not(.hidden) {
       display: flex;
       flex-direction: column;
       min-height: calc(100vh - 5.5rem);
@@ -719,7 +730,7 @@
 
     #main-column.questioner-main {
       position: relative;
-      z-index: 1;
+      z-index: 3;
     }
     @media (min-width: 1536px) {
       #main-column.questioner-main {
@@ -732,6 +743,12 @@
       font-weight: 400;
       letter-spacing: -0.01em;
     }
+    #settings-modal,
+    #api-settings-modal {
+      z-index: 6000 !important;
+      position: fixed !important;
+      inset: 0 !important;
+    }
     @media (min-width: 768px) {
       #question-text-wrap {
         font-size: 1.35rem;
@@ -742,6 +759,20 @@
 </head>
 <body>
   <div id="bg-interactive" class="bg-drift" aria-hidden="true"></div>
+  <canvas id="scratch-canvas" aria-hidden="true"></canvas>
+  <div id="scratch-eraser-cursor" class="scratch-eraser-cursor" aria-hidden="true"></div>
+  <aside id="scratch-toolbar" class="fixed left-3 top-1/2 -translate-y-1/2 z-[18] w-14 flex flex-col gap-2 p-2 border border-slate-400/80 rounded-2xl bg-white/90 backdrop-blur-md shadow-lg" aria-label="Scratch paper tools">
+    <button type="button" id="scratch-tool-pencil" class="w-full aspect-square rounded-xl border border-slate-900 bg-slate-900 text-white text-sm font-semibold p-0 cursor-pointer transition-colors" title="Pencil" aria-label="Pencil">
+      <i class="fas fa-pencil-alt"></i>
+    </button>
+    <button type="button" id="scratch-tool-eraser" class="w-full aspect-square rounded-xl border border-slate-300 bg-slate-50 text-slate-900 text-sm font-semibold p-0 cursor-pointer transition-colors" title="Eraser" aria-label="Eraser">
+      <i class="fas fa-eraser"></i>
+    </button>
+    <button type="button" id="scratch-clear" class="w-full aspect-square rounded-xl border border-slate-300 bg-white text-slate-900 text-xs font-bold p-0 cursor-pointer hover:bg-slate-50 transition-colors" title="Clear background" aria-label="Clear background">
+      <i class="fas fa-trash"></i>
+    </button>
+  </aside>
+  <div id="scratch-hint" class="scratch-hint">Draw on the background for scratch paper!</div>
   <div class="navbar-container">
     <div id="navbar-placeholder"></div>
   </div>
@@ -792,7 +823,7 @@
       </div>
       <div id="modal-formulas-wrap" class="mb-6 hidden">
         <h4 class="font-semibold text-gray-900 mb-3">Formulas</h4>
-        <ul id="modal-formulas" class="list-disc list-inside space-y-2"></ul>
+        <ul id="modal-formulas" class="list-disc list-outside pl-6 space-y-2"></ul>
       </div>
       <div class="mb-6">
         <h4 class="font-semibold text-gray-900 mb-3">Keywords</h4>
@@ -821,7 +852,7 @@
     </div>
   </div>
 
-  <div class="content-wrapper pb-16 pt-6 px-4 md:px-8 max-w-5xl mx-auto questioner-main" id="main-column">
+  <div class="content-wrapper pt-6 px-4 md:px-8 max-w-5xl mx-auto questioner-main" id="main-column">
     <div id="setup-screen" class="mb-16 questioner-setup">
       <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center md:text-left">Questioner</h1>
 
@@ -932,17 +963,17 @@
           <i class="fas fa-arrow-right text-gray-700"></i>
         </button>
 
-        <div class="flex flex-wrap items-start justify-between gap-3 mb-2 pr-14 pl-0">
-          <p id="question-context-tag" class="question-context-tag" role="status"></p>
-          <button type="button" onclick="showQuestionModal()" class="text-gray-500 hover:text-gray-700 shrink-0 p-1" title="Question info">
+        <div class="flex items-center justify-start gap-1.5 mb-2 pr-14 pl-0">
+          <p id="question-context-tag" class="font-normal text-[0.8125rem] md:text-sm tracking-[-0.01em] text-gray-600 leading-[1.45] text-left" role="status"></p>
+          <button type="button" onclick="showQuestionModal()" class="shrink-0 -mt-0.5 text-gray-500 p-0.5 leading-none cursor-pointer" title="Question info">
             <i class="fas fa-info-circle text-lg"></i>
           </button>
         </div>
 
         <div id="question-image-container" style="display: none;"></div>
-        <p id="question-text-wrap" class="text-gray-900 text-left leading-snug pl-0 pr-2 mt-5 mb-3 md:mt-6 md:mb-4">
+        <div id="question-text-wrap" class="text-gray-900 text-left leading-snug pl-0 pr-2 mt-5 mb-3 md:mt-6 md:mb-4">
           <span id="question-text"></span>
-        </p>
+        </div>
 
         <div id="options-container" class="options-grid question-body-spacer mb-2"></div>
 
@@ -950,19 +981,19 @@
           <div id="quiz-tool-strip-wrap" class="quiz-tool-strip-wrap">
             <div id="quiz-tool-strip" class="quiz-tool-strip">
               <div class="quiz-tool-col">
-                <button type="button" id="btn-calculator" onclick="openCalculatorWindow()" class="quiz-tool-surface-btn">
+                <button type="button" id="btn-calculator" onclick="openCalculatorWindow()" class="w-full min-h-[3.25rem] inline-flex items-center justify-center gap-2 px-3 rounded-xl border border-stone-700 bg-gradient-to-br from-stone-500 to-stone-600 text-white text-sm font-semibold cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition hover:brightness-105 hover:-translate-y-px">
                   <i class="fas fa-calculator"></i>
                   <span class="truncate">Calculator</span>
                 </button>
               </div>
               <div class="quiz-tool-col">
-                <button type="button" id="btn-references" onclick="openReferenceModal()" class="quiz-tool-surface-btn">
+                <button type="button" id="btn-references" onclick="openReferenceModal()" class="w-full min-h-[3.25rem] inline-flex items-center justify-center gap-2 px-3 rounded-xl border border-stone-700 bg-gradient-to-br from-stone-500 to-stone-600 text-white text-sm font-semibold cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition hover:brightness-105 hover:-translate-y-px">
                   <i class="fas fa-file-pdf"></i>
                   <span class="truncate">References</span>
                 </button>
               </div>
               <div class="quiz-tool-col quiz-tool-col-ai" id="ai-explanation-col">
-                <button type="button" id="ai-explanation-btn" class="quiz-tool-surface-btn">
+                <button type="button" id="ai-explanation-btn" class="w-full min-h-[3.25rem] inline-flex items-center justify-center gap-2 px-3 rounded-xl border border-stone-700 bg-gradient-to-br from-stone-500 to-stone-600 text-white text-sm font-semibold cursor-pointer shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition hover:brightness-105 hover:-translate-y-px">
                   <i class="fas fa-wand-magic-sparkles shrink-0" aria-hidden="true"></i>
                   <span class="truncate">Generate AI Explanation</span>
                 </button>
@@ -1081,6 +1112,7 @@
     let availableTestTypes = new Set();
     let selectedWord = '';
     let dataLoadedFor = null;
+    let scratchPad = null;
 
     function getUnitNames() {
       return SUBJECT_CONFIG[currentSubject].unitNames;
@@ -1303,6 +1335,172 @@
       const stage = document.getElementById('question-stage');
       const w = stage ? stage.getBoundingClientRect().width : 720;
       document.documentElement.style.setProperty('--question-card-width', Math.round(w) + 'px');
+    }
+
+    function initScratchPad() {
+      const canvas = document.getElementById('scratch-canvas');
+      const hint = document.getElementById('scratch-hint');
+      const toolbar = document.getElementById('scratch-toolbar');
+      const eraserCursor = document.getElementById('scratch-eraser-cursor');
+      if (!canvas || !toolbar) return;
+
+      const ctx = canvas.getContext('2d', { alpha: true });
+      if (!ctx) return;
+
+      const state = {
+        tool: 'pencil',
+        color: '#111111',
+        pencilSize: 3.2,
+        eraserSize: 34,
+        drawing: false,
+        hasDrawn: false,
+        lastX: 0,
+        lastY: 0,
+        points: []
+      };
+
+      function resizeCanvas() {
+        const dpr = window.devicePixelRatio || 1;
+        const old = document.createElement('canvas');
+        old.width = canvas.width;
+        old.height = canvas.height;
+        old.getContext('2d').drawImage(canvas, 0, 0);
+
+        canvas.width = Math.floor(window.innerWidth * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(dpr, dpr);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        if (old.width > 0 && old.height > 0) {
+          ctx.drawImage(old, 0, 0, old.width / dpr, old.height / dpr);
+        }
+      }
+
+      function setTool(tool) {
+        state.tool = tool;
+        $('#scratch-tool-pencil')
+          .toggleClass('bg-slate-900 border-slate-900 text-white', tool === 'pencil')
+          .toggleClass('bg-slate-50 border-slate-300 text-slate-900', tool !== 'pencil');
+        $('#scratch-tool-eraser')
+          .toggleClass('bg-slate-900 border-slate-900 text-white', tool === 'eraser')
+          .toggleClass('bg-slate-50 border-slate-300 text-slate-900', tool !== 'eraser');
+        if (eraserCursor) {
+          eraserCursor.style.display = tool === 'eraser' ? 'block' : 'none';
+        }
+      }
+
+      function strokeWidth() {
+        return state.tool === 'eraser' ? state.eraserSize : state.pencilSize;
+      }
+
+      function hideHintIfNeeded() {
+        if (!state.hasDrawn && hint) {
+          state.hasDrawn = true;
+          hint.classList.add('hidden');
+        }
+      }
+
+      function isInteractiveTarget(target) {
+        if (!target || !target.closest) return false;
+        return !!target.closest(
+          'button, a, input, select, textarea, label, iframe, .option-row, .modal, #reference-modal, #image-modal, #calculator-window, #question-stage, #setup-screen, #results-screen, #navbar-placeholder, #scratch-toolbar'
+        );
+      }
+
+      function startDraw(e) {
+        if (e.button !== 0) return;
+        if (isInteractiveTarget(e.target)) return;
+        e.preventDefault();
+        state.drawing = true;
+        state.lastX = e.clientX;
+        state.lastY = e.clientY;
+        state.points = [{ x: e.clientX, y: e.clientY }];
+        hideHintIfNeeded();
+      }
+
+      function drawMove(e) {
+        if (!state.drawing) return;
+        e.preventDefault();
+        const x = e.clientX;
+        const y = e.clientY;
+        state.points.push({ x: x, y: y });
+        if (state.points.length < 2) return;
+        if (state.points.length > 6) state.points.shift();
+        const p0 = state.points[state.points.length - 2];
+        const p1 = state.points[state.points.length - 1];
+        const midX = (p0.x + p1.x) * 0.5;
+        const midY = (p0.y + p1.y) * 0.5;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(state.lastX, state.lastY);
+        ctx.quadraticCurveTo(p0.x, p0.y, midX, midY);
+        ctx.lineWidth = strokeWidth();
+        if (state.tool === 'eraser') {
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.strokeStyle = 'rgba(0,0,0,1)';
+        } else {
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.strokeStyle = state.color;
+        }
+        ctx.stroke();
+        ctx.restore();
+        state.lastX = midX;
+        state.lastY = midY;
+      }
+
+      function stopDraw() {
+        if (!state.drawing) return;
+        state.drawing = false;
+        state.points = [];
+      }
+
+      function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+
+      function trackEraserCursor(e) {
+        if (!eraserCursor) return;
+        if (state.tool !== 'eraser') {
+          eraserCursor.style.display = 'none';
+          return;
+        }
+        if (isInteractiveTarget(e.target)) {
+          eraserCursor.style.display = 'none';
+          return;
+        }
+        eraserCursor.style.display = 'block';
+        const d = state.eraserSize;
+        eraserCursor.style.width = d + 'px';
+        eraserCursor.style.height = d + 'px';
+        eraserCursor.style.left = e.clientX + 'px';
+        eraserCursor.style.top = e.clientY + 'px';
+      }
+
+      $('#scratch-tool-pencil').on('click', function() { setTool('pencil'); });
+      $('#scratch-tool-eraser').on('click', function() { setTool('eraser'); });
+      $('#scratch-clear').on('click', clearCanvas);
+
+      document.addEventListener('pointerdown', function(e) {
+        if (e.pointerType === 'mouse' && e.button !== 0) return;
+        startDraw(e);
+      });
+      document.addEventListener('pointermove', drawMove);
+      document.addEventListener('pointermove', trackEraserCursor);
+      document.addEventListener('pointerup', stopDraw);
+      document.addEventListener('pointercancel', stopDraw);
+      document.addEventListener('mouseleave', stopDraw);
+      document.addEventListener('selectstart', function(e) {
+        if (state.drawing) e.preventDefault();
+      });
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      setTool('pencil');
+      scratchPad = { clear: clearCanvas };
     }
 
     function setupWordSelection() {
@@ -1751,7 +1949,7 @@
       if ((currentSubject === 'physics' || currentSubject === 'chemistry') && hasQuestionImage(currentQuestion)) {
         const src = questionImageSrc(currentQuestion.id);
         const alt = questionImageAlt(currentQuestion.id);
-        const wrap = $('<div class="question-image-wrap my-4" title="Drag corner to resize; click image to enlarge"></div>');
+        const wrap = $('<div class="question-image-wrap my-4" title="Click image to enlarge"></div>');
         const img = $('<img>').attr('src', src).attr('alt', alt).attr('tabindex', '0').attr('role', 'button');
         img.on('error', function() { $(this).attr('alt', alt); });
         wrap.append(img);
@@ -1881,7 +2079,7 @@
       (currentQuestion.options || []).forEach((option, index) => {
         const isCorrect = index === currentQuestion.answer;
         const row = $('<div class="text-sm md:text-base leading-snug py-1"></div>');
-        row.toggleClass('text-green-600 font-semibold', isCorrect);
+        row.toggleClass('font-semibold text-gray-900', isCorrect);
         row.toggleClass('text-gray-700', !isCorrect);
         row.text(String.fromCharCode(65 + index) + '. ' + option + (isCorrect ? ' (Correct)' : ''));
         optionsList.append(row);
@@ -1899,9 +2097,9 @@
           const latex = formulaLatexMap[id];
           if (latex) {
             const href = formulaBasePath + '?id=' + encodeURIComponent(id);
-            const li = $('<li class="formula-latex text-gray-700 flex items-center gap-2 flex-wrap"></li>');
+            const li = $('<li class="formula-latex text-gray-700"></li>');
             li.append($('<a href="' + href + '" target="_blank" rel="noopener" class="text-black hover:underline"></a>').html(latex));
-            li.append($('<span class="text-gray-500 font-mono text-sm"></span>').text('(' + id + ')'));
+            li.append($('<span class="text-black text-sm ml-1"></span>').text('(' + id + ')'));
             formulasContainer.append(li);
           }
         });
@@ -2034,7 +2232,14 @@
     window.closeDefinitionModal = closeDefinitionModal;
 
     $(document).ready(function() {
-      $('#navbar-placeholder').load('navbar.html');
+      $('#navbar-placeholder').load('navbar.html', function() {
+        const settingsModal = document.getElementById('settings-modal');
+        if (settingsModal) {
+          settingsModal.style.zIndex = '6000';
+          settingsModal.style.position = 'fixed';
+          settingsModal.style.inset = '0';
+        }
+      });
       initCalculatorDrag();
 
       currentSubject = $('#subject-select').val();
@@ -2087,24 +2292,25 @@
         if (showingFeedback) nextQuestion();
       });
 
-      (function initBgParallax() {
-        const bg = document.getElementById('bg-interactive');
-        if (!bg) return;
-        let targetX = 0, targetY = 0, curX = 0, curY = 0, raf = 0;
-        function tick() {
-          curX += (targetX - curX) * 0.06;
-          curY += (targetY - curY) * 0.06;
-          bg.style.transform = 'translate3d(' + curX.toFixed(2) + 'px, ' + curY.toFixed(2) + 'px, 0)';
-          raf = requestAnimationFrame(tick);
+      function allowQuestionStageScroll(target) {
+        if ($('#quiz-screen').hasClass('hidden')) return false;
+        const stage = document.getElementById('question-stage');
+        return !!(stage && target && stage.contains(target));
+      }
+
+      document.addEventListener('wheel', function(e) {
+        if (!allowQuestionStageScroll(e.target)) {
+          e.preventDefault();
         }
-        window.addEventListener('mousemove', function(e) {
-          const cx = window.innerWidth * 0.5;
-          const cy = window.innerHeight * 0.5;
-          targetX = (e.clientX - cx) * 0.04;
-          targetY = (e.clientY - cy) * 0.04;
-        }, { passive: true });
-        raf = requestAnimationFrame(tick);
-      })();
+      }, { passive: false });
+
+      document.addEventListener('touchmove', function(e) {
+        if (!allowQuestionStageScroll(e.target)) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      initScratchPad();
 
       $(document).on('click', '#ai-explanation-btn', function() { generateAIExplanation(); });
     });
